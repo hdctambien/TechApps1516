@@ -3,7 +3,11 @@
 .classpath
 .project
 */.settings/
+.recommendations/
+
 #ignore build files
 *.class
+
 #ignore batch scripts to run builds
 *.bat
+
