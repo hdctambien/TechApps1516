@@ -3,7 +3,7 @@
 .classpath
 .project
 */.settings/
-.recommendations/
+.recommenders/
 
 #ignore build files
 *.class
