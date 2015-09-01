@@ -17,13 +17,16 @@ public class Client {
 	private BufferedReader reader;
 	private PrintWriter writer;
 	private boolean done;
+	private ClientProtocol protocol;
 	
-	public Client(String address, int port) throws IOException{
+	public Client(String address, int port, ClientProtocol protocol) throws IOException{
 		iaddress = InetAddress.getByName(address);
 		this.port = port;
 		s = new Socket(iaddress, port);
 		reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		writer = new PrintWriter(s.getOutputStream());
+		this.protocol = protocol;
+		protocol.setOuput(writer);
 		done = false;
 	}
 	
@@ -48,7 +51,8 @@ public class Client {
 		ipaddress = in.nextLine();
 		//System.out.println("Type the message you would like to send to the server...");
 		try{
-			Client client = new Client(ipaddress, PORT);			
+			BasicProtocol basic = new BasicProtocol();
+			Client client = new Client(ipaddress, PORT, basic);			
 			client.enterProtocolLoop(in);			
 		}catch(IOException e){
 			e.printStackTrace();

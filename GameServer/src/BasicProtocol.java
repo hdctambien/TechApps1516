@@ -1,36 +1,27 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 
-
-public class BasicProtocol extends ProtocolHandler implements Runnable {
+public class BasicProtocol implements ProtocolHandler {
 	
-	boolean done = false;
-	
-	public BasicProtocol(Socket client) throws IOException{
-		super(client);
+	public BasicProtocol(){
+		
 	}
 	
-	@Override
-	void serviceClient() {
-		try{
-			while(!done){
-				String message = in.readLine();
-				System.out.println("[Client]: "+message);
-				if(message.equals("exit")){
-					done = true;
-				}else{
-					out.println("echo "+message); out.flush();
-					System.out.println("[Server]: echo "+message);
-				}
+	public void processRequest(Request r){
+		String msg = r.getMessage();
+		if(msg.equals("exit")){
+			try {
+				r.getClientInfo().getSocket().close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			System.out.println("Closing client connection...");
-			client.close();
-		}catch(IOException e){
-			e.printStackTrace();
+			return;
 		}
+		PrintWriter writer = r.getClientInfo().getPrintWriter();
+		writer.println("echo "+msg);
+		writer.flush();
 	}
 
-	
-	
-	
 }

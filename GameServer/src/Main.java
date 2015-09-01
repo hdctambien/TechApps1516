@@ -2,9 +2,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-
 public class Main {
+	
 	private static boolean done = false;
+	
 	public static void main(String[] args) {
 		Server server = new Server();
 		Thread sthread = new Thread(server);
@@ -32,6 +33,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		in.close();
 		System.exit(0);
 	}
 

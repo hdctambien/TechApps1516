@@ -14,9 +14,13 @@ public class Server implements Runnable{
 	volatile boolean done;
 	ServerSocket ss;
 	List<Thread> serviceThreads;
+	RequestProcessor processor;
+	Thread processorThread;
 	
 	public Server(){
 		serviceThreads = new ArrayList<Thread>();
+		processor = new RequestProcessor(new BasicProtocol());
+		processorThread = new Thread(processor);
 	}
 	
 	@Override
@@ -27,14 +31,16 @@ public class Server implements Runnable{
 			e.printStackTrace();
 		}
 		
+		processorThread.start();
+		
 		while(!done){
 			
 			try {
 				Socket client = ss.accept(); System.out.println("Accepted a Client!");
-				BasicProtocol protocol = new BasicProtocol(client);
-				Thread t = new Thread(protocol);
-				t.start();
-				serviceThreads.add(t);				
+				ClientInfo info = new ClientInfo(client);
+				RequestForwarder forwarder = new RequestForwarder(info, processor);
+				forwarder.start();
+				serviceThreads.add(forwarder.getThread());				
 				/*System.out.println("[Client]: "+in.readLine());
 				out.println("OK"); out.flush(); System.out.println("[Server]: OK");
 				client.close(); System.out.println("Closing Client Connection");*/
@@ -42,6 +48,12 @@ public class Server implements Runnable{
 				e.printStackTrace();
 			}
 			
+		}
+		try {
+			ss.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
