@@ -5,3 +5,4 @@
 */.settings/
 #ignore build files
 *.class
+.recommendations/
