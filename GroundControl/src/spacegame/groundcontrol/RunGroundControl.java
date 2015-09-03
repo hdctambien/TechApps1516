@@ -9,7 +9,5 @@ public class RunGroundControl
 	{
 		game = new groundControlGame();
 		game.run();
-		System.out.println("Something should be happening now");
 	}
-	
 }
