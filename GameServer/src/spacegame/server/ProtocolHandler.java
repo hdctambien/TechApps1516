@@ -1,3 +1,4 @@
+package spacegame.server;
 
 public interface ProtocolHandler {
 

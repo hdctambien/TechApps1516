@@ -1,3 +1,4 @@
+package spacegame.server;
 import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;

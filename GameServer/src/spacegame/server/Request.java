@@ -1,3 +1,4 @@
+package spacegame.server;
 
 public class Request {
 	private String message;

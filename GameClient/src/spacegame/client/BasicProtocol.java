@@ -1,3 +1,4 @@
+package spacegame.client;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 

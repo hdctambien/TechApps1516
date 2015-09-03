@@ -1,5 +1,5 @@
+package spacegame.client;
 import java.io.PrintWriter;
-
 
 public abstract class AbstractProtocol implements Runnable{
 
