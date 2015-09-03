@@ -1,18 +1,23 @@
 import java.io.PrintWriter;
+import java.net.InetAddress;
 
-
-public class BasicProtocol implements ClientProtocol {
+public class BasicProtocol extends AbstractProtocol {
 	
-	private PrintWriter writer;
+	private InetAddress iaddress;
+	private int port;
+	
+	public BasicProtocol(Client client){
+		super(client);
+		iaddress = client.getAddress();
+		port = client.getPort();
+	}
+	
 	@Override
 	public void process(String command) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setOuput(PrintWriter writer) {
-		this.writer = writer;
+		if(command.equals("TERM")){
+			client.sendMessage("exit");//This tells the server read thread to close before the server closes the connection
+		}
+		System.out.println("[Server@ "+iaddress.getHostAddress()+":"+port+"]: "+command);		
 	}
 
 }
