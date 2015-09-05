@@ -105,8 +105,16 @@ public class Client implements Runnable{
 				if(message.equals("TERM")){
 					//This indicates server is closing connection
 					done = true;
+				}else if(message.equals("exit")){
+					//This indicates that the server would like to close the connection
+					done = true;
+					sendMessage("TERM");
+					Thread.sleep(100);//Give time for the server read thread to close
+					s.close();
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}			
 		}		

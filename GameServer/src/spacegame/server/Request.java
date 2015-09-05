@@ -14,4 +14,7 @@ public class Request {
 	public ClientInfo getClientInfo(){
 		return cInfo;
 	}
+	public void reply(String prefix){
+		cInfo.sendMessage(prefix+" "+message);
+	}
 }
