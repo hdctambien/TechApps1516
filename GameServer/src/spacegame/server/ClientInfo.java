@@ -39,7 +39,7 @@ public class ClientInfo {
 	}
 	
 	protected static ClientInfo getServerTerminalClientInfo(){
-		if(serverInfo == null){//creat the info if it hasn't been created yet
+		if(serverInfo == null){//create the info if it hasn't been created yet
 			serverInfo = new ClientInfo();
 		}
 		return serverInfo;

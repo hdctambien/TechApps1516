@@ -46,6 +46,7 @@ public class Server implements Runnable{
 				forwarder.start();
 				serviceThreads.add(forwarder.getThread());
 				forwarders.add(forwarder);
+				infos.add(info);
 			} catch(SocketException se){
 				System.out.println("Server Socket closed!");
 			} catch (IOException e) {

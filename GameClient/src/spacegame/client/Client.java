@@ -24,6 +24,7 @@ public class Client implements Runnable{
 	private PrintWriter writer;
 	private Queue<String> messageQueue;
 	private int port;
+	private volatile boolean exit;
 	
 	private volatile boolean done;
 	
@@ -42,6 +43,7 @@ public class Client implements Runnable{
 		reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		writer = new PrintWriter(s.getOutputStream());
 		messageQueue = new LinkedBlockingQueue<String>();
+		exit = false;
 	}
 	
 	/**
@@ -105,10 +107,12 @@ public class Client implements Runnable{
 				if(message.equals("TERM")){
 					//This indicates server is closing connection
 					done = true;
+					exit = true;
 				}else if(message.equals("exit")){
 					//This indicates that the server would like to close the connection
 					done = true;
 					sendMessage("TERM");
+					exit = true;
 					Thread.sleep(100);//Give time for the server read thread to close
 					s.close();
 				}
@@ -127,6 +131,15 @@ public class Client implements Runnable{
 	 */
 	public void stop(){
 		done = true;
+	}
+	
+	/**
+	 * This method indicates whether the server has initiated a connection close request, and that the client is exiting.
+	 * @return true if a server exit request has happened, false if the client is still in an active read loop
+	 */
+	public boolean isExit(){
+		return exit;
+		
 	}
 
 }

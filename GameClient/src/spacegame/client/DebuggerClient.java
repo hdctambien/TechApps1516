@@ -27,6 +27,9 @@ public class DebuggerClient {
 	 */
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
+		System.out.println("Welcome to DebuggerClient!");
+		System.out.print("Please enter your name: ");
+		String name = in.nextLine();
 		System.out.print("Please enter server IP address: ");
 		ipaddress = in.nextLine();
 		try{
@@ -36,6 +39,11 @@ public class DebuggerClient {
 			clientThread.start();
 			protocolThread = new Thread(basic);
 			protocolThread.start();
+			
+			//Basic name and job setup
+			client.sendMessage("set name "+name);			
+			client.sendMessage("set job DebuggerClient");
+			
 			enterProtocolLoop(in, client, basic);			
 		}catch(IOException e){
 			e.printStackTrace();
@@ -54,17 +62,19 @@ public class DebuggerClient {
 	public static void enterProtocolLoop(Scanner in, Client client, AbstractProtocol protocol) throws IOException{
 		done = false;
 		while(!done){
-			System.out.print("<BasicClient\\> ");
+			//System.out.print("<BasicClient\\> ");
 			String message = in.nextLine();
 			client.sendMessage(message);
 			System.out.println(":::Message sent to server!");
+			
 			if(message.equals("exit")){
 				done = true;
 				client.stop();
 				protocol.stop();
+			}else if(client.isExit()){
+				done = true;
+				protocol.stop();		
 			}
 		}
-		
 	}
-	
 }

@@ -25,6 +25,7 @@ public class Main {
 		}
 		System.out.println(" type 'exit' to quit.");
 		serverInfo = ClientInfo.getServerTerminalClientInfo();
+		server.infos.add(serverInfo);
 		while(!done){
 			System.out.print("\\> ");
 			String cmd = in.nextLine();

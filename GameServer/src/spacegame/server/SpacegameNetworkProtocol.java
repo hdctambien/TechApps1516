@@ -17,9 +17,13 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	public void processRequest(Request r) {
 		String msg = r.getMessage();
 		ClientInfo info = r.getClientInfo();
-		if(msg.length() > 0 && msg.charAt(0) == '#'){
+		if(msg.length() > 0 && msg.charAt(0) == '#'){//It's a chat!
 			ChatMessage chat = new ChatMessage(info.getName(),info.getJob(),info.getUID(),msg.substring(1, msg.length()));
 			chats.addChat(chat);
+			ClientInfo[] allClients = Main.server.getAllClientInfo();
+			for(ClientInfo client: allClients){
+				client.sendMessage("chat ["+chat.getJob()+":"+chat.getName()+" @ "+chat.getTimeString()+"] #"+chat.getMessage());
+			}
 		}else{
 			String[] words = msg.split(" ");
 			switch(words[0]){
@@ -51,13 +55,13 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}else{
 			switch(words[1]){
 				case "version":
-					info.sendMessage("give version "+Main.VERSION);
+					info.sendMessage("set version "+Main.VERSION);
 					break;
 				case "name":
-					info.sendMessage("give name "+info.getName());
+					info.sendMessage("set name "+info.getName());
 					break;
 				case "job":
-					info.sendMessage("give job "+info.getJob());
+					info.sendMessage("set job "+info.getJob());
 					break;
 				default:
 					r.reply("UNK");
