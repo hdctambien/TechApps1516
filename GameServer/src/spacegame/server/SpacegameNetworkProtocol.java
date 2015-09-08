@@ -22,7 +22,12 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 			chats.addChat(chat);
 			ClientInfo[] allClients = Main.server.getAllClientInfo();
 			for(ClientInfo client: allClients){
-				client.sendMessage("chat ["+chat.getJob()+":"+chat.getName()+" @ "+chat.getTimeString()+"] #"+chat.getMessage());
+				if(client.equals(info)){
+					//they don't need their own chat message
+				}else{
+					client.sendMessage("chat ["+chat.getJob()+":"+chat.getName()+" @ "
+							+chat.getTimeString()+"] #"+chat.getMessage());
+				}
 			}
 		}else{
 			String[] words = msg.split(" ");
@@ -32,6 +37,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "set":
 					doSet(msg, words, info, r);
+					break;
+				case "push":
+					doPush(msg, words, info, r);
 					break;
 				case "OK":
 					//maybe I will want something here in the future...
@@ -86,6 +94,21 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				default:
 					r.reply("UNK");
 					break;
+			}
+		}
+	}
+	
+	public void doPush(String msg, String[] words, ClientInfo info, Request r){
+		if(words.length<2){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			ClientInfo[] allClients = Main.server.getAllClientInfo();
+			for(ClientInfo client: allClients){
+				if(client.equals(info)){
+					//they don't need their own chat message
+				}else{
+					client.sendMessage(msg);
+				}
 			}
 		}
 	}
