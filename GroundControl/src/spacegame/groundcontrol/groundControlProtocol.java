@@ -25,6 +25,11 @@ public class groundControlProtocol extends AbstractProtocol
 		port = client.getPort();	
 		gcGame = groundControlGame;
 		this.client= client;
+		client.sendMessage("set job GroundControl");
+	}
+	Client getClient()
+	{
+		return client;
 	}
 	public void process(String stringIn) 
 	{

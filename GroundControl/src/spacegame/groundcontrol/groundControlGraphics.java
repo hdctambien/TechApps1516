@@ -2,9 +2,13 @@ package spacegame.groundcontrol;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+
+import spacegame.client.Client;
 
 class groundControlGraphics extends Thread 
 {
@@ -12,14 +16,16 @@ class groundControlGraphics extends Thread
     public Container cont = new Container();
 	private groundControlGame gcGame;
 	private JTextArea textBox = new JTextArea();
+	Client c;
 	
-	public groundControlGraphics(groundControlGame groundControlGame) 
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
 		textBox.setVisible(true);
 		textBox.setText("No message Recieved yet");
 		cont.add(textBox);
+		this.c = c;
 		
 		
 		windowFrame.setResizable(false);
@@ -28,8 +34,14 @@ class groundControlGraphics extends Thread
 		windowFrame.setResizable(true);
 		windowFrame.setVisible(true);
 		windowFrame.setPreferredSize(new Dimension(1000,700));
+		windowFrame.addWindowListener(new WindowAdapter() {
+			  public void windowClosing(WindowEvent e) {
+			    c.sendMessage("exit");
+			  }
+			});
 		windowFrame.add(cont);
 		windowFrame.pack();
+		
 	}
 	public void run()
 	{
