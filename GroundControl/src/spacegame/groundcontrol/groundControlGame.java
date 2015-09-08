@@ -12,6 +12,7 @@ public class groundControlGame implements Runnable
     boolean running = false;
     private groundControlGraphics guiThread;
 	private boolean isRunning = false;
+	private Client c;
 	
 	Client gcClient;
 	groundControlProtocol gcProtocol;
@@ -24,12 +25,13 @@ public class groundControlGame implements Runnable
 			e.printStackTrace();
 		}
 		gcProtocol = new groundControlProtocol(gcClient, this);
+		c = gcProtocol.getClient();
 	}
 	
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this);
+	    guiThread = new groundControlGraphics(this,c);
 	    guiThread.start();
 	    gameLogic();
 	}	
