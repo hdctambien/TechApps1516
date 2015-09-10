@@ -2,10 +2,15 @@ package spacegame.groundcontrol;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
@@ -13,21 +18,41 @@ import spacegame.client.Client;
 class groundControlGraphics extends Thread 
 {
 	JFrame windowFrame;    
-    public Container cont = new Container();
+    public JPanel windowPanel = new JPanel();
 	private groundControlGame gcGame;
-	private JTextArea textBox = new JTextArea();
+	private JButton testButton1;
 	Client c;
+	private boolean buttonStatus = false;
+	private boolean buttonUpdated = true;
+	
+	private MouseAdapter mouse = new MouseAdapter()
+	{ 
+		public void mousePressed(MouseEvent e)
+		{
+			buttonStatus = true;
+			buttonUpdated = false;
+			System.out.println("Button pressed");
+		}
+		public void mouseReleased(MouseEvent e)
+		{
+			buttonStatus = false;
+			buttonUpdated = false;
+			System.out.println("Button released");
+		}
+	};
 	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
-		textBox.setVisible(true);
-		textBox.setText("No message Recieved yet");
-		cont.add(textBox);
+		windowPanel.setVisible(true);
 		this.c = c;
 		
-		
+		testButton1 = new JButton();
+		testButton1.setText("Test Button");
+		testButton1.addMouseListener(mouse);
+		testButton1.setVisible(true);
+		windowPanel.add(testButton1);
 		windowFrame.setResizable(false);
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +64,7 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.add(cont);
+		windowFrame.add(windowPanel);
 		windowFrame.pack();
 		
 	}
@@ -47,22 +72,12 @@ class groundControlGraphics extends Thread
 	{
 		while(gcGame.running)
 		{
-			if(!windowFrame.hasFocus())
+			if(!buttonUpdated)
 			{
-				try
-				{
-					this.sleep(50);
-				}
-				catch(InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-				continue;
+				c.sendMessage("set buttonStatus " + buttonStatus);
+				buttonUpdated = true;
+				System.out.println(buttonStatus);
 			}
 		}
-	}
-	void writeText(String textIn)
-	{
-		textBox.setText(textIn);
 	}
 }

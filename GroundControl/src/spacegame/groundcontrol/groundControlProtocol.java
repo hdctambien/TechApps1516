@@ -33,7 +33,6 @@ public class groundControlProtocol extends AbstractProtocol
 	}
 	public void process(String stringIn) 
 	{
-		gcGame.processTextMessage(stringIn);
 		System.out.println(stringIn);
 	}
 }
