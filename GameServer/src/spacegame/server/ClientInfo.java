@@ -80,6 +80,7 @@ public class ClientInfo {
 	public void sendMessage(String message){
 		writer.println(message);
 		writer.flush();
+		System.out.println("(UID:"+uid+") Sent Message: "+message);
 	}
 	
 }

@@ -6,11 +6,14 @@ import spacegame.server.chat.Chats;
 public class SpacegameNetworkProtocol implements ProtocolHandler {
 
 	public static final int ERR_CMD_FORMAT = 1;
+	public static final int ERR_PARSE_VAL = 2;
 	
 	private Chats chats;
+	private GameState gameState;
 	
 	public SpacegameNetworkProtocol(){
 		chats = new Chats();
+		gameState = new GameState();
 	}
 	
 	@Override
@@ -72,7 +75,8 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					info.sendMessage("set job "+info.getJob());
 					break;
 				default:
-					r.reply("UNK");
+					gameState.doGet(words[1],info,r);
+					//r.reply("UNK");
 					break;	
 			}
 		}
@@ -92,7 +96,8 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					r.reply("OK");
 					break;
 				default:
-					r.reply("UNK");
+					gameState.doSet(words[1],words[2],info,r);
+					//r.reply("UNK");
 					break;
 			}
 		}
@@ -105,7 +110,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 			ClientInfo[] allClients = Main.server.getAllClientInfo();
 			for(ClientInfo client: allClients){
 				if(client.equals(info)){
-					//they don't need their own chat message
+					//they don't need their own push message
 				}else{
 					client.sendMessage(msg);
 				}
@@ -113,4 +118,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}
 	}
 
+	public GameState getGameState(){
+		return gameState;
+	}
 }
