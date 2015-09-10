@@ -2,6 +2,7 @@ package spacegame.groundcontrol;
 
 import java.io.IOException;
 
+
 import spacegame.client.*;
 
 
@@ -40,12 +41,15 @@ public class groundControlGame implements Runnable
 	{
 		while(running)
 		{
+			try
+			{
+				Thread.sleep(10);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
-	}
-	
-	void processTextMessage(String text)
-	{
-		guiThread.writeText(text);
 	}
 }
 
