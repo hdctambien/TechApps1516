@@ -5,7 +5,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
- 
+
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,9 +22,10 @@ public class GUI extends JPanel
     protected JButton b1, b2, b3;
  
     public GUI() {
-        ImageIcon leftButtonIcon = createImageIcon("images/right.gif");
+    	
+        ImageIcon leftButtonIcon = createImageIcon("images/left.gif");
         ImageIcon middleButtonIcon = createImageIcon("images/middle.gif");
-        ImageIcon rightButtonIcon = createImageIcon("Koala.jpg");
+        ImageIcon rightButtonIcon = createImageIcon("koala.jpg");
  
         b1 = new JButton("Disable middle button", leftButtonIcon);
         b1.setVerticalTextPosition(AbstractButton.CENTER);
