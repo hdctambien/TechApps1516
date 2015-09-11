@@ -10,6 +10,7 @@ public class groundControlGame implements Runnable
 {
 	String iaddress = "10.11.1.110";
 	int port = 8080;
+	String name = "";
     boolean running = false;
     private groundControlGraphics guiThread;
 	private boolean isRunning = false;
@@ -18,8 +19,9 @@ public class groundControlGame implements Runnable
 	Client gcClient;
 	groundControlProtocol gcProtocol;
 	
-	public groundControlGame()
+	public groundControlGame(String iAddress, int port, String name)
 	{
+		this.name = name;
 		try {
 			gcClient = new Client(iaddress,port);
 		} catch (IOException e) {
@@ -27,6 +29,7 @@ public class groundControlGame implements Runnable
 		}
 		gcProtocol = new groundControlProtocol(gcClient, this);
 		c = gcProtocol.getClient();
+		c.sendMessage("set name " + name);
 	}
 	
 	public void run() 
