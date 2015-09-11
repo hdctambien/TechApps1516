@@ -8,6 +8,9 @@
 #ignore build files
 *.class
 
-#ignore batch scripts to run builds
-*.bat
+#Currently it would be useful if everyone had my batch files to run the Server and Debugger Client
+#Uncomment below to ignore batch scripts to run builds
+#*.bat
 
+#ignore Thumbs.db
+Thumbs.db

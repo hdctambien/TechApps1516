@@ -1,0 +1,1 @@
+java -jar GameServer.jar
