@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.Socket;
 
-
+//hi caleb
 public class BasicProtocol extends ProtocolHandler implements Runnable {
 	
 	boolean done = false;
@@ -30,7 +30,4 @@ public class BasicProtocol extends ProtocolHandler implements Runnable {
 		}
 	}
 
-	
-	
-	
 }

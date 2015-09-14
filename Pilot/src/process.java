@@ -1,24 +1,47 @@
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.*;
 import java.util.Scanner;
-public class process extends JFrame
+public class process 
 {
+	
+	private static final Graphics Graphics = null;
+	public JPanel testpanel;
+	public JFrame frame= new JFrame();
+	
 	public int xcord,ycord,zcord,angle;
+	public process()
+	{
+		test();
+		frame.setLayout(new FlowLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1000,800);
+		frame.setVisible(true);
+			
+
+		
+	}
 	public static void main(String[] args)
 	{
 		
 		Scanner input = new Scanner( System.in );
 		boolean done = false, finished = false;
 		
-		JFrame frame = new JFrame();
+		
+		
+		
+		
 		JPanel panel = new JPanel(), buttons = new JPanel(); 
+		panel.setSize(1000,600);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1000,1000);
-		frame.setVisible(true);
-		
+				
 		JButton up = new JButton();
 		JButton down = new JButton();
 		JButton left = new JButton();
@@ -29,7 +52,8 @@ public class process extends JFrame
 		buttons.add(down);
 		buttons.add(right);
 		
-		frame.add(buttons);
+	//	frame.add(panel);
+	//	frame.add(buttons);
 	
 	//	panel.setLayout(new GridLayout(7,7));
 	/*	while(done == false)
@@ -64,36 +88,40 @@ public class process extends JFrame
 			
 		}*/
 		double rand = Math.random();
+		new process();
 		
 	//	createCircle(rand,panel);
-	}
-	public void createCircle(double	 cord, Graphics g)
-	{
 		
 	}
-}
-class Change
-{
-	private int xcord=0,ycord=0;
-	public void changeAngle()
+	public void test()
 	{
-		//send to server
-	}
-	public void goRight()
-	{
-		xcord++;
-	}
-	public void goLeft()
-	{
-		xcord--;
-	}
-	public void goUp()
-	{
-		ycord++;
-	}
-	public void goDown()
-	{
-		ycord--;
+		
+		final Draw dc = new Draw();
+		testpanel = new JPanel()
+		{
+			protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
+				xcord = 400;
+				ycord = 400;
+			//	g2d = dc.draw(g2d, xcord, ycord);
+			//	g = g2d;
+				g2d.draw(new Ellipse2D.Double(xcord, ycord, 100, 100));
+			}
+		};
+		frame.add(testpanel);
 	}
 	
 }
+class Draw
+{
+	public Graphics2D draw(Graphics2D g2d, int x, int y)
+	{
+		System.out.println("entered");
+		g2d.draw(new Ellipse2D.Double(x, y, 100, 100));
+		return g2d;
+	}
+}
+	
+

@@ -3,6 +3,15 @@
 .classpath
 .project
 */.settings/
+.recommenders/
+
 #ignore build files
 *.class
-.recommenders/
+
+#Currently it would be useful if everyone had my batch files to run the Server and Debugger Client
+#Uncomment below to ignore batch scripts to run builds
+#*.bat
+
+#ignore Thumbs.db
+Thumbs.db
+

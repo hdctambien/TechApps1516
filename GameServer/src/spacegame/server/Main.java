@@ -1,12 +1,19 @@
+package spacegame.server;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-
 public class Main {
+	
+	public static final float VERSION = 1.0f;
+	
 	private static boolean done = false;
+	private static ClientInfo serverInfo;
+	
+	public static Server server;
+	
 	public static void main(String[] args) {
-		Server server = new Server();
+		server = new Server();
 		Thread sthread = new Thread(server);
 		sthread.start();
 		Scanner in = new Scanner(System.in);
@@ -17,21 +24,21 @@ public class Main {
 			e.printStackTrace();
 		}
 		System.out.println(" type 'exit' to quit.");
+		serverInfo = ClientInfo.getServerTerminalClientInfo();
+		server.infos.add(serverInfo);
 		while(!done){
 			System.out.print("\\> ");
-			if(in.nextLine().equals("exit")){
+			String cmd = in.nextLine();
+			if(cmd.equals("exit")){
 				done = true;
 				//System.exit(0);
+			}else{
+				server.processor.addRequest(new Request(cmd,serverInfo));
 			}
 		}
-		server.done = true;
-		Thread.yield();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		server.stop();
+		in.nextLine();//lets the user see all server messages before the final closing.
+		in.close();
 		System.exit(0);
 	}
 
