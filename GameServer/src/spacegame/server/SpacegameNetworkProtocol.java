@@ -53,6 +53,8 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "UNK":
 					//And maybe something here...
 					break;
+				case "noop": //NO OPERATION
+					break;
 				default:
 					r.reply("UNK");
 					break;
@@ -74,6 +76,8 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "job":
 					info.sendMessage("set job "+info.getJob());
 					break;
+				case "id":
+					info.sendMessage("set id "+info.getUID());
 				default:
 					gameState.doGet(words[1],info,r);
 					//r.reply("UNK");

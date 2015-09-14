@@ -3,15 +3,24 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/**
+ * This is the Main class of the server in charge of running and setup. This class is the class that runs in the
+ * GameServer.jar file. It also contains a version field for the version of the server's protocol.
+ * @author Caleb Wilson
+ */
 public class Main {
 	
-	public static final float VERSION = 1.0f;
+	public static final float VERSION = 1.2f;
 	
 	private static boolean done = false;
 	private static ClientInfo serverInfo;
 	
 	public static Server server;
 	
+	/**
+	 * Starts the server.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		server = new Server();
 		Thread sthread = new Thread(server);
