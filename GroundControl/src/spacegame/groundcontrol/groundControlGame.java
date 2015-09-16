@@ -3,6 +3,12 @@ package spacegame.groundcontrol;
 import java.io.IOException;
 
 
+
+
+
+
+
+
 import spacegame.client.*;
 
 
@@ -19,6 +25,13 @@ public class groundControlGame implements Runnable
 	Client gcClient;
 	groundControlProtocol gcProtocol;
 	
+	private boolean hasLink;
+	private double rocketVelocity; // m/s
+	private double rocketHeading;  //degrees (-180 to 180)
+	private double rocketPosX;     //m
+	private double rocketPosY;     //m 
+	private double throttle;       //throttle percentage
+	
 	public groundControlGame(String iAddress, int port, String name)
 	{
 		this.name = name;
@@ -30,6 +43,7 @@ public class groundControlGame implements Runnable
 		gcProtocol = new groundControlProtocol(gcClient, this);
 		c = gcProtocol.getClient();
 		c.sendMessage("set name " + name);
+		c.sendMessage("subscribe all");
 	}
 	
 	public void run() 
@@ -38,6 +52,7 @@ public class groundControlGame implements Runnable
 	    guiThread = new groundControlGraphics(this,c);
 	    guiThread.start();
 	    gameLogic();
+	    
 	}	
 	
 	private void gameLogic()
@@ -52,7 +67,46 @@ public class groundControlGame implements Runnable
 			{
 				e.printStackTrace();
 			}
+			c.sendMessage("get throttle");
+			c.sendMessage("get rocketHeading");
 		}
+	}
+
+	public void setThrottle(String string) 
+	{
+		throttle = Double.parseDouble(string);
+		guiThread.updateThrottle(throttle);
+	}
+
+	public void setHasLink(String string) 
+	{
+		hasLink = Boolean.parseBoolean(string);	
+		guiThread.updateHasLink(hasLink);
+	}
+
+	public void setRocketPosX(String string) 
+	{
+		rocketPosX = Double.parseDouble(string);
+		guiThread.updateRocketPosX(rocketPosX);
+	}
+
+	public void setRocketPosY(String string) 
+	{
+		rocketPosY = Double.parseDouble(string);
+		guiThread.updateRocketPosY(rocketPosY);
+	}
+
+	public void setRocketHeading(String string) 
+	{
+		rocketHeading = Double.parseDouble(string);
+		guiThread.updateRocketHeading(rocketHeading);
+	}
+
+	public void setRocketVelocity(String string) 
+	{
+		rocketVelocity = Double.parseDouble(string);
+		guiThread.updateRocketVelocity(rocketVelocity);
+		
 	}
 }
 

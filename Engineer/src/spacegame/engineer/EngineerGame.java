@@ -15,8 +15,8 @@ public class EngineerGame implements Runnable
 	private boolean running = false;
 	Client eClient;
 	EngineerProtocol eProtocol;
-	//String iaddress = "10.11.1.110";
-	String iaddress = "192.168.1.89";
+	String iaddress = "10.11.1.110";
+	//String iaddress = "192.168.1.89";
 	int port = 8080;
 	JButton exit;
 	JButton get;
@@ -25,25 +25,26 @@ public class EngineerGame implements Runnable
 	private Thread clientThread;
 		
 	public EngineerGame()
-	{
-		gui = new EngineerGUI(this, this.eClient);
-		gui.start();	
-		try {
+	{	
+		try 
+		{
 			eClient = new Client(iaddress,port);
 			clientThread = new Thread(eClient);
 			clientThread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		gui = new EngineerGUI(this, this.eClient);
+		gui.start();
 		eProtocol = new EngineerProtocol(eClient, this, gui);
 		protocolThread = new Thread(eProtocol);
 		protocolThread.start();
-		run();
+		//run();
 	}
 	
-	public double Throttle()
+	public void Throttle(int throt)
 	{
-		return 3;
+		eClient.sendMessage("set throttle "+Integer.toString(throt));
 	}
 	
 	public void run()
@@ -51,16 +52,7 @@ public class EngineerGame implements Runnable
 		running = true;
 		while(running)
 		{
-			eClient.sendMessage("get buttonStatus");
-			try
-			{
-				Thread.sleep(10);
-			}
-			catch(InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-			
+						
 		}		
 	}
 }

@@ -20,35 +20,46 @@ public class RunGroundControl
 		boolean good = false;
 		JFrame frame = new JFrame();
 		int option = 0;
-
-		do
+		
+		boolean testing = true;
+		
+		
+		if(testing == false)
 		{
-			iAddress = JOptionPane.showInputDialog("Enter IP Address");
-			System.out.println(iAddress);
-			port = Integer.parseInt(JOptionPane.showInputDialog("Enter port (8080 for default)"));
-			System.out.println(port);
-			name = JOptionPane.showInputDialog("Enter Desired Name");
-			System.out.println(name);
-			
-			boolean temp = false;
-			try {
-				temp = InetAddress.getByName(iAddress).isReachable(5000);
-			} catch (UnknownHostException e) {
-				temp = false;
-			} catch (IOException e) {
-				temp = false;
+			do
+			{
+				iAddress = JOptionPane.showInputDialog("Enter IP Address");
+				System.out.println(iAddress);
+				port = Integer.parseInt(JOptionPane.showInputDialog("Enter port (8080 for default)"));
+				System.out.println(port);
+				name = JOptionPane.showInputDialog("Enter Desired Name");
+				System.out.println(name);
+				
+				boolean temp = false;
+				try {
+					temp = InetAddress.getByName(iAddress).isReachable(5000);
+				} catch (UnknownHostException e) {
+					temp = false;
+				} catch (IOException e) {
+					temp = false;
+				}
+				good = temp;
+				if(good = true)
+					JOptionPane.showMessageDialog(frame,"Connecting to "+iAddress + " on port " + port + " with name "+ name);
+				else
+					JOptionPane.showMessageDialog(frame,"Connection failed. Retry or close.");
+				option = JOptionPane.showConfirmDialog(frame,
+						"Connection Failed. Retry?", "Connecting Failed",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			}
-			good = temp;
-			if(good = true)
-				JOptionPane.showMessageDialog(frame,"Connecting to "+iAddress + " on port " + port + " with name "+ name);
-			else
-				JOptionPane.showMessageDialog(frame,"Connection failed. Retry or close.");
-			option = JOptionPane.showConfirmDialog(frame,
-					"Connection Failed. Retry?", "Connecting Failed",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			while(!good && option != 2);
+			if(runGame)
+			{
+				game = new groundControlGame(iAddress, port, name);
+				game.run();
+			}
 		}
-		while(!good && option != 2);
-		if(runGame)
+		else
 		{
 			game = new groundControlGame(iAddress, port, name);
 			game.run();
