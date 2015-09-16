@@ -7,13 +7,17 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 
 	public static final int ERR_CMD_FORMAT = 1;
 	public static final int ERR_PARSE_VAL = 2;
+	public static final int ERR_NOT_SUBSCRIBED = 3;
 	
 	private Chats chats;
 	private GameState gameState;
+	private StateUpdateHandler stateUpdateHandler;
 	
 	public SpacegameNetworkProtocol(){
 		chats = new Chats();
 		gameState = new GameState();
+		stateUpdateHandler = new StateUpdateHandler();
+		gameState.addGameStateListener(stateUpdateHandler);
 	}
 	
 	@Override
@@ -44,6 +48,11 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "push":
 					doPush(msg, words, info, r);
 					break;
+				case "subscribe":
+					doSubscribe(msg,words,info,r);
+					break;
+				case "unsubscribe":
+					doUnsubscribe(msg,words,info,r);
 				case "OK":
 					//maybe I will want something here in the future...
 					break;
@@ -103,7 +112,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					gameState.doSet(words[1],words[2],info,r);
 					//r.reply("UNK");
 					break;
-			}
+			}			
 		}
 	}
 	
@@ -118,6 +127,27 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				}else{
 					client.sendMessage(msg);
 				}
+			}
+		}
+	}
+	
+	public void doSubscribe(String msg, String[] words, ClientInfo info, Request r){
+		if(words.length<2){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			stateUpdateHandler.addSubsriber(words[1], info);
+			r.reply("OK");
+		}
+	}
+	
+	public void doUnsubscribe(String msg, String[] words, ClientInfo info, Request r){
+		if(words.length<2){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			if(stateUpdateHandler.removeSubscriber(words[1],info)){
+				r.reply("OK");
+			}else{
+				r.reply("ERR "+ERR_NOT_SUBSCRIBED);
 			}
 		}
 	}

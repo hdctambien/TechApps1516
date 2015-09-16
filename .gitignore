@@ -10,7 +10,8 @@
 
 #Currently it would be useful if everyone had my batch files to run the Server and Debugger Client
 #Uncomment below to ignore batch scripts to run builds
-#*.bat
+#Now just better to ignore becuase of issues with creating batch files on some people's computers
+*.bat
 
 #ignore Thumbs.db
 Thumbs.db
