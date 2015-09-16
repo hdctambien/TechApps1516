@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
@@ -21,9 +22,12 @@ class groundControlGraphics extends Thread
     public JPanel windowPanel = new JPanel();
 	private groundControlGame gcGame;
 	private JButton testButton1;
+	private JSlider throttle;
+	private JSlider rocketHeading;
 	Client c;
 	private boolean buttonStatus = false;
 	private boolean buttonUpdated = true;
+	
 	
 	private MouseAdapter mouse = new MouseAdapter()
 	{ 
@@ -41,6 +45,7 @@ class groundControlGraphics extends Thread
 		}
 	};
 	
+	@SuppressWarnings("deprecation")
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
 		gcGame = groundControlGame;
@@ -52,7 +57,27 @@ class groundControlGraphics extends Thread
 		testButton1.setText("Test Button");
 		testButton1.addMouseListener(mouse);
 		testButton1.setVisible(true);
+		
+		throttle = new JSlider();
+		rocketHeading = new JSlider();
+		
+		throttle.setMaximum(100);
+		throttle.setMinimum(0);
+		throttle.setMajorTickSpacing(10);
+		throttle.setOrientation(JSlider.VERTICAL);
+		throttle.setName("Throttle Position");
+		throttle.setEnabled(false);
+		
+		rocketHeading.setMaximum(180);
+		rocketHeading.setMinimum(-180);
+		rocketHeading.setMajorTickSpacing(15);
+		rocketHeading.setName("Rocket Heading (Degrees from Vertical)");
+		rocketHeading.setEnabled(false);
+		
+		
 		windowPanel.add(testButton1);
+		windowPanel.add(rocketHeading);
+		windowPanel.add(throttle);
 		windowFrame.setResizable(false);
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,5 +104,33 @@ class groundControlGraphics extends Thread
 				System.out.println(buttonStatus);
 			}
 		}
+	}
+	public void updateRocketVelocity(double rocketVelocity) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void updateRocketHeading(double rH) 
+	{
+		rocketHeading.setValue((int) Math.round(rH));
+		System.out.println("Setting value of Rocket Heading to " + rH);
+	}
+	public void updateRocketPosX(double rPX) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	public void updateRocketPosY(double rPY) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	public void updateHasLink(boolean hL) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	public void updateThrottle(double t) 
+	{
+		throttle.setValue((int) Math.round(t));
 	}
 }

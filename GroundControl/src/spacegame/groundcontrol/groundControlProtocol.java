@@ -33,6 +33,21 @@ public class groundControlProtocol extends AbstractProtocol
 	}
 	public void process(String stringIn) 
 	{
-		System.out.println(stringIn);
+		String[] splitStringIn = stringIn.split(" ");
+		for(String str: splitStringIn)
+			System.out.print(str + " ");
+		System.out.println();
+			switch(splitStringIn[1])
+			{
+				case "rocketVelocity":gcGame.setRocketVelocity(splitStringIn[2]);break;
+				case "rocketHeading" :gcGame.setRocketHeading(splitStringIn[2]); break;
+				case "rocketPosX"    :gcGame.setRocketPosX(splitStringIn[2]); break;
+				case "rocketPosY"    :gcGame.setRocketPosY(splitStringIn[2]); break;
+				case "hasLink"       :gcGame.setHasLink(splitStringIn[2]); break;
+				case "throttle"      :gcGame.setThrottle(splitStringIn[2]); break;
+				case "buttonStatus"  :System.out.println("Ignoring button status is now: " + splitStringIn[2]);break;
+				
+				default: System.out.println("Unknown Command: " + splitStringIn);
+			}
 	}
 }
