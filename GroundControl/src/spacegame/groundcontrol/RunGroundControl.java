@@ -43,7 +43,7 @@ public class RunGroundControl
 				JOptionPane.showMessageDialog(frame,"Connecting to "+iAddress + " on port " + port + " with name "+ name);
 			else
 				JOptionPane.showMessageDialog(frame,"Connection failed. Retry or close.");
-			option = JOptionPane.showInternalConfirmDialog(frame,
+			option = JOptionPane.showConfirmDialog(frame,
 					"Connection Failed. Retry?", "Connecting Failed",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 		}
