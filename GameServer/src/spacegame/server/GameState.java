@@ -1,22 +1,33 @@
 package spacegame.server;
 
+/**
+ * This class hold Game-specific variables and contains functionality to get and set those variables
+ * @author Caleb Wilson
+ */
 public class GameState {
 
 	public static final String BUTTON_STATUS = "buttonStatus";
 	public static final String ROCKET_VELOCITY = "rocketVelocity";
 	public static final String ROCKET_HEADING = "rocketHeading";
-	public static final String ROCKET_POS = "rocketPos";
+	public static final String ROCKET_POS_X = "rocketPosX";
+	public static final String ROCKET_POS_Y = "rocketPosY";
+	public static final String HAS_LINK = "hasLink";
 	
 	private volatile boolean buttonStatus;
+	private volatile boolean hasLink;
 	private volatile double rocketVelocity; // m/s
-	private volatile double rocketHeading;  // radians
-	private volatile double rocketPos;      //Position (m?)
+	private volatile double rocketHeading;  //degrees (-180 to 180)
+	private volatile double rocketPosX;     //m
+	private volatile double rocketPosY;     //m 
+	
 	
 	public GameState(){
 		buttonStatus = false;
+		hasLink = true;
 		rocketVelocity = 0.0;
-		rocketHeading = Math.PI/2;
-		rocketPos = 0.0;
+		rocketHeading = 0.0;
+		rocketPosX = 0.0;
+		rocketPosY = 0.0;
 	}
 	
 	public synchronized boolean getButtonStatus(){
@@ -24,6 +35,12 @@ public class GameState {
 	}
 	public synchronized void setButtonStatus(boolean status){
 		buttonStatus = status;
+	}
+	public synchronized boolean getHasLink(){
+		return buttonStatus;
+	}
+	public synchronized void setHasLink(boolean link){
+		hasLink = link;
 	}
 	public synchronized double getRocketVelocity(){
 		return rocketVelocity;
@@ -37,16 +54,25 @@ public class GameState {
 	public synchronized void setRocketHeading(double heading){
 		rocketHeading = heading;
 	}
-	public synchronized double getRocketPosition(){
-		return rocketPos;
+	public synchronized double getRocketPosX(){
+		return rocketPosX;
 	}
-	public synchronized void setRocketPosition(double position){
-		rocketPos = position;
+	public synchronized void setRocketPosX(double position){
+		rocketPosX = position;
+	}
+	public synchronized double getRocketPosY(){
+		return rocketPosY;
+	}
+	public synchronized void setRocketPosY(double position){
+		rocketPosY = position;
 	}
 	public synchronized void doGet(String var, ClientInfo info, Request r){
 		switch(var){
 			case BUTTON_STATUS:
 				info.sendMessage("set buttonStatus "+buttonStatus);
+				break;
+			case HAS_LINK:
+				info.sendMessage("set hasLink "+hasLink);
 				break;
 			case ROCKET_VELOCITY:
 				info.sendMessage("set rocketVelocity "+rocketVelocity);
@@ -54,8 +80,11 @@ public class GameState {
 			case ROCKET_HEADING:
 				info.sendMessage("set rocketHeading "+rocketHeading);
 				break;
-			case ROCKET_POS:
-				info.sendMessage("set rocketPos "+rocketPos);
+			case ROCKET_POS_X:
+				info.sendMessage("set rocketPosX "+rocketPosX);
+				break;
+			case ROCKET_POS_Y:
+				info.sendMessage("set rocketPosY "+rocketPosY);
 				break;
 			default:
 				r.reply("UNK");
@@ -64,14 +93,14 @@ public class GameState {
 	}
 	public synchronized void doSet(String var, String val, ClientInfo info, Request r){
 		switch(var){
-			case BUTTON_STATUS:
+			case BUTTON_STATUS: case HAS_LINK:
 				if(tryBooleanParse(var,val)){
 					r.reply("OK");
 				}else{
 					r.reply("ERR "+SpacegameNetworkProtocol.ERR_PARSE_VAL);
 				}
 				break;
-			case ROCKET_VELOCITY: case ROCKET_HEADING: case ROCKET_POS:
+			case ROCKET_VELOCITY: case ROCKET_HEADING: case ROCKET_POS_X: case ROCKET_POS_Y:
 				if(tryDoubleParse(var,val)){
 					r.reply("OK");
 				}else{
@@ -92,6 +121,9 @@ public class GameState {
 			case BUTTON_STATUS:
 				buttonStatus = temp;
 				break;
+			case HAS_LINK:
+				hasLink = temp;
+				break;
 		}
 		return true;
 	}
@@ -107,8 +139,11 @@ public class GameState {
 				case ROCKET_HEADING:
 					rocketHeading = d;
 					break;
-				case ROCKET_POS:
-					rocketPos = d;
+				case ROCKET_POS_X:
+					rocketPosX = d;
+					break;
+				case ROCKET_POS_Y:
+					rocketPosY = d;
 					break;
 			}
 		}catch(NumberFormatException e){

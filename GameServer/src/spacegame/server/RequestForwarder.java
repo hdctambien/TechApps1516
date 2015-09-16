@@ -2,6 +2,11 @@ package spacegame.server;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * A class that continuously reads from a client socket and passes one line messages from the client to a
+ * RequestProcessor as Request objects. Don't forget to start() it!
+ * @author Caleb Wilson
+ */
 public class RequestForwarder implements Runnable{
 
 	private volatile boolean done;
@@ -11,6 +16,15 @@ public class RequestForwarder implements Runnable{
 	private RequestProcessor processor;
 	private Thread readThread;
 	
+	/**
+	 * Create a new RequestForwarder that reads messages from the given client and feeds them into the given
+	 * RequestProcessor. The RequestForwarder will attempt to create a read stream from the client's socket.
+	 * The RequestForwarder will not start reading until you tell it to start(). a tryTerminate() method is also
+	 * available to terminate the read thread and client connection.
+	 * @param info the information about the client
+	 * @param rp the RequestProcessor to feed to
+	 * @throws IOException If it can't create read streams from the client socket
+	 */
 	public RequestForwarder(ClientInfo info, RequestProcessor rp) throws IOException{
 		this.info = info;
 		socket = info.getSocket();
@@ -19,10 +33,16 @@ public class RequestForwarder implements Runnable{
 		readThread = new Thread(this);
 	}
 	
+	/**
+	 * Start the read Thread for the forwarder
+	 */
 	public void start(){
 		readThread.start();
 	}
 
+	/**
+	 * Do not call this method directly. It is called by the read thread to loop reading operations
+	 */
 	@Override
 	public void run() {
 		done = false;
@@ -63,10 +83,20 @@ public class RequestForwarder implements Runnable{
 		
 	}
 
+	/**
+	 * Get the reading Thread of this object. Please be courteous and tell the forwarder to tryTerminate()
+	 * instead of getting its Thread and calling interupt() or something else that would forcibly close the
+	 * thread
+	 * @return
+	 */
 	public Thread getThread(){
 		return readThread;
 	}
 	
+	/**
+	 * A method that tells the client it is time to close the connection and coordinates to terminate the
+	 * connection and read thread gracefully. This method will block until such has been accomplished.
+	 */
 	public void tryTerminate(){//Blocks until readthread terminates
 		PrintWriter p = info.getPrintWriter();
 		p.println("exit");
@@ -80,6 +110,10 @@ public class RequestForwarder implements Runnable{
 		}
 	}
 	
+	/**
+	 * Get the ClientInfo associated with this forwarder.
+	 * @return the ClientInfo of the client this forwarder is interacting with
+	 */
 	public ClientInfo getClientInfo(){
 		return info;
 	}
