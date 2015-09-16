@@ -28,11 +28,11 @@ public class EngineerProtocol extends AbstractProtocol
 		this.gui = gui;
 		this.client= client;
 		client.sendMessage("set job Engineer");
+		client.sendMessage("subscribe buttonStatus");
 	}
 	
 	public void process(String stringIn)
 	{
-		//eGame.processTextMessage(stringIn);
 		System.out.println(stringIn);
 		switch(stringIn)
 		{
