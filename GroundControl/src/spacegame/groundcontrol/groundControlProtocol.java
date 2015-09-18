@@ -25,7 +25,6 @@ public class groundControlProtocol extends AbstractProtocol
 		port = client.getPort();	
 		gcGame = groundControlGame;
 		this.client= client;
-		client.sendMessage("set job GroundControl");
 	}
 	Client getClient()
 	{
@@ -34,9 +33,6 @@ public class groundControlProtocol extends AbstractProtocol
 	public void process(String stringIn) 
 	{
 		String[] splitStringIn = stringIn.split(" ");
-		for(String str: splitStringIn)
-			System.out.print(str + " ");
-		System.out.println();
 			switch(splitStringIn[1])
 			{
 				case "rocketVelocity":gcGame.setRocketVelocity(splitStringIn[2]);break;
@@ -45,9 +41,8 @@ public class groundControlProtocol extends AbstractProtocol
 				case "rocketPosY"    :gcGame.setRocketPosY(splitStringIn[2]); break;
 				case "hasLink"       :gcGame.setHasLink(splitStringIn[2]); break;
 				case "throttle"      :gcGame.setThrottle(splitStringIn[2]); break;
-				case "buttonStatus"  :System.out.println("Ignoring button status is now: " + splitStringIn[2]);break;
 				
-				default: System.out.println("Unknown Command: " + splitStringIn);
+				default:break;
 			}
 	}
 }

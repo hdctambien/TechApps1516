@@ -43,6 +43,7 @@ public class groundControlGame implements Runnable
 		gcProtocol = new groundControlProtocol(gcClient, this);
 		c = gcProtocol.getClient();
 		c.sendMessage("set name " + name);
+		c.sendMessage("set job GroundControl");
 		c.sendMessage("subscribe all");
 	}
 	
@@ -67,8 +68,6 @@ public class groundControlGame implements Runnable
 			{
 				e.printStackTrace();
 			}
-			c.sendMessage("get throttle");
-			c.sendMessage("get rocketHeading");
 		}
 	}
 
