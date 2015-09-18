@@ -35,17 +35,14 @@ class groundControlGraphics extends Thread
 		{
 			buttonStatus = true;
 			buttonUpdated = false;
-			System.out.println("Button pressed");
 		}
 		public void mouseReleased(MouseEvent e)
 		{
 			buttonStatus = false;
 			buttonUpdated = false;
-			System.out.println("Button released");
 		}
 	};
 	
-	@SuppressWarnings("deprecation")
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
 		gcGame = groundControlGame;
@@ -101,7 +98,6 @@ class groundControlGraphics extends Thread
 			{
 				c.sendMessage("set buttonStatus " + buttonStatus);
 				buttonUpdated = true;
-				System.out.println(buttonStatus);
 			}
 		}
 	}

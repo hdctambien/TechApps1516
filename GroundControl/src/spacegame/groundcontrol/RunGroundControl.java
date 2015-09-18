@@ -60,7 +60,7 @@ public class RunGroundControl
 			}
 		}
 		else
-		{
+		{ 
 			game = new groundControlGame(iAddress, port, name);
 			game.run();
 		}
