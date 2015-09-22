@@ -13,5 +13,9 @@ public class Entity {
 		components.add(c);
 	}
 	
+	public void update(long timeElapsed){
+		
+	}
+	
 	
 }
