@@ -28,7 +28,7 @@ public class EngineerProtocol extends AbstractProtocol
 		this.gui = gui;
 		this.client= client;
 		client.sendMessage("set job Engineer");
-		client.sendMessage("subscribe buttonStatus");
+		client.sendMessage("subscribe all");
 	}
 	
 	public void process(String stringIn)
@@ -36,8 +36,7 @@ public class EngineerProtocol extends AbstractProtocol
 		System.out.println(stringIn);
 		switch(stringIn)
 		{
-			case "set buttonStatus false": gui.setColor("red");break;
-			case "set buttonStatus true" : gui.setColor("green");break;
+			
 		}
 	}
 }

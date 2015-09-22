@@ -19,21 +19,28 @@ public class EngineerGUI extends Thread
 	Client client;
 	JFrame frame;
 	JPanel panel;
-	private JButton stop;
-	private JButton start;
-	private JButton exit;
-	private JButton get;
+	
 	private JSlider throttle;
+	
+	private int power = 100;
+	private int pC;
+	private int pS;
+	private int pF;
+	private int pG;
+	private JSlider pFuel;
+	private JSlider pComms;
+	private JSlider pShield;
+	private JSlider pGuns;
+	
 	private JLabel thro;
-	private JPanel testColor;
+		
 	private GridBagLayout bag;
 	private GridBagConstraints bagC;
 
 	private int WIN_HEIGHT;
 	private int WIN_WIDTH;
 	private int throt = 0;
-	private Dimension size;
-	
+	private Dimension size;	
 	
 	public EngineerGUI(EngineerGame game, Client eClient)
 	{
@@ -44,31 +51,12 @@ public class EngineerGUI extends Thread
 		size = new Dimension(WIN_HEIGHT, WIN_WIDTH);
 		frame = new JFrame();
 		panel = new JPanel();
-		testColor = new JPanel();
 		bag = new GridBagLayout();
-		bagC = new GridBagConstraints();
-	
+		bagC = new GridBagConstraints();	
 		
-		panel.setLayout(bag);
+		panel.setLayout(new GridLayout(2, 6));
 		frame.add(panel);
 		thro = new JLabel(Integer.toString(throt));
-			
-		stop = new JButton("Stop");
-		stop.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent event)
-			{
-				running = false;
-			}
-		});
-		exit = new JButton("Exit Program");
-		exit.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent event)
-			{
-				client.sendMessage("exit");
-				System.exit(8080);
-			}
-		});
 		
 		throttle = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
 		throttle.setMajorTickSpacing(10);
@@ -85,21 +73,70 @@ public class EngineerGUI extends Thread
 				Throt(throt);
 			}
 		});
-		bagC.gridy = 1;
+		
+		pFuel   = new JSlider(JSlider.VERTICAL, 0, 100, 25);
+		pFuel.setMajorTickSpacing(10);
+		pFuel.setMinorTickSpacing(5);
+		pFuel.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					pF = ((JSlider) e.getSource()).getValue();
+				}					
+			});
+		
+		pComms  = new JSlider(JSlider.VERTICAL, 0, 100, 25);
+		pComms.setMajorTickSpacing(10);
+		pComms.setMinorTickSpacing(5);
+		pComms.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					pC = ((JSlider) e.getSource()).getValue();
+				}					
+			});
+		
+		pShield = new JSlider(JSlider.VERTICAL, 0, 100, 25);
+		pShield.setMajorTickSpacing(10);
+		pShield.setMinorTickSpacing(5);
+		pShield.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					pS = ((JSlider) e.getSource()).getValue();
+				}					
+			});
+		
+		pGuns   = new JSlider(JSlider.VERTICAL, 0, 100, 25);
+		pGuns.setMajorTickSpacing(10);
+		pGuns.setMinorTickSpacing(5);
+		pGuns.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					pG = ((JSlider) e.getSource()).getValue();
+				}					
+			});
+		
+		panel.add(pFuel);
+		pFuel.setSize(50, 200);
+		panel.add(pComms);
+		pComms.setSize(50, 200);
+		panel.add(pShield);
+		pShield.setSize(50, 200);
+		panel.add(pGuns);
+		pGuns.setSize(50, 200);
+		
+	/*	bagC.gridy = 1;
 		bagC.ipadx = 150;
-		panel.add(throttle, bagC);
+		panel.add(throttle);
 		bagC.ipadx = 0;
 		bagC.gridy = 2;
 		bagC.ipady = 50;
-		panel.add(thro, bagC);
-		bagC.gridy = 3;
-		bagC.ipady = 50;
-		bagC.ipadx = 50;
-		panel.add(testColor, bagC);
-		testColor.setBackground(Color.BLUE);
+		panel.add(thro);
 		thro.setHorizontalAlignment(JLabel.CENTER);
-		throttle.setSize(500, 25);
-		
+		throttle.setSize(500, 25);*/
+
 		panel.setVisible(true);
 		frame.setSize(size);
 		frame.setVisible(true);
@@ -111,16 +148,7 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
-	}
-	
-	public void setColor(String color)
-	{
-		if(color.equals("red"))
-			testColor.setBackground(Color.RED);
-		else
-			if(color.equals("green"))
-				testColor.setBackground(Color.GREEN);
-	}
+	}	
 	
 	public void Throt(int thrott)
 	{
