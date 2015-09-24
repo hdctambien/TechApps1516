@@ -13,6 +13,7 @@ public class PhysicsComponent extends Component
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
+
 	public void move(long timeElapsed) 
 	{
 		Component position = getEntity().getComponent("Position");
