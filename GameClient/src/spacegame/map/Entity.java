@@ -48,8 +48,9 @@ public class Entity {
 	}
 	
 	public void sync(Entity e){
-		for(int i = 0 ; i < components.size(); i++){
-			components.get(i).sync(e.components.get(i));
+		List<String> keys = new ArrayList<String>(components.keySet());
+		for(int i = 0 ; i < keys.size(); i++){
+			components.get(keys.get(i)).sync(e.components.get(keys.get(i)));
 		}
 	}
 	
@@ -57,7 +58,7 @@ public class Entity {
 		Entity entity = new Entity(name, ufid);
 		List<String> keys = new ArrayList<String>(components.keySet());
 		for(String key: keys){
-			entity.addComponent(key,components.get(key).clone());
+			entity.addComponent(key,components.get(key).clone(entity));
 		}
 		return entity;
 	}
