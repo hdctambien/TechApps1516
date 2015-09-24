@@ -10,14 +10,16 @@ public class EntityFactory {
 	
 	public Entity createShip(){
 		Entity ship = new Entity("Ship"+ufid, ufid++);
-		//ship.addComponent("Physics",new PhysicsComponent());
-		
+		ship.addComponent("Position", new PositionComponent());
+		ship.addComponent("Power", new PowerComponent());
+		ship.addComponent("Physics", new PhysicsComponent());	
 		return ship;
 	}
 	
 	public Entity createAsteroid(){
 		Entity asteroid = new Entity("Asteroid"+ufid,ufid++);
-		//asteroid.addComponent("Physics",new PhysicsComponent());
+		asteroid.addComponent("Position", new PositionComponent());
+		asteroid.addComponent("Physics",new PhysicsComponent());
 		
 		return asteroid;
 	}

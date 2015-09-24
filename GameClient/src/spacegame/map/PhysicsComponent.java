@@ -13,7 +13,6 @@ public class PhysicsComponent extends Component
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
-	@Override
 	public void update(long timeElapsed) 
 	{
 		xPos += timeElapsed/(1_000_000_000.0) * xVel;
