@@ -73,6 +73,26 @@ public class FuelComponent extends Component{
 				return false;
 		}
 	}
+	
+	public boolean hasDouble(String name){
+		switch(name){
+			case "currentFuel":
+			case "maxFuel":
+			case "throttle":
+				return true;
+			default:
+				return false;
+		}
+	}
+	
+	public double getDouble(String name){
+		switch(name){
+			case "currentFuel": return currentFuel;
+			case "maxFuel": return maxFuel;
+			case "throttle": return throttle;
+			default: return Double.NaN;
+		}
+	}
 
 	@Override
 	public String getVariable(String varname) {
