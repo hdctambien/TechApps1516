@@ -42,7 +42,8 @@ public class Entity {
 	
 	public void update(long timeElapsed){
 		if(hasComponent("Update")){
-			
+			UpdateComponent updater = (UpdateComponent) getComponent("Update");
+			updater.update(timeElapsed);
 		}
 	}
 	
