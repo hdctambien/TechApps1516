@@ -28,13 +28,21 @@ public class Entity {
 		components.put(key,c);
 	}
 	
+	public Component getComponent(String key){
+		return components.get(key);
+	}
+	
+	public boolean hasComponent(String key){
+		return components.contains(key);
+	}
+	
 	public Component[] getComponents(){
 		return new ArrayList<Component>(components.values()).toArray(new Component[components.size()]);
 	}
 	
 	public void update(long timeElapsed){
-		for(Component c: getComponents()){
-			c.update(timeElapsed);
+		if(hasComponent("Update")){
+			
 		}
 	}
 	
