@@ -2,8 +2,6 @@ package spacegame.map;
 
 public class PhysicsComponent extends Component
 {
-	private double xPos;
-	private double yPos;
 	private double xVel;
 	private double yVel;
 	private double xAcc;
@@ -11,6 +9,7 @@ public class PhysicsComponent extends Component
 	private double heading;
 	private double throttle;
 	private Component position;
+	private Component fuel;
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
@@ -18,14 +17,13 @@ public class PhysicsComponent extends Component
 	{
 		super(entity);
 		position = getEntity().getComponent("Position");
+		fuel = getEntity().getComponent("Fuel");
 	}
-	
 
 	public void move(long timeElapsed) 
 	{
-		
-		xPos += timeElapsed/(1_000_000_000.0) * xVel;
-		yPos += timeElapsed/(1_000_000_000.0) * yVel;
+		position.setVariable("posX", position.getVariable("posX") + timeElapsed/(1_000_000_000.0) * xVel );
+		position.setVariable("posY", position.getVariable("posY") + timeElapsed/(1_000_000_000.0) * yVel );
 	}
 	
 	public void accelerate(long timeElapsed)
@@ -34,17 +32,20 @@ public class PhysicsComponent extends Component
 		yVel += timeElapsed/(1_000_000_000.0) * yAcc;
 	}
 	
-	public void throttleAcceleration()
+	public void changeAcceleration()
 	{
-		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
-		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
+		xAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
+		yAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
 	}
 	
 	@Override
 	public void sync(Component c) 
 	{
-		// TODO Auto-generated method stub
-		
+		c.setVariable("xVel", Double.toString(xVel));
+		c.setVariable("yVel", Double.toString(yVel));
+		c.setVariable("xAcc", Double.toString(xAcc));
+		c.setVariable("yAcc", Double.toString(yAcc));
+		c.setVariable("heading", Double.toString(heading));
 	}
 
 	@Override
@@ -63,8 +64,6 @@ public class PhysicsComponent extends Component
 			case "velocityX":
 			case "velocityY":
 			case "heading":
-			case "posX":
-			case "posY":
 			case "throttle":
 				return true;
 			default: return false;
@@ -80,8 +79,6 @@ public class PhysicsComponent extends Component
 			case "velocityX": return Double.toString(xVel);
 			case "velocityY": return Double.toString(yVel);
 			case "heading": return Double.toString(heading);
-			case "posX": return Double.toString(xPos);
-			case "posY": return Double.toString(yPos);
 			case "throttle": return Double.toString(throttle);
 			default: return null;
 		}
@@ -96,8 +93,6 @@ public class PhysicsComponent extends Component
 			case "velocityX": xVel = Double.parseDouble(value); return true;
 			case "velocityY": yVel = Double.parseDouble(value); return true;
 			case "heading": heading = Double.parseDouble(value); return true;
-			case "posX": xPos = Double.parseDouble(value); return true;
-			case "posY": yPos = Double.parseDouble(value); return true;
 			case "throttle": throttle = Double.parseDouble(value); return true;
 			default: return false;
 		}

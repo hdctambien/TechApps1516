@@ -2,18 +2,20 @@ package spacegame.map;
 
 public class PositionComponent extends Component
 {
-	private double x;
-	private double y;
+	private double posX;
+	private double posY;
 	
-	public PositionComponent(Entity entity) {
+	public PositionComponent(Entity entity) 
+	{
 		super(entity);
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
 	public void sync(Component c) 
 	{
-		
+		c.setVariable("posX", Double.toString(posX));
+		c.setVariable("posY", Double.toString(posY));
 	}
 
 	@Override
@@ -27,8 +29,8 @@ public class PositionComponent extends Component
 	{
 		switch(varname)
 		{
-		case "x":
-		case "y": 
+		case "posX":
+		case "posY": 
 			return true;
 		default: return false;
 		}
@@ -39,8 +41,8 @@ public class PositionComponent extends Component
 	{
 		switch(varname)
 		{
-		case "x": return Double.toString(x);
-		case "y": return Double.toString(y);
+		case "posX": return Double.toString(posX);
+		case "posY": return Double.toString(posY);
 		default: return null;
 		}
 	}
@@ -50,8 +52,8 @@ public class PositionComponent extends Component
 	{
 		switch(varname)
 		{
-		case "x": x = Double.parseDouble(value);return true;
-		case "y": y = Double.parseDouble(value);return true;
+		case "posX": posX = Double.parseDouble(value);return true;
+		case "posY": posY = Double.parseDouble(value);return true;
 		default:return false;
 		}
 	}
