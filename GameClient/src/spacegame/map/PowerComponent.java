@@ -11,15 +11,19 @@ public class PowerComponent extends Component
 	@Override
 	public void update(long timeElapsed) 
 	{
+		
+		
+	}
+	
+	public void calculatePower()
+	{
 		if(powerComms/100 + powerFuel/100 + powerShield/100 + powerGuns/100 > 1)
 		{
-			//TODO: POWER OVERLOAD or something
 			powerComms = 0;
 			powerFuel = 0;
 			powerShield = 0;
 			powerGuns = 0;
 		}
-		
 	}
 
 	@Override
@@ -66,10 +70,10 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
-			case "powerComms" : powerComms = Double.parseDouble(varname); return true;
-			case "powerFuel " : powerFuel = Double.parseDouble(varname); return true;
-			case "powerShield": powerShield = Double.parseDouble(varname); return true;
-			case "powerGuns"  : powerGuns = Double.parseDouble(varname); return true;
+			case "powerComms" : powerComms = Double.parseDouble(value); return true;
+			case "powerFuel " : powerFuel = Double.parseDouble(value); return true;
+			case "powerShield": powerShield = Double.parseDouble(value); return true;
+			case "powerGuns"  : powerGuns = Double.parseDouble(value); return true;
 			default: return false;
 		}
 	}
