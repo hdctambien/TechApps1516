@@ -50,11 +50,4 @@ public class PositionComponent extends Component
 		default:return false;
 		}
 	}
-
-	@Override
-	public void update(long timeElapsed) {
-		// TODO Remove This
-		
-	}
-
 }

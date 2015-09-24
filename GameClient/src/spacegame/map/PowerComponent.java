@@ -7,14 +7,7 @@ public class PowerComponent extends Component
 	private double powerFuel;
 	private double powerShield;
 	private double powerGuns;
-	
-	@Override
-	public void update(long timeElapsed) 
-	{
-		
-		
-	}
-	
+
 	public void calculatePower()
 	{
 		if(powerComms/100 + powerFuel/100 + powerShield/100 + powerGuns/100 > 1)
