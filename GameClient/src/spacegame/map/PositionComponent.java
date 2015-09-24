@@ -4,6 +4,11 @@ public class PositionComponent extends Component
 {
 	private double x;
 	private double y;
+	
+	public PositionComponent(Entity entity) {
+		super(entity);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void sync(Component c) 

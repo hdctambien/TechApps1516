@@ -10,13 +10,20 @@ public class PhysicsComponent extends Component
 	private double yAcc;
 	private double heading;
 	private double throttle;
+	private Component position;
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
+	
+	public PhysicsComponent(Entity entity) 
+	{
+		super(entity);
+		position = getEntity().getComponent("Position");
+	}
 	
 
 	public void move(long timeElapsed) 
 	{
-		Component position = getEntity().getComponent("Position");
+		
 		xPos += timeElapsed/(1_000_000_000.0) * xVel;
 		yPos += timeElapsed/(1_000_000_000.0) * yVel;
 	}

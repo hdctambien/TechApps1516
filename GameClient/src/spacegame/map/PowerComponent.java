@@ -7,6 +7,12 @@ public class PowerComponent extends Component
 	private double powerFuel;
 	private double powerShield;
 	private double powerGuns;
+	
+	public PowerComponent(Entity entity) 
+	{
+		super(entity);
+		// TODO Auto-generated constructor stub
+	}
 
 	public void calculatePower()
 	{
