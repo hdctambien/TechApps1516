@@ -1,16 +1,19 @@
 package spacegame.map;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 public class Entity {
 
-	private ArrayList<Component> components;
+	private Hashtable<String,Component> components;
 	private String name;
 	private int ufid; //Unique Factory Identifier
 	
 	protected Entity(String name, int ufid){
 		this.name = name;
 		this.ufid = ufid;
+		components = new Hashtable<String,Component>();
 	}
 	
 	public String getName(){
@@ -21,16 +24,16 @@ public class Entity {
 		return ufid;
 	}
 	
-	public void addComponent(Component c){
-		components.add(c);
+	public void addComponent(String key, Component c){
+		components.put(key,c);
 	}
 	
 	public Component[] getComponents(){
-		return components.toArray(new Component[components.size()]);
+		return new ArrayList<Component>(components.values()).toArray(new Component[components.size()]);
 	}
 	
 	public void update(long timeElapsed){
-		for(Component c: components){
+		for(Component c: getComponents()){
 			c.update(timeElapsed);
 		}
 	}
@@ -43,14 +46,15 @@ public class Entity {
 	
 	public Entity clone(){
 		Entity entity = new Entity(name, ufid);
-		for(Component c: components){
-			entity.addComponent(c.clone());
+		List<String> keys = new ArrayList<String>(components.keySet());
+		for(String key: keys){
+			entity.addComponent(key,components.get(key).clone());
 		}
 		return entity;
 	}
 	
 	public boolean hasVariable(String varname){
-		for(Component c: components){
+		for(Component c: getComponents()){
 			if(c.hasVariable(varname)){
 				return true;
 			}
@@ -59,7 +63,7 @@ public class Entity {
 	}
 	
 	public boolean setVariable(String varname, String value){
-		for(Component c: components){
+		for(Component c: getComponents()){
 			if(c.hasVariable(varname)){
 				return c.setVariable(varname, value);
 			}
@@ -68,7 +72,7 @@ public class Entity {
 	}
 	
 	public String getVariable(String varname){
-		for(Component c: components){
+		for(Component c: getComponents()){
 			if(c.hasVariable(varname)){
 				return c.getVariable(varname);
 			}
