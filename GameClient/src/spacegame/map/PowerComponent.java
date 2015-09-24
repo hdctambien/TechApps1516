@@ -2,21 +2,20 @@ package spacegame.map;
 
 public class PowerComponent extends Component
 {
-	private double power; //Arbitrary or? Powerups? Other things? etc etc
-	private double powerComms;
-	private double powerFuel;
-	private double powerShield;
-	private double powerGuns;
+	private int power;
+	private int powerComms;
+	private int powerFuel;
+	private int powerShield;
+	private int powerGuns;
 	
 	public PowerComponent(Entity entity) 
 	{
 		super(entity);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void calculatePower()
 	{
-		if(powerComms/100 + powerFuel/100 + powerShield/100 + powerGuns/100 > 1)
+		if(powerComms + powerFuel + powerShield + powerGuns > power)
 		{
 			powerComms = 0;
 			powerFuel = 0;
@@ -26,13 +25,17 @@ public class PowerComponent extends Component
 	}
 
 	@Override
-	public void sync(Component c) {
-		// TODO Auto-generated method stub
-		
+	public void sync(Component c) 
+	{
+		c.setVariable("powerComms", Integer.toString(powerComms));
+		c.setVariable("powerFuel", Integer.toString(powerFuel));
+		c.setVariable("powerShield", Integer.toString(powerShield));
+		c.setVariable("powerGuns", Integer.toString(powerGuns));
 	}
 
 	@Override
-	public Component clone() {
+	public Component clone() 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -56,10 +59,10 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
-			case "powerComms" : return Double.toString(powerComms);
-			case "powerFuel " : return Double.toString(powerFuel);
-			case "powerShield": return Double.toString(powerShield);
-			case "powerGuns"  : return Double.toString(powerGuns);
+			case "powerComms" : return Integer.toString(powerComms);
+			case "powerFuel " : return Integer.toString(powerFuel);
+			case "powerShield": return Integer.toString(powerShield);
+			case "powerGuns"  : return Integer.toString(powerGuns);
 			default: return null;
 		}
 	}
@@ -69,10 +72,10 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
-			case "powerComms" : powerComms = Double.parseDouble(value); return true;
-			case "powerFuel " : powerFuel = Double.parseDouble(value); return true;
-			case "powerShield": powerShield = Double.parseDouble(value); return true;
-			case "powerGuns"  : powerGuns = Double.parseDouble(value); return true;
+			case "powerComms" : powerComms = Integer.parseInt(value); return true;
+			case "powerFuel " : powerFuel = Integer.parseInt(value); return true;
+			case "powerShield": powerShield = Integer.parseInt(value); return true;
+			case "powerGuns"  : powerGuns = Integer.parseInt(value); return true;
 			default: return false;
 		}
 	}
