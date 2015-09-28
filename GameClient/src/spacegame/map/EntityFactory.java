@@ -22,7 +22,7 @@ public class EntityFactory {
 		Entity asteroid = new Entity("Asteroid"+ufid,ufid++);
 		asteroid.addComponent("Position", new PositionComponent(asteroid));
 		asteroid.addComponent("Physics",new PhysicsComponent(asteroid));
-		
+		asteroid.addComponent("Update", new AsteroidUpdateComponent(asteroid));
 		return asteroid;
 	}
 	
