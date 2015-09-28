@@ -50,8 +50,13 @@ public class PhysicsComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		PhysicsComponent clone = new PhysicsComponent(entity);
+		clone.xVel = xVel;
+		clone.yVel = yVel;
+		clone.xAcc = xAcc;
+		clone.yAcc = yAcc;
+		clone.heading = heading;
+		return clone;
 	}
 
 
