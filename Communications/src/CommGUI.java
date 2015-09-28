@@ -70,7 +70,6 @@ public class CommGUI extends Thread implements Runnable {
 
 
     }
-
     private MouseAdapter mouse = new MouseAdapter()
     {
         public void mousePressed(MouseEvent e)
