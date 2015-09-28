@@ -20,7 +20,7 @@ public class ShipUpdateComponent extends UpdateComponent{
 		}
 		fuel.consumeFuel(timeElapsed);
 		if(fuel.checkThrottle()){
-			physics.changeAcceleration();
+			physics.throttleAcceleration(fuel.getDouble("throttle"));
 		}
 		physics.accelerate(timeElapsed);
 		physics.move(timeElapsed);
