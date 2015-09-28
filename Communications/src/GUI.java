@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
  *   images/middle.gif
  *   images/left.gif
  */
-//;kasdhfkdjashfkdashf;kasdfj;alsdfj;lasdfkjsw
+
 public class GUI extends JPanel
                         implements ActionListener {
     protected JButton b1, b2, b3;
