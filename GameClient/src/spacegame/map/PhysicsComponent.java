@@ -7,9 +7,7 @@ public class PhysicsComponent extends Component
 	private double xAcc;
 	private double yAcc;
 	private double heading;
-	private double throttle;
 	private Component position;
-	private Component fuel;
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
@@ -17,7 +15,6 @@ public class PhysicsComponent extends Component
 	{
 		super(entity);
 		position = getEntity().getComponent("Position");
-		fuel = getEntity().getComponent("Fuel");
 	}
 
 	public void move(long timeElapsed) 
@@ -32,10 +29,10 @@ public class PhysicsComponent extends Component
 		yVel += timeElapsed/(1_000_000_000.0) * yAcc;
 	}
 	
-	public void changeAcceleration()
+	public void throttleAcceleration(double throttle)
 	{
-		xAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
-		yAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
+		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
+		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
 	}
 	
 	@Override
@@ -65,6 +62,8 @@ public class PhysicsComponent extends Component
 			case "velocityY":
 			case "heading":
 			case "throttle":
+			case "xAcc":
+			case "yAcc":
 				return true;
 			default: return false;
 		}
@@ -79,7 +78,8 @@ public class PhysicsComponent extends Component
 			case "velocityX": return Double.toString(xVel);
 			case "velocityY": return Double.toString(yVel);
 			case "heading": return Double.toString(heading);
-			case "throttle": return Double.toString(throttle);
+			case "xAcc": return Double.toString(xAcc);
+			case "yAcc": return Double.toString(yAcc);
 			default: return null;
 		}
 	}
@@ -93,7 +93,8 @@ public class PhysicsComponent extends Component
 			case "velocityX": xVel = Double.parseDouble(value); return true;
 			case "velocityY": yVel = Double.parseDouble(value); return true;
 			case "heading": heading = Double.parseDouble(value); return true;
-			case "throttle": throttle = Double.parseDouble(value); return true;
+			case "xAcc": xAcc = Double.parseDouble(value); return true;
+			case "yAcc": yAcc = Double.parseDouble(value); return true;
 			default: return false;
 		}
 	}

@@ -21,7 +21,10 @@ public class PositionComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		return null;
+		PositionComponent position = new PositionComponent(entity);
+		position.posX = posX;
+		position.posY = posY;
+		return position;
 	}
 
 	@Override

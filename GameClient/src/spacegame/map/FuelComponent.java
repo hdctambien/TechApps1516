@@ -36,12 +36,17 @@ public class FuelComponent extends Component{
 		return currentFuel==maxFuel;
 	}
 	
-	public void checkThrottle(){
+	public boolean checkThrottle(){
 		if(currentFuel == 0){
 			throttle = 0;
+			return false;
 		}else if(currentFuel<0){
 			currentFuel = 0;
 			throttle = 0;
+			return false;
+		}else{
+			//we have a throttle
+			return true;
 		}
 	}
 
