@@ -19,7 +19,7 @@ public class PositionComponent extends Component
 	}
 
 	@Override
-	public Component clone() 
+	public Component clone(Entity entity) 
 	{
 		return null;
 	}

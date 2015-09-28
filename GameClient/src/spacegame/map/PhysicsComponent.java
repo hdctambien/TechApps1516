@@ -49,7 +49,7 @@ public class PhysicsComponent extends Component
 	}
 
 	@Override
-	public Component clone() 
+	public Component clone(Entity entity) 
 	{
 		// TODO Auto-generated method stub
 		return null;
