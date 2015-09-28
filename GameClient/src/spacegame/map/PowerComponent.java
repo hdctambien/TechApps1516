@@ -31,13 +31,19 @@ public class PowerComponent extends Component
 		c.setVariable("powerFuel", Integer.toString(powerFuel));
 		c.setVariable("powerShield", Integer.toString(powerShield));
 		c.setVariable("powerGuns", Integer.toString(powerGuns));
+		c.setVariable("power", Integer.toString(power));
 	}
 
 	@Override
-	public Component clone() 
+	public Component clone(Entity entity) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		PowerComponent clone = new PowerComponent(entity);
+		clone.powerComms = powerComms;
+		clone.powerFuel = powerFuel;
+		clone.powerGuns = powerGuns;
+		clone.powerShield = powerShield;
+		clone.power = power;
+		return clone;
 	}
 
 	@Override
@@ -45,6 +51,7 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
+			case "power":
 			case "powerComms" :
 			case "powerFuel " :
 			case "powerShield":
@@ -59,6 +66,7 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
+			case "power": return Integer.toString(power);
 			case "powerComms" : return Integer.toString(powerComms);
 			case "powerFuel " : return Integer.toString(powerFuel);
 			case "powerShield": return Integer.toString(powerShield);
@@ -72,6 +80,7 @@ public class PowerComponent extends Component
 	{
 		switch(varname)
 		{
+			case "power": power = Integer.parseInt(value); return true;
 			case "powerComms" : powerComms = Integer.parseInt(value); return true;
 			case "powerFuel " : powerFuel = Integer.parseInt(value); return true;
 			case "powerShield": powerShield = Integer.parseInt(value); return true;
