@@ -7,7 +7,6 @@ public class PhysicsComponent extends Component
 	private double xAcc;
 	private double yAcc;
 	private double heading;
-	private double throttle;
 	private Component position;
 	private Component fuel;
 	
@@ -64,7 +63,6 @@ public class PhysicsComponent extends Component
 			case "velocityX":
 			case "velocityY":
 			case "heading":
-			case "throttle":
 				return true;
 			default: return false;
 		}
@@ -79,7 +77,6 @@ public class PhysicsComponent extends Component
 			case "velocityX": return Double.toString(xVel);
 			case "velocityY": return Double.toString(yVel);
 			case "heading": return Double.toString(heading);
-			case "throttle": return Double.toString(throttle);
 			default: return null;
 		}
 	}
@@ -93,7 +90,6 @@ public class PhysicsComponent extends Component
 			case "velocityX": xVel = Double.parseDouble(value); return true;
 			case "velocityY": yVel = Double.parseDouble(value); return true;
 			case "heading": heading = Double.parseDouble(value); return true;
-			case "throttle": throttle = Double.parseDouble(value); return true;
 			default: return false;
 		}
 	}
