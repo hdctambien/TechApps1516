@@ -18,6 +18,12 @@ public class ShieldComponent extends Component
 		maxShield = MAX_SHIELD;
 		shieldRegenRate = SHIELD_REGEN_RATE;
 	}
+	
+	public void takeDamage(int damageAmount)
+	{
+		//TODO
+	}
+	
 
 	@Override
 	public void sync(Component c) 
@@ -40,22 +46,39 @@ public class ShieldComponent extends Component
 	@Override
 	public boolean hasVariable(String varname) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		switch(varname)
+		{
+			case "maxShield"       :
+			case "shield"          :
+			case "shieldRegenRate" :
+				return true;
+			default: return false;
+		}
 	}
 
 	@Override
 	public String getVariable(String varname) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		switch(varname)
+		{
+			case "maxShield"       : return Integer.toString(maxShield);
+			case "shield"          : return Integer.toString(shield);
+			case "shieldRegenRate" : return Double.toString(shieldRegenRate);
+			default: return null;
+		}
 	}
 
 	@Override
 	public boolean setVariable(String varname, String value) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		switch(varname)
+		{
+			case "maxShield"       : maxShield = Integer.parseInt(value);
+			case "shield"          : shield = Integer.parseInt(value);
+			case "shieldRegenRate" : shieldRegenRate = Double.parseDouble(value);
+				return true;
+			default: return false;
+		}
 	}
 
 	@Override
