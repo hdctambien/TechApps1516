@@ -9,7 +9,10 @@ public class ShipUpdateComponent extends UpdateComponent{
 	
 	public ShipUpdateComponent(Entity entity) {
 		super(entity);
-		
+		position = (PositionComponent) entity.getComponent("Position");
+		physics = (PhysicsComponent) entity.getComponent("Physics");
+		power = (PowerComponent) entity.getComponent("Power");
+		fuel = (FuelComponent) entity.getComponent("Fuel");
 	}
 
 	@Override

@@ -11,8 +11,10 @@ public class EntityFactory {
 	public Entity createShip(){
 		Entity ship = new Entity("Ship"+ufid, ufid++);
 		ship.addComponent("Position", new PositionComponent(ship));
+		ship.addComponent("Physics", new PhysicsComponent(ship));
 		ship.addComponent("Power", new PowerComponent(ship));
-		ship.addComponent("Physics", new PhysicsComponent(ship));	
+		ship.addComponent("Fuel", new FuelComponent(ship));
+		ship.addComponent("Update", new ShipUpdateComponent(ship));
 		return ship;
 	}
 	
