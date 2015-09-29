@@ -5,8 +5,7 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 	private PhysicsComponent physics;
 	
 	public AsteroidUpdateComponent(Entity entity) {
-		super(entity);
-		physics = (PhysicsComponent) entity.getComponent("Physics");
+		super(entity);		
 	}
 
 	@Override
@@ -18,6 +17,26 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 	@Override
 	public Component clone(Entity entity) {
 		return new AsteroidUpdateComponent(entity);
+	}
+
+	@Override
+	public void createReferences() {
+		physics = (PhysicsComponent) getEntity().getComponent("Physics");
+	}
+	
+
+	@Override
+	public String serialize() {
+		return "AsteroidUpdate";
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		if(serial.equals("AsteroidUpdate")){
+			//GOOD
+		}else{
+			System.out.println("Serialization error with AsteroidUpdateComponent. String recieved: "+serial);
+		}
 	}
 
 }

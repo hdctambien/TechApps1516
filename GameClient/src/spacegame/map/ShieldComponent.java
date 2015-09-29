@@ -12,15 +12,11 @@ public class ShieldComponent extends Component
 	private Component power;
 	private Component health;
 	
-	
-	
 	public ShieldComponent(Entity entity) 
 	{
 		super(entity);
 		maxShield = MAX_SHIELD;
 		shieldRegenRate = SHIELD_REGEN_RATE;
-		power = entity.getComponent("Power");
-		health = entity.getComponent("shield");
 	}
 
 	@Override
@@ -60,6 +56,24 @@ public class ShieldComponent extends Component
 	{
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public String serialize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReferences() {
+		power = getEntity().getComponent("Power");
+		health = getEntity().getComponent("shield");		
 	}
 
 }

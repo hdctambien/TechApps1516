@@ -8,7 +8,6 @@ public class PositionComponent extends Component
 	public PositionComponent(Entity entity) 
 	{
 		super(entity);
-
 	}
 
 	@Override
@@ -59,5 +58,20 @@ public class PositionComponent extends Component
 		case "posY": posY = Double.parseDouble(value);return true;
 		default:return false;
 		}
+	}
+
+	@Override
+	public String serialize() {
+		return "posX:"+posX+" posY:"+posY;
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReferences() {		
 	}
 }

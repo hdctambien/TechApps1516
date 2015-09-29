@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class Entity {
+public class Entity implements ISerializable {
 
 	private Hashtable<String,Component> components;
 	private String name;
@@ -88,6 +88,35 @@ public class Entity {
 			}
 		}
 		return "Bruh, I don't have this variable...";
+	}
+
+	protected void createReferences(){
+		for(Component c: getComponents()){
+			c.createReferences();
+		}
+	}
+	
+	@Override
+	public String serialize() {
+		StringBuilder serial = new StringBuilder();
+		serial.append(name);
+		serial.append(" size=");
+		serial.append(components.size());		
+		List<String> keys = new ArrayList<String>(components.keySet());
+		for(String key: keys){
+			serial.append("\n");
+			serial.append("serial ");
+			serial.append(key);
+			serial.append(" ");
+			serial.append(components.get(key).serialize());
+		}		
+		return serial.toString();
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

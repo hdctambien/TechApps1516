@@ -88,5 +88,21 @@ public class PowerComponent extends Component
 			default: return false;
 		}
 	}
+
+	@Override
+	public String serialize() {
+		return "power:"+power+" powerComms:"+powerComms+" powerFuel:"+powerFuel+" powerShield:"+powerShield+
+			" powerGuns:"+powerGuns;
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReferences() {		
+	}
 	
 }

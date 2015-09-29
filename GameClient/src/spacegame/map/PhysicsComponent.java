@@ -13,8 +13,7 @@ public class PhysicsComponent extends Component
 	
 	public PhysicsComponent(Entity entity) 
 	{
-		super(entity);
-		position = getEntity().getComponent("Position");
+		super(entity);		
 	}
 
 	public void move(long timeElapsed) 
@@ -101,6 +100,22 @@ public class PhysicsComponent extends Component
 			case "yAcc": yAcc = Double.parseDouble(value); return true;
 			default: return false;
 		}
+	}
+
+	@Override
+	public String serialize() {
+		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc"+yAcc;
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReferences() {
+		position = getEntity().getComponent("Position");
 	}
 	
 }

@@ -9,10 +9,7 @@ public class ShipUpdateComponent extends UpdateComponent{
 	
 	public ShipUpdateComponent(Entity entity) {
 		super(entity);
-		position = (PositionComponent) entity.getComponent("Position");
-		physics = (PhysicsComponent) entity.getComponent("Physics");
-		power = (PowerComponent) entity.getComponent("Power");
-		fuel = (FuelComponent) entity.getComponent("Fuel");
+		
 	}
 
 	@Override
@@ -32,6 +29,28 @@ public class ShipUpdateComponent extends UpdateComponent{
 	@Override
 	public Component clone(Entity entity) {
 		return new ShipUpdateComponent(entity);
+	}
+
+	@Override
+	public void createReferences() {
+		position = (PositionComponent) getEntity().getComponent("Position");
+		physics = (PhysicsComponent) getEntity().getComponent("Physics");
+		power = (PowerComponent) getEntity().getComponent("Power");
+		fuel = (FuelComponent) getEntity().getComponent("Fuel");		
+	}
+
+	@Override
+	public String serialize() {
+		return "ShipUpdate";
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		if(serial.equals("ShipUpdate")){
+			//GOOD
+		}else{
+			System.out.println("Serialization error with ShipUpdateComponent. String recieved: "+serial);
+		}
 	}
 
 

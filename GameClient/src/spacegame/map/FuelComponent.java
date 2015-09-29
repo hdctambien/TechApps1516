@@ -16,7 +16,6 @@ public class FuelComponent extends Component{
 	public FuelComponent(Entity entity) {
 		super(entity);
 		maxFuel = DEFAULT_MAX_FUEL;
-		power = entity.getComponent("Power");
 	}
 	
 	public void consumeFuel(long timeElapsed){
@@ -129,6 +128,22 @@ public class FuelComponent extends Component{
 				return false;
 				
 		}
+	}
+
+	@Override
+	public String serialize() {
+		return "currentFuel:"+currentFuel+" maxFuel:"+maxFuel+" throttle:"+throttle;
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createReferences() {
+		power = getEntity().getComponent("Power");		
 	}
 
 }

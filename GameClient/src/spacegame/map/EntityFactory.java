@@ -15,6 +15,7 @@ public class EntityFactory {
 		ship.addComponent("Power", new PowerComponent(ship));
 		ship.addComponent("Fuel", new FuelComponent(ship));
 		ship.addComponent("Update", new ShipUpdateComponent(ship));
+		ship.createReferences();//DO NOT FORGET THIS, IT IS EXTRMEMELY IMPORTANT
 		return ship;
 	}
 	
@@ -23,6 +24,7 @@ public class EntityFactory {
 		asteroid.addComponent("Position", new PositionComponent(asteroid));
 		asteroid.addComponent("Physics",new PhysicsComponent(asteroid));
 		asteroid.addComponent("Update", new AsteroidUpdateComponent(asteroid));
+		asteroid.createReferences();
 		return asteroid;
 	}
 	

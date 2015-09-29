@@ -3,7 +3,7 @@ package spacegame.map;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class GameMap {
+public class GameMap implements ISerializable {
 
 	ArrayList<Entity> entities;
 	LinkedBlockingQueue<MapAction> actionQueue;
@@ -64,5 +64,25 @@ public class GameMap {
 		}
 		cloned = true;
 		return map;
+	}
+
+	@Override
+	public String serialize() {
+		StringBuilder serial = new StringBuilder();
+		serial.append("serial GameMap size=");
+		serial.append(entities.size());		
+		for(int i = 0; i < entities.size();i++){
+			serial.append("\n");
+			serial.append("serial Entity ");
+			serial.append(i);
+			serial.append(" ");
+			serial.append(entities.get(i).serialize());
+		}
+		return serial.toString();
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		
 	}
 }
