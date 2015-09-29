@@ -4,6 +4,10 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 
 	private PhysicsComponent physics;
 	
+	public AsteroidUpdateComponent(){
+		
+	}
+	
 	public AsteroidUpdateComponent(Entity entity) {
 		super(entity);		
 	}
@@ -27,16 +31,16 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 
 	@Override
 	public String serialize() {
-		return "AsteroidUpdate";
+		return EntityFactory.ASTEROID_UPDATE;
 	}
 
-	@Override
+	/*@Override
 	public void unserialize(String serial) {
 		if(serial.equals("AsteroidUpdate")){
 			//GOOD
 		}else{
 			System.out.println("Serialization error with AsteroidUpdateComponent. String recieved: "+serial);
 		}
-	}
+	}*/
 
 }

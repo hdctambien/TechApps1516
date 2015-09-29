@@ -13,6 +13,10 @@ public class FuelComponent extends Component{
 	public static final double FUEL_REGEN_RATE = 0.05;
 	public static final double DEFAULT_MAX_FUEL = 100;
 	
+	public FuelComponent(){
+		maxFuel = DEFAULT_MAX_FUEL;
+	}
+	
 	public FuelComponent(Entity entity) {
 		super(entity);
 		maxFuel = DEFAULT_MAX_FUEL;
@@ -133,12 +137,6 @@ public class FuelComponent extends Component{
 	@Override
 	public String serialize() {
 		return "currentFuel:"+currentFuel+" maxFuel:"+maxFuel+" throttle:"+throttle;
-	}
-
-	@Override
-	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -2,6 +2,10 @@ package spacegame.map;
 
 public abstract class UpdateComponent extends Component {
 
+	public UpdateComponent(){
+		
+	}
+	
 	public UpdateComponent(Entity entity) {
 		super(entity);
 	}
@@ -26,4 +30,9 @@ public abstract class UpdateComponent extends Component {
 	public void sync(Component c) {
 		
 	}
+	
+	public void unserialize(String serial){
+		//Nothing needs to happen
+	}
+	
 }

@@ -8,6 +8,10 @@ public class PowerComponent extends Component
 	private int powerShield;
 	private int powerGuns;
 	
+	public PowerComponent(){
+		
+	}
+	
 	public PowerComponent(Entity entity) 
 	{
 		super(entity);
@@ -82,7 +86,7 @@ public class PowerComponent extends Component
 		{
 			case "power": power = Integer.parseInt(value); return true;
 			case "powerComms" : powerComms = Integer.parseInt(value); return true;
-			case "powerFuel " : powerFuel = Integer.parseInt(value); return true;
+			case "powerFuel" : powerFuel = Integer.parseInt(value); return true;
 			case "powerShield": powerShield = Integer.parseInt(value); return true;
 			case "powerGuns"  : powerGuns = Integer.parseInt(value); return true;
 			default: return false;
@@ -93,12 +97,6 @@ public class PowerComponent extends Component
 	public String serialize() {
 		return "power:"+power+" powerComms:"+powerComms+" powerFuel:"+powerFuel+" powerShield:"+powerShield+
 			" powerGuns:"+powerGuns;
-	}
-
-	@Override
-	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -7,6 +7,10 @@ public class ShipUpdateComponent extends UpdateComponent{
 	private PowerComponent power;
 	private FuelComponent fuel;
 	
+	public ShipUpdateComponent(){
+		
+	}
+	
 	public ShipUpdateComponent(Entity entity) {
 		super(entity);
 		
@@ -41,18 +45,6 @@ public class ShipUpdateComponent extends UpdateComponent{
 
 	@Override
 	public String serialize() {
-		return "ShipUpdate";
+		return EntityFactory.SHIP_UPDATE;
 	}
-
-	@Override
-	public void unserialize(String serial) {
-		if(serial.equals("ShipUpdate")){
-			//GOOD
-		}else{
-			System.out.println("Serialization error with ShipUpdateComponent. String recieved: "+serial);
-		}
-	}
-
-
-
 }

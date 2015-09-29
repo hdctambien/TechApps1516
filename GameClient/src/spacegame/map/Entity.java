@@ -26,6 +26,7 @@ public class Entity implements ISerializable {
 	
 	public void addComponent(String key, Component c){
 		components.put(key,c);
+		c.setEntity(this);
 	}
 	
 	public Component getComponent(String key){
@@ -115,7 +116,50 @@ public class Entity implements ISerializable {
 
 	@Override
 	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
+		String[] lines = serial.split("\n");
+		String[] meta = lines[0].split(" ");
+		try{
+			name = meta[0];
+			String[] nameUfid = meta[0].split("\\.");
+			ufid = Integer.parseInt(nameUfid[1]);
+			//String[] sizeS = meta[1].split("=");
+			//int size = Integer.parseInt(sizeS[1]);
+			for(int i = 1; i < lines.length; i++){
+				String[] data = lines[i].split(" ",3);
+				//data[0]==="serial"
+				String key = data[1];
+				Component c;
+				boolean update = false;
+				switch(key){
+					case EntityFactory.PHYSICS: c = new PhysicsComponent(); break;
+					case EntityFactory.FUEL: c = new FuelComponent(); break;
+					case EntityFactory.POSITION: c = new PositionComponent(); break;
+					case EntityFactory.POWER: c = new PowerComponent(); break;
+					case EntityFactory.UPDATE:
+						update = true;
+						switch(data[2]){
+							case EntityFactory.ASTEROID_UPDATE:
+								c = new AsteroidUpdateComponent();
+								break;
+							case EntityFactory.SHIP_UPDATE:
+								c = new ShipUpdateComponent();
+								break;
+							default:
+								throw new RuntimeException("Unknown Update Component: "+key);
+						}
+						break;
+					default:
+						throw new RuntimeException("Unknown Component: "+key);
+				}
+				components.put(key, c);
+				if(!update){
+					c.unserialize(data[2]);
+				}
+			}
+		}catch(RuntimeException e){//for all those index out of bounds that good occur but I don't want
+			//to bother testing for since they should cause a serial exception anyway
+			throw new SerialException("Entity unserialize failure",e);
+		}
 		
 	}
 	

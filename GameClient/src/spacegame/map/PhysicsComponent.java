@@ -11,6 +11,10 @@ public class PhysicsComponent extends Component
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
+	public PhysicsComponent(){
+		
+	}
+	
 	public PhysicsComponent(Entity entity) 
 	{
 		super(entity);		
@@ -104,13 +108,7 @@ public class PhysicsComponent extends Component
 
 	@Override
 	public String serialize() {
-		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc"+yAcc;
-	}
-
-	@Override
-	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
-		
+		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc:"+yAcc;
 	}
 
 	@Override

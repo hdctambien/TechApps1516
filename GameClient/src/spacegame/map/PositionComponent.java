@@ -5,6 +5,10 @@ public class PositionComponent extends Component
 	private double posX;
 	private double posY;
 	
+	public PositionComponent(){
+		
+	}
+	
 	public PositionComponent(Entity entity) 
 	{
 		super(entity);
@@ -63,12 +67,6 @@ public class PositionComponent extends Component
 	@Override
 	public String serialize() {
 		return "posX:"+posX+" posY:"+posY;
-	}
-
-	@Override
-	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
