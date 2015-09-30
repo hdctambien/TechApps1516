@@ -6,7 +6,6 @@ public class ShieldComponent extends Component
 	private final int MAX_SHIELD = 1500;
 	private final double SHIELD_REGEN_RATE = 50.0;
 	private int maxShield = MAX_SHIELD;
-	private double shieldRegenRate = SHIELD_REGEN_RATE;
 	private int shield;
 	
 	private Component power;
@@ -15,21 +14,33 @@ public class ShieldComponent extends Component
 	public ShieldComponent() 
 	{
 		maxShield = MAX_SHIELD;
-		shieldRegenRate = SHIELD_REGEN_RATE;
 	}
 	
 	public void takeDamage(int damageAmount)
 	{
-		//TODO
+		shield -= damageAmount;
+		if(shield <= 0)
+		{
+			((HealthComponent) health).takeDamage(0-shield);
+			shield = 0;
+		}
 	}
 	
+	public void regenShields(long timeElapsed)
+	{
+		String shieldPowerString = power.getVariable("powerShield");
+		double powerShield = Double.parseDouble(shieldPowerString);
+		shield += powerShield*SHIELD_REGEN_RATE*timeElapsed/NANO;
+		if(shield>maxShield){
+			shield=maxShield;
+		}
+	}
 
 	@Override
 	public void sync(Component c) 
 	{
 		c.setVariable("maxShield", Integer.toString(maxShield));
 		c.setVariable("shield", Integer.toString(shield));
-		c.setVariable("shieldRegenRate", Double.toString(shieldRegenRate));
 	}
 
 	@Override
@@ -38,7 +49,6 @@ public class ShieldComponent extends Component
 		ShieldComponent clone = new ShieldComponent();
 		clone.maxShield = maxShield;
 		clone.shield = shield;
-		clone.shieldRegenRate = shieldRegenRate;
 		clone.setEntity(entity);
 		return clone;
 	}
@@ -63,7 +73,6 @@ public class ShieldComponent extends Component
 		{
 			case "maxShield"       : return Integer.toString(maxShield);
 			case "shield"          : return Integer.toString(shield);
-			case "shieldRegenRate" : return Double.toString(shieldRegenRate);
 			default: return null;
 		}
 	}
@@ -75,7 +84,6 @@ public class ShieldComponent extends Component
 		{
 			case "maxShield"       : maxShield = Integer.parseInt(value);
 			case "shield"          : shield = Integer.parseInt(value);
-			case "shieldRegenRate" : shieldRegenRate = Double.parseDouble(value);
 				return true;
 			default: return false;
 		}
@@ -84,12 +92,13 @@ public class ShieldComponent extends Component
 	@Override
 	public String serialize() 
 	{
-		return "maxShield:"+maxShield+" shield:"+shield+" shieldRegenRate:"+shieldRegenRate;
+		return "maxShield:"+maxShield+" shield:"+shield;
 	}
 
 
 	@Override
-	public void createReferences() {
+	public void createReferences() 
+	{
 		power = getEntity().getComponent("Power");
 		health = getEntity().getComponent("shield");		
 	}
