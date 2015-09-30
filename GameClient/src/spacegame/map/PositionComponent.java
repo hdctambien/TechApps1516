@@ -5,10 +5,13 @@ public class PositionComponent extends Component
 	private double posX;
 	private double posY;
 	
+	public PositionComponent(){
+		
+	}
+	
 	public PositionComponent(Entity entity) 
 	{
 		super(entity);
-
 	}
 
 	@Override
@@ -21,7 +24,10 @@ public class PositionComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		return null;
+		PositionComponent position = new PositionComponent(entity);
+		position.posX = posX;
+		position.posY = posY;
+		return position;
 	}
 
 	@Override
@@ -57,4 +63,27 @@ public class PositionComponent extends Component
 		default:return false;
 		}
 	}
+
+	@Override
+	public String serialize() {
+		return "posX:"+posX+" posY:"+posY;
+	}
+
+	@Override
+	public void createReferences() {		
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PositionComponent){
+			boolean equal = true;
+			PositionComponent p = (PositionComponent) obj;
+			equal = equal && (posX == p.posX);
+			equal = equal && (posY == p.posY);
+			return equal;
+		}else{
+			return false;
+		}
+	}
+	
 }

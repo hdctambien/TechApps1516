@@ -7,17 +7,17 @@ public class PhysicsComponent extends Component
 	private double xAcc;
 	private double yAcc;
 	private double heading;
-	private double throttle;
 	private Component position;
-	private Component fuel;
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
+	public PhysicsComponent(){
+		
+	}
+	
 	public PhysicsComponent(Entity entity) 
 	{
-		super(entity);
-		position = getEntity().getComponent("Position");
-		fuel = getEntity().getComponent("Fuel");
+		super(entity);		
 	}
 
 	public void move(long timeElapsed) 
@@ -32,10 +32,10 @@ public class PhysicsComponent extends Component
 		yVel += timeElapsed/(1_000_000_000.0) * yAcc;
 	}
 	
-	public void changeAcceleration()
+	public void throttleAcceleration(double throttle)
 	{
-		xAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
-		yAcc = (Double.parseDouble(fuel.getVariable("throttle"))/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
+		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
+		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
 	}
 	
 	@Override
@@ -51,8 +51,13 @@ public class PhysicsComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		PhysicsComponent clone = new PhysicsComponent(entity);
+		clone.xVel = xVel;
+		clone.yVel = yVel;
+		clone.xAcc = xAcc;
+		clone.yAcc = yAcc;
+		clone.heading = heading;
+		return clone;
 	}
 
 
@@ -64,7 +69,8 @@ public class PhysicsComponent extends Component
 			case "velocityX":
 			case "velocityY":
 			case "heading":
-			case "throttle":
+			case "xAcc":
+			case "yAcc":
 				return true;
 			default: return false;
 		}
@@ -79,7 +85,8 @@ public class PhysicsComponent extends Component
 			case "velocityX": return Double.toString(xVel);
 			case "velocityY": return Double.toString(yVel);
 			case "heading": return Double.toString(heading);
-			case "throttle": return Double.toString(throttle);
+			case "xAcc": return Double.toString(xAcc);
+			case "yAcc": return Double.toString(yAcc);
 			default: return null;
 		}
 	}
@@ -93,8 +100,35 @@ public class PhysicsComponent extends Component
 			case "velocityX": xVel = Double.parseDouble(value); return true;
 			case "velocityY": yVel = Double.parseDouble(value); return true;
 			case "heading": heading = Double.parseDouble(value); return true;
-			case "throttle": throttle = Double.parseDouble(value); return true;
+			case "xAcc": xAcc = Double.parseDouble(value); return true;
+			case "yAcc": yAcc = Double.parseDouble(value); return true;
 			default: return false;
+		}
+	}
+
+	@Override
+	public String serialize() {
+		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc:"+yAcc;
+	}
+
+	@Override
+	public void createReferences() {
+		position = getEntity().getComponent("Position");
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PhysicsComponent){
+			boolean equal = true;
+			PhysicsComponent p = (PhysicsComponent) obj;
+			equal = equal && (xVel == p.xVel);
+			equal = equal && (yVel == p.yVel);
+			equal = equal && (heading == p.heading);
+			equal = equal && (xAcc == p.xAcc);
+			equal = equal && (yAcc == p.yAcc);
+			return equal;
+		}else{
+			return false;
 		}
 	}
 	

@@ -8,6 +8,10 @@ public class PowerComponent extends Component
 	private int powerShield;
 	private int powerGuns;
 	
+	public PowerComponent(){
+		
+	}
+	
 	public PowerComponent(Entity entity) 
 	{
 		super(entity);
@@ -82,10 +86,36 @@ public class PowerComponent extends Component
 		{
 			case "power": power = Integer.parseInt(value); return true;
 			case "powerComms" : powerComms = Integer.parseInt(value); return true;
-			case "powerFuel " : powerFuel = Integer.parseInt(value); return true;
+			case "powerFuel" : powerFuel = Integer.parseInt(value); return true;
 			case "powerShield": powerShield = Integer.parseInt(value); return true;
 			case "powerGuns"  : powerGuns = Integer.parseInt(value); return true;
 			default: return false;
+		}
+	}
+
+	@Override
+	public String serialize() {
+		return "power:"+power+" powerComms:"+powerComms+" powerFuel:"+powerFuel+" powerShield:"+powerShield+
+			" powerGuns:"+powerGuns;
+	}
+
+	@Override
+	public void createReferences() {		
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PowerComponent){
+			boolean equal = true;
+			PowerComponent p = (PowerComponent) obj;
+			equal = equal && (power == p.power);
+			equal = equal && (powerComms == p.powerComms);
+			equal = equal && (powerFuel == p.powerFuel);
+			equal = equal && (powerShield == p.powerShield);
+			equal = equal && (powerGuns == p.powerGuns);			
+			return equal;
+		}else{
+			return false;
 		}
 	}
 	

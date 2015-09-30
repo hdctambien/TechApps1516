@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class Entity {
+public class Entity implements ISerializable {
 
 	private Hashtable<String,Component> components;
 	private String name;
@@ -26,6 +26,7 @@ public class Entity {
 	
 	public void addComponent(String key, Component c){
 		components.put(key,c);
+		c.setEntity(this);
 	}
 	
 	public Component getComponent(String key){
@@ -33,7 +34,7 @@ public class Entity {
 	}
 	
 	public boolean hasComponent(String key){
-		return components.contains(key);
+		return components.containsKey(key);
 	}
 	
 	public Component[] getComponents(){
@@ -88,6 +89,108 @@ public class Entity {
 			}
 		}
 		return "Bruh, I don't have this variable...";
+	}
+
+	protected void createReferences(){
+		for(Component c: getComponents()){
+			c.createReferences();
+		}
+	}
+	
+	@Override
+	public String serialize() {
+		StringBuilder serial = new StringBuilder();
+		serial.append(name);
+		serial.append(" size=");
+		serial.append(components.size());		
+		List<String> keys = new ArrayList<String>(components.keySet());
+		for(String key: keys){
+			serial.append("\n");
+			serial.append("serial ");
+			serial.append(key);
+			serial.append(" ");
+			serial.append(components.get(key).serialize());
+		}		
+		return serial.toString();
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		String[] lines = serial.split("\n");
+		String[] meta = lines[0].split(" ");
+		try{
+			name = meta[0];
+			String[] nameUfid = meta[0].split("\\.");
+			ufid = Integer.parseInt(nameUfid[1]);
+			//String[] sizeS = meta[1].split("=");
+			//int size = Integer.parseInt(sizeS[1]);
+			for(int i = 1; i < lines.length; i++){
+				String[] data = lines[i].split(" ",3);
+				//data[0]==="serial"
+				String key = data[1];
+				Component c;
+				boolean update = false;
+				switch(key){
+					case EntityFactory.PHYSICS: c = new PhysicsComponent(); break;
+					case EntityFactory.FUEL: c = new FuelComponent(); break;
+					case EntityFactory.POSITION: c = new PositionComponent(); break;
+					case EntityFactory.POWER: c = new PowerComponent(); break;
+					case EntityFactory.UPDATE:
+						update = true;
+						switch(data[2]){
+							case EntityFactory.ASTEROID_UPDATE:
+								c = new AsteroidUpdateComponent();
+								break;
+							case EntityFactory.SHIP_UPDATE:
+								c = new ShipUpdateComponent();
+								break;
+							default:
+								throw new RuntimeException("Unknown Update Component: "+key);
+						}
+						break;
+					default:
+						throw new RuntimeException("Unknown Component: "+key);
+				}
+				if(!update){
+					c.unserialize(data[2]);
+				}
+				components.put(key, c);
+				c.setEntity(this);
+			}
+		}catch(RuntimeException e){//for all those index out of bounds that good occur but I don't want
+			//to bother testing for since they should cause a serial exception anyway
+			throw new SerialException("Entity unserialize failure",e);
+		}		
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof Entity){
+			Entity entity = (Entity) obj;
+			List<String> keys = new ArrayList<String>(components.keySet());
+			/*List<String> keys2 = new ArrayList<String>(entity.components.keySet());
+			for(String key: keys){
+				System.out.println(key);
+			}
+			for(String key: keys2){
+				System.out.println(key);
+			}*/
+			for(String key: keys){
+				if(entity.hasComponent(key)){
+					if(!entity.getComponent(key).equals(components.get(key))){
+						System.out.println("Entity.equals(obj) :: Components not equal: "+key);
+						return false;
+					}
+				}else{
+					System.out.println("Entity.equals(obj) :: Entity doesn't contain key: "+key);
+					return false;
+				}
+			}
+			return true;
+		}else{
+			System.out.println("Entity.equals(obj) :: obj not instance of Entity");
+			return false;
+		}
 	}
 	
 }

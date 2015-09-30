@@ -13,10 +13,13 @@ public class FuelComponent extends Component{
 	public static final double FUEL_REGEN_RATE = 0.05;
 	public static final double DEFAULT_MAX_FUEL = 100;
 	
+	public FuelComponent(){
+		maxFuel = DEFAULT_MAX_FUEL;
+	}
+	
 	public FuelComponent(Entity entity) {
 		super(entity);
 		maxFuel = DEFAULT_MAX_FUEL;
-		power = entity.getComponent("Power");
 	}
 	
 	public void consumeFuel(long timeElapsed){
@@ -36,12 +39,17 @@ public class FuelComponent extends Component{
 		return currentFuel==maxFuel;
 	}
 	
-	public void checkThrottle(){
+	public boolean checkThrottle(){
 		if(currentFuel == 0){
 			throttle = 0;
+			return false;
 		}else if(currentFuel<0){
 			currentFuel = 0;
 			throttle = 0;
+			return false;
+		}else{
+			//we have a throttle
+			return true;
 		}
 	}
 
@@ -123,6 +131,30 @@ public class FuelComponent extends Component{
 			default:
 				return false;
 				
+		}
+	}
+
+	@Override
+	public String serialize() {
+		return "currentFuel:"+currentFuel+" maxFuel:"+maxFuel+" throttle:"+throttle;
+	}
+
+	@Override
+	public void createReferences() {
+		power = getEntity().getComponent("Power");		
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof FuelComponent){
+			boolean equal = true;
+			FuelComponent f = (FuelComponent) obj;
+			equal = equal && (currentFuel == f.currentFuel);
+			equal = equal && (maxFuel == f.maxFuel);
+			equal = equal && (throttle == f.throttle);
+			return equal;
+		}else{
+			return false;
 		}
 	}
 
