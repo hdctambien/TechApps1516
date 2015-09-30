@@ -42,9 +42,9 @@ public class EngineerGUI extends Thread
 	private int throt = 0;
 	private Dimension size;	
 	
-	public EngineerGUI(EngineerGame game, Client eClient)
+	public EngineerGUI(EngineerGame g, Client eClient)
 	{
-		this.game = game;
+		this.game = g;
 		this.client = eClient;
 		WIN_HEIGHT = 1366;
 		WIN_WIDTH  = 768;
@@ -54,7 +54,7 @@ public class EngineerGUI extends Thread
 		bag = new GridBagLayout();
 		bagC = new GridBagConstraints();	
 		
-		panel.setLayout(new GridLayout(2, 6));
+		panel.setLayout(new GridLayout(1, 4));
 		frame.add(panel);
 		thro = new JLabel(Integer.toString(throt));
 		
@@ -82,6 +82,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pF = ((JSlider) e.getSource()).getValue();
+					game.powerFuel(pF);
 				}					
 			});
 		
@@ -93,6 +94,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pC = ((JSlider) e.getSource()).getValue();
+					game.powerComms(pC);
 				}					
 			});
 		
@@ -104,6 +106,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pS = ((JSlider) e.getSource()).getValue();
+					game.powerShield(pS);
 				}					
 			});
 		
@@ -115,6 +118,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pG = ((JSlider) e.getSource()).getValue();
+					game.powerGuns(pG);
 				}					
 			});
 		

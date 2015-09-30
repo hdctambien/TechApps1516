@@ -8,11 +8,6 @@ public class PositionComponent extends Component
 	public PositionComponent(){
 		
 	}
-	
-	public PositionComponent(Entity entity) 
-	{
-		super(entity);
-	}
 
 	@Override
 	public void sync(Component c) 
@@ -24,9 +19,10 @@ public class PositionComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		PositionComponent position = new PositionComponent(entity);
+		PositionComponent position = new PositionComponent();
 		position.posX = posX;
 		position.posY = posY;
+		position.setEntity(entity);
 		return position;
 	}
 
