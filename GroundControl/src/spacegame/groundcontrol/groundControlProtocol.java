@@ -5,6 +5,12 @@ import java.net.InetAddress;
 import spacegame.client.AbstractProtocol;
 import spacegame.client.Client;
 
+/**
+ * Handles incoming messages from the server, currently obsolete as it does not handle the new entity structure.
+ * 
+ * @author Justin Pierre
+ */
+
 public class groundControlProtocol extends AbstractProtocol
 {
 	private InetAddress iaddress;

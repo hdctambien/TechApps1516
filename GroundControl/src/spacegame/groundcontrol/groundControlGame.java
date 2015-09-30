@@ -11,7 +11,11 @@ import java.io.IOException;
 
 import spacegame.client.*;
 
-
+/**
+ * Starts up client and runs the game loop, initializes game logic and graphics threads.
+ * 
+ * @author Justin Pierre
+ */
 public class groundControlGame implements Runnable
 {
 	String iaddress = "10.11.1.110";
