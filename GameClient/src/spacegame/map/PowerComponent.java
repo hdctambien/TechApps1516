@@ -8,13 +8,9 @@ public class PowerComponent extends Component
 	private int powerShield;
 	private int powerGuns;
 	
-	public PowerComponent(){
-		
-	}
-	
-	public PowerComponent(Entity entity) 
+	public PowerComponent()
 	{
-		super(entity);
+		
 	}
 
 	public void calculatePower()
@@ -41,12 +37,13 @@ public class PowerComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		PowerComponent clone = new PowerComponent(entity);
+		PowerComponent clone = new PowerComponent();
 		clone.powerComms = powerComms;
 		clone.powerFuel = powerFuel;
 		clone.powerGuns = powerGuns;
 		clone.powerShield = powerShield;
 		clone.power = power;
+		clone.setEntity(entity);
 		return clone;
 	}
 

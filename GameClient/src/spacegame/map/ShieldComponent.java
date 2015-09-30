@@ -12,9 +12,8 @@ public class ShieldComponent extends Component
 	private Component power;
 	private Component health;
 	
-	public ShieldComponent(Entity entity) 
+	public ShieldComponent() 
 	{
-		super(entity);
 		maxShield = MAX_SHIELD;
 		shieldRegenRate = SHIELD_REGEN_RATE;
 	}
@@ -36,10 +35,11 @@ public class ShieldComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		ShieldComponent clone = new ShieldComponent(entity);
+		ShieldComponent clone = new ShieldComponent();
 		clone.maxShield = maxShield;
 		clone.shield = shield;
 		clone.shieldRegenRate = shieldRegenRate;
+		clone.setEntity(entity);
 		return clone;
 	}
 
