@@ -52,7 +52,6 @@ public class CommGame implements Runnable
         protocol = new CommProtocol(client, this, gui);
         protocolThread = new Thread(protocol);
         protocolThread.start();
-        run();
         //gui.close();
 
     }

@@ -1,4 +1,4 @@
-//package Communications;
+package Communications.src;
 
 import javax.swing.AbstractButton;
 
@@ -87,8 +87,6 @@ public class CommGUI extends Thread implements Runnable {
     };
     public void run()
     {
-
-
         while(game.running)
         {
             if(!buttonUpdated)

@@ -1,3 +1,4 @@
+package Communications.src;
 
 import java.net.InetAddress;
 
@@ -33,10 +34,10 @@ public class CommProtocol extends AbstractProtocol
     {
         //eGame.processTextMessage(stringIn);
         System.out.println(stringIn);
-        switch(stringIn)
-        {
-            //	case "set buttonStatus false": gui.setColor("red");break;
-            //	case "set buttonStatus true" : gui.setColor("green");break;
-        }
+      //  switch(stringIn)
+    //    {
+//            	case "set buttonStatus false": gui.setColor("red");break;
+//            	case "set buttonStatus true" : gui.setColor("green");break;
+//        }
     }
 }
