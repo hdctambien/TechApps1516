@@ -8,13 +8,9 @@ public class PowerComponent extends Component
 	private int powerShield;
 	private int powerGuns;
 	
-	public PowerComponent(){
-		
-	}
-	
-	public PowerComponent(Entity entity) 
+	public PowerComponent()
 	{
-		super(entity);
+		power = 1000;
 	}
 
 	public void calculatePower()
@@ -41,12 +37,13 @@ public class PowerComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		PowerComponent clone = new PowerComponent(entity);
+		PowerComponent clone = new PowerComponent();
 		clone.powerComms = powerComms;
 		clone.powerFuel = powerFuel;
 		clone.powerGuns = powerGuns;
 		clone.powerShield = powerShield;
 		clone.power = power;
+		clone.setEntity(entity);
 		return clone;
 	}
 
@@ -57,7 +54,7 @@ public class PowerComponent extends Component
 		{
 			case "power":
 			case "powerComms" :
-			case "powerFuel " :
+			case "powerFuel" :
 			case "powerShield":
 			case "powerGuns"  :
 				return true;
@@ -72,7 +69,7 @@ public class PowerComponent extends Component
 		{
 			case "power": return Integer.toString(power);
 			case "powerComms" : return Integer.toString(powerComms);
-			case "powerFuel " : return Integer.toString(powerFuel);
+			case "powerFuel" : return Integer.toString(powerFuel);
 			case "powerShield": return Integer.toString(powerShield);
 			case "powerGuns"  : return Integer.toString(powerGuns);
 			default: return null;

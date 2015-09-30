@@ -17,11 +17,6 @@ public class FuelComponent extends Component{
 		maxFuel = DEFAULT_MAX_FUEL;
 	}
 	
-	public FuelComponent(Entity entity) {
-		super(entity);
-		maxFuel = DEFAULT_MAX_FUEL;
-	}
-	
 	public void consumeFuel(long timeElapsed){
 		currentFuel -= throttle*FUEL_CONS_RATE*timeElapsed/NANO;
 	}
@@ -63,10 +58,11 @@ public class FuelComponent extends Component{
 
 	@Override
 	public Component clone(Entity entity) {
-		FuelComponent clone = new FuelComponent(entity);
+		FuelComponent clone = new FuelComponent();
 		clone.currentFuel = currentFuel;
 		clone.maxFuel = maxFuel;
 		clone.throttle = throttle;
+		clone.setEntity(entity);
 		return clone;
 	}
 

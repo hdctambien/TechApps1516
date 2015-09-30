@@ -132,4 +132,29 @@ public class GameMap implements ISerializable {
 		}
 	}
 	
+	public Entity getEntityByName(String name){
+		for(Entity entity: entities){
+			if(entity.getName().equals(name)){
+				return entity;
+			}
+		}
+		return null;
+	}
+	public int getIndexByName(String name){
+		for(int i = 0; i <entities.size(); i++){
+			if(entities.get(i).getName().equals(name)){
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean hasEntityWithName(String name){
+		for(int i = 0; i <entities.size(); i++){
+			if(entities.get(i).getName().equals(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

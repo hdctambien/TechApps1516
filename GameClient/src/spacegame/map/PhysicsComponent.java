@@ -14,11 +14,6 @@ public class PhysicsComponent extends Component
 	public PhysicsComponent(){
 		
 	}
-	
-	public PhysicsComponent(Entity entity) 
-	{
-		super(entity);		
-	}
 
 	public void move(long timeElapsed) 
 	{
@@ -51,12 +46,13 @@ public class PhysicsComponent extends Component
 	@Override
 	public Component clone(Entity entity) 
 	{
-		PhysicsComponent clone = new PhysicsComponent(entity);
+		PhysicsComponent clone = new PhysicsComponent();
 		clone.xVel = xVel;
 		clone.yVel = yVel;
 		clone.xAcc = xAcc;
 		clone.yAcc = yAcc;
 		clone.heading = heading;
+		clone.setEntity(clone);
 		return clone;
 	}
 
