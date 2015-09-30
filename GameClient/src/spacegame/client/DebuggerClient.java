@@ -64,6 +64,7 @@ public class DebuggerClient {
 		while(!done){
 			//System.out.print("<BasicClient\\> ");
 			String message = in.nextLine();
+			//if(message.equals("tltest")){client.sendMessage("two\nlines");}
 			client.sendMessage(message);
 			System.out.println(":::Message sent to server!");
 			

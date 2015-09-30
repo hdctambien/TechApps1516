@@ -3,7 +3,7 @@ package spacegame.map;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class GameMap {
+public class GameMap implements ISerializable {
 
 	ArrayList<Entity> entities;
 	LinkedBlockingQueue<MapAction> actionQueue;
@@ -65,4 +65,96 @@ public class GameMap {
 		cloned = true;
 		return map;
 	}
+
+	@Override
+	public String serialize() {
+		StringBuilder serial = new StringBuilder();
+		serial.append("serial GameMap size=");
+		serial.append(entities.size());		
+		for(int i = 0; i < entities.size();i++){
+			serial.append("\n");
+			serial.append("$serial Entity ");
+			serial.append(i);
+			serial.append(" ");
+			serial.append(entities.get(i).serialize());
+		}
+		serial.append("\n$serial END");
+		return serial.toString();
+	}
+
+	@Override
+	public void unserialize(String serial) {
+		//System.out.println(serial);
+		try{
+			String[] entitiesSerial = serial.split("\n\\$");
+			String[] mapMeta = entitiesSerial[0].split(" ");
+			//mapMeta[0] : serial
+			//mapMeta[1] : GameMap
+			String[] sizeSerial = mapMeta[2].split("=");
+			int size = Integer.parseInt(sizeSerial[1]);
+			entities.ensureCapacity(size);
+			for(int i = 1; i<entitiesSerial.length;i++){
+				if(entitiesSerial[i].equals("serial END")){
+					break;
+				}else{
+					Entity entity = new Entity("Entity",-1);
+					entity.unserialize(entitiesSerial[i].split(" ",4)[3]);
+					entities.add(entity);
+							//entitiesSerial[i].substring(
+							//entitiesSerial[i].indexOf("Entity")+("Entity "+(i-1)).length()));
+				}				
+			}
+		} catch(RuntimeException e){
+			throw new SerialException("Map unserialize() failure",e);
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof GameMap){
+			boolean equal = true;
+			GameMap map = (GameMap)obj;
+			if(map.entities.size()!=entities.size()){
+				System.out.println("GameMap.equals(obj) :: GameMap sizes differ, "
+						+entities.size()+":"+map.entities.size());
+				return false;
+			}
+			for(int i = 0; i < entities.size(); i++){
+				if(!entities.get(i).equals(map.entities.get(i))){
+					System.out.println("GameMap.equals(obj) :: Entity not equal, index="+i);
+					return false;
+				}
+			}
+			return true;
+		}else{
+			System.out.println("GameMap.equals(obj) :: obj not instance of GameMap");
+			return false;
+		}
+	}
+	
+	public Entity getEntityByName(String name){
+		for(Entity entity: entities){
+			if(entity.getName().equals(name)){
+				return entity;
+			}
+		}
+		return null;
+	}
+	public int getIndexByName(String name){
+		for(int i = 0; i <entities.size(); i++){
+			if(entities.get(i).getName().equals(name)){
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean hasEntityWithName(String name){
+		for(int i = 0; i <entities.size(); i++){
+			if(entities.get(i).getName().equals(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

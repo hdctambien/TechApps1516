@@ -16,3 +16,6 @@
 #ignore Thumbs.db
 Thumbs.db
 
+#IGNORE ANNOYING IntelliJ stuff
+.idea
+

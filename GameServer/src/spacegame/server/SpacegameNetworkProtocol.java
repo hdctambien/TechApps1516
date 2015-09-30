@@ -2,6 +2,7 @@ package spacegame.server;
 
 import spacegame.server.chat.ChatMessage;
 import spacegame.server.chat.Chats;
+import spacegame.map.*;
 
 public class SpacegameNetworkProtocol implements ProtocolHandler {
 
@@ -53,6 +54,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "unsubscribe":
 					doUnsubscribe(msg,words,info,r);
+				case "testSerial":
+					testSerial(info);
+					break;
 				case "OK":
 					//maybe I will want something here in the future...
 					break;
@@ -87,6 +91,13 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "id":
 					info.sendMessage("set id "+info.getUID());
+					break;
+				case "ship":
+					info.sendMessage("set ship "+info.getShip());
+					break;
+				case "map":
+					info.sendMessage(gameState.getMap().serialize());
+					break;
 				default:
 					gameState.doGet(words[1],info,r);
 					//r.reply("UNK");
@@ -106,6 +117,10 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "job":
 					info.setJob(words[2]);
+					r.reply("OK");
+					break;
+				case "ship":
+					info.setShip(words[2]);
 					r.reply("OK");
 					break;
 				default:
@@ -154,5 +169,13 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 
 	public GameState getGameState(){
 		return gameState;
+	}
+	
+	public void testSerial(ClientInfo info){
+		GameMap map = new GameMap();
+		EntityFactory factory = new EntityFactory();
+		map.addEntity(factory.createShip());
+		map.addEntity(factory.createAsteroid());
+		info.sendMessage(map.serialize());
 	}
 }

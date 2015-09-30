@@ -19,6 +19,7 @@ public class ClientInfo {
 	private PrintWriter writer;
 	private String name;
 	private String job;
+	private String ship;
 	private int uid;
 	
 	/**
@@ -44,6 +45,7 @@ public class ClientInfo {
 		uid = 0;
 		name = "Server";
 		job = "MainTerminal";
+		ship = "Admin";
 		writer = new PrintWriter(out);		
 	}
 	
@@ -97,6 +99,13 @@ public class ClientInfo {
 	 */
 	public int getUID(){
 		return uid;
+	}
+	
+	public String getShip(){
+		return ship;
+	}
+	public void setShip(String ship){
+		this.ship = ship;
 	}
 	
 	/**
