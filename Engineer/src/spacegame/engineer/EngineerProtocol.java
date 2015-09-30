@@ -28,6 +28,7 @@ public class EngineerProtocol extends AbstractProtocol
 		this.gui = gui;
 		this.client= client;
 		client.sendMessage("set job Engineer");
+		client.sendMessage("set ship Ship.1");
 		client.sendMessage("subscribe all");
 	}
 	

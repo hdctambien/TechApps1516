@@ -16,6 +16,12 @@ import javax.swing.JTextArea;
 
 import spacegame.client.Client;
 
+/**
+ * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
+ * 
+ * @author Justin Pierre
+ */
+
 class groundControlGraphics extends Thread 
 {
 	JFrame windowFrame;    

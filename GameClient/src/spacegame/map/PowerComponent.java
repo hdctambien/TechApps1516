@@ -10,7 +10,7 @@ public class PowerComponent extends Component
 	
 	public PowerComponent()
 	{
-		
+		power = 1000;
 	}
 
 	public void calculatePower()
@@ -54,7 +54,7 @@ public class PowerComponent extends Component
 		{
 			case "power":
 			case "powerComms" :
-			case "powerFuel " :
+			case "powerFuel" :
 			case "powerShield":
 			case "powerGuns"  :
 				return true;
@@ -69,7 +69,7 @@ public class PowerComponent extends Component
 		{
 			case "power": return Integer.toString(power);
 			case "powerComms" : return Integer.toString(powerComms);
-			case "powerFuel " : return Integer.toString(powerFuel);
+			case "powerFuel" : return Integer.toString(powerFuel);
 			case "powerShield": return Integer.toString(powerShield);
 			case "powerGuns"  : return Integer.toString(powerGuns);
 			default: return null;

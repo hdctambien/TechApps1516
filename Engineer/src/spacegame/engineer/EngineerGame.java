@@ -23,10 +23,10 @@ public class EngineerGame implements Runnable
 	
 	private double pFR, pCR, pGR, pSR;
 	
-	private int pSt;
-	private int pGt;
-	private int pFt;
-	private int pCt;
+	private int pSt = 25;
+	private int pGt = 25;
+	private int pFt = 25;
+	private int pCt = 25;
 	private double power;
 		
 	public EngineerGame()
@@ -57,80 +57,99 @@ public class EngineerGame implements Runnable
 		{
 			case "pS": 
 				pFR = pF/100;
+				System.out.println(pFR);
 				pCR = pC/100;
 				pGR = pG/100;
 				power = 100 - pS;
-				pF = (int)Math.floor(pFR * power);
-				pC = (int)Math.floor(pCR * power);
-				pG = (int)Math.floor(pGR * power);
-				eClient.sendMessage("set powerShield " + Integer.toString(pS));
-				eClient.sendMessage("set powerFuel " + Integer.toString(pF));
-				eClient.sendMessage("set powerComms " + Integer.toString(pC));
-				eClient.sendMessage("set powerGuns " + Integer.toString(pG));break;
+				pSt = pS;
+				pFt = (int)Math.floor(pFR * power);
+				pCt = (int)Math.floor(pCR * power);
+				pGt = (int)Math.floor(pGR * power);
+				eClient.sendMessage("set powerShield " + Integer.toString(pSt));
+				eClient.sendMessage("set powerFuel " + Integer.toString(pFt));
+				eClient.sendMessage("set powerComms " + Integer.toString(pCt));
+				eClient.sendMessage("set powerGuns " + Integer.toString(pGt));break;
 				
 			case "pF": 
 				pSR = pS/100;
 				pCR = pC/100;
 				pGR = pG/100;
 				power = 100 - pF;
-				pS = (int)Math.floor(pSR * power);
-				pC = (int)Math.floor(pCR * power);
-				pG = (int)Math.floor(pGR * power);
-				eClient.sendMessage("set powerFuel " + Integer.toString(pF));
-				eClient.sendMessage("set powerShield " + Integer.toString(pS));
-				eClient.sendMessage("set powerComms " + Integer.toString(pC));
-				eClient.sendMessage("set powerGuns " + Integer.toString(pG));break;
+				pSt = (int)Math.floor(pSR * power);
+				pFt = pF;
+				pCt = (int)Math.floor(pCR * power);
+				pGt = (int)Math.floor(pGR * power);
+				eClient.sendMessage("set powerFuel " + Integer.toString(pFt));
+				eClient.sendMessage("set powerShield " + Integer.toString(pSt));
+				eClient.sendMessage("set powerComms " + Integer.toString(pCt));
+				eClient.sendMessage("set powerGuns " + Integer.toString(pGt));break;
 				
 			case "pC": 
 				pFR = pF/100;
 				pSR = pS/100;
 				pGR = pG/100;
 				power = 100 - pC;
-				pS = (int)Math.floor(pSR * power);
-				pG = (int)Math.floor(pGR * power);
-				pF = (int)Math.floor(pFR * power);
-				eClient.sendMessage("set powerComms " + Integer.toString(pC));
-				eClient.sendMessage("set powerFuel " + Integer.toString(pF));
-				eClient.sendMessage("set powerShield " + Integer.toString(pS));
-				eClient.sendMessage("set powerGuns " + Integer.toString(pG));break;
+				pSt = (int)Math.floor(pSR * power);
+				pFt = (int)Math.floor(pFR * power);
+				pCt = pC;
+				pGt = (int)Math.floor(pGR * power);
+				eClient.sendMessage("set powerComms " + Integer.toString(pCt));
+				eClient.sendMessage("set powerFuel " + Integer.toString(pFt));
+				eClient.sendMessage("set powerShield " + Integer.toString(pSt));
+				eClient.sendMessage("set powerGuns " + Integer.toString(pGt));break;
 				
 			case "pG": 
 				pFR = pF/100;
 				pCR = pC/100;
 				pSR = pS/100;
 				power = 100 - pG;
-				pS = (int)Math.floor(pSR * power);
-				pG = (int)Math.floor(pGR * power);
-				pF = (int)Math.floor(pFR * power);
-				eClient.sendMessage("set powerComms " + Integer.toString(pG));
-				eClient.sendMessage("set powerFuel " + Integer.toString(pF));
-				eClient.sendMessage("set powerShield " + Integer.toString(pS));
-				eClient.sendMessage("set powerGuns " + Integer.toString(pC));break;
+				pSt = (int)Math.floor(pSR * power);
+				pFt = (int)Math.floor(pFR * power);
+				pCt = (int)Math.floor(pCR * power);
+				pGt = pG;
+				eClient.sendMessage("set powerGuns " + Integer.toString(pGt));
+				eClient.sendMessage("set powerFuel " + Integer.toString(pFt));
+				eClient.sendMessage("set powerShield " + Integer.toString(pSt));
+				eClient.sendMessage("set powerComms " + Integer.toString(pCt));break;
+				
+			default:
+				pCt = 25;
+				pSt = 25;
+				pFt = 25;
+				pGt = 25;break;
 		}
+		System.out.println(pCt);
+		System.out.println(pFt);
+		System.out.println(pSt);
+		System.out.println(pGt);
+		gui.pComms.setValue(pCt);
+		gui.pFuel.setValue(pFt);
+		gui.pShield.setValue(pSt);
+		gui.pGuns.setValue(pGt);
 	}
 	
 	public void powerShield(int pShield)
 	{
 		//eClient.sendMessage("set powerShield " + Integer.toString(pShield));
-		powerDist(pShield, pF, pC, pG, "pS");
+		powerDist(pShield, pFt, pCt, pGt, "pS");
 	}
 	
 	public void powerFuel(int pFuel)
 	{
 		//eClient.sendMessage("set powerFuel " + Integer.toString(pFuel));
-		powerDist(pS, pFuel, pC, pG, "pF");
+		powerDist(pSt, pFuel, pCt, pGt, "pF");
 	}
 	
 	public void powerComms(int pComms)
 	{
 		//eClient.sendMessage("set powerComms " + Integer.toString(pComms));
-		powerDist(pS, pF, pComms, pG, "pC");
+		powerDist(pSt, pFt, pComms, pGt, "pC");
 	}
 	
 	public void powerGuns(int pGuns)
 	{
 		//eClient.sendMessage("set powerGuns " + Integer.toString(pGuns));
-		powerDist(pS, pF, pC, pGuns, "pG");
+		powerDist(pSt, pFt, pCt, pGuns, "pG");
 	}
 	
 	public void run()

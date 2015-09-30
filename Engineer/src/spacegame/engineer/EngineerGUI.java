@@ -23,14 +23,22 @@ public class EngineerGUI extends Thread
 	private JSlider throttle;
 	
 	private int power = 100;
-	private int pC;
-	private int pS;
-	private int pF;
-	private int pG;
-	private JSlider pFuel;
-	private JSlider pComms;
-	private JSlider pShield;
-	private JSlider pGuns;
+	private int pC = 25;
+	private int pS = 25;
+	private int pF = 25;
+	private int pG = 25;
+	public JSlider pFuel;
+	public JSlider pComms;
+	public JSlider pShield;
+	public JSlider pGuns;
+	private JPanel powerPanel;
+	
+	private JPanel tp, tp2, tp3;
+	
+	private JLabel fuel;
+	private JLabel comms;
+	private JLabel shield;
+	private JLabel guns;
 	
 	private JLabel thro;
 		
@@ -46,16 +54,24 @@ public class EngineerGUI extends Thread
 	{
 		this.game = g;
 		this.client = eClient;
-		WIN_HEIGHT = 1366;
-		WIN_WIDTH  = 768;
+		WIN_HEIGHT = 700;
+		WIN_WIDTH  = 700;
 		size = new Dimension(WIN_HEIGHT, WIN_WIDTH);
 		frame = new JFrame();
 		panel = new JPanel();
 		bag = new GridBagLayout();
-		bagC = new GridBagConstraints();	
+		bagC = new GridBagConstraints();
 		
-		panel.setLayout(new GridLayout(1, 4));
+		tp = new JPanel();
+		tp2 = new JPanel();
+		tp3 = new JPanel();
+		
+		//panel.setLayout(new GridLayout(2, 2));
+		frame.setLayout(new GridLayout(2, 2));
 		frame.add(panel);
+		frame.add(tp);
+		frame.add(tp2);
+		frame.add(tp3);
 		thro = new JLabel(Integer.toString(throt));
 		
 		throttle = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
@@ -77,6 +93,8 @@ public class EngineerGUI extends Thread
 		pFuel   = new JSlider(JSlider.VERTICAL, 0, 100, 25);
 		pFuel.setMajorTickSpacing(10);
 		pFuel.setMinorTickSpacing(5);
+		pFuel.setPaintTicks(true);
+		pFuel.setValue(25);
 		pFuel.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -89,6 +107,7 @@ public class EngineerGUI extends Thread
 		pComms  = new JSlider(JSlider.VERTICAL, 0, 100, 25);
 		pComms.setMajorTickSpacing(10);
 		pComms.setMinorTickSpacing(5);
+		pComms.setPaintTicks(true);
 		pComms.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -101,6 +120,8 @@ public class EngineerGUI extends Thread
 		pShield = new JSlider(JSlider.VERTICAL, 0, 100, 25);
 		pShield.setMajorTickSpacing(10);
 		pShield.setMinorTickSpacing(5);
+		pShield.setPaintTicks(true);
+		pShield.setValue(25);
 		pShield.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -113,6 +134,8 @@ public class EngineerGUI extends Thread
 		pGuns   = new JSlider(JSlider.VERTICAL, 0, 100, 25);
 		pGuns.setMajorTickSpacing(10);
 		pGuns.setMinorTickSpacing(5);
+		pGuns.setPaintTicks(true);
+		pGuns.setValue(25);
 		pGuns.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -122,14 +145,23 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-		panel.add(pFuel);
-		pFuel.setSize(50, 200);
-		panel.add(pComms);
-		pComms.setSize(50, 200);
-		panel.add(pShield);
-		pShield.setSize(50, 200);
-		panel.add(pGuns);
-		pGuns.setSize(50, 200);
+		powerPanel = new JPanel();
+		
+		powerPanel.add(pFuel);
+		powerPanel.add(pComms);
+		powerPanel.add(pShield);
+		powerPanel.add(pGuns);
+		
+		panel.add(powerPanel, JFrame.LEFT_ALIGNMENT);
+		
+	/*	fuel = new JLabel("Fuel");
+		powerPanel.add(fuel);
+		comms = new JLabel("Comms");
+		powerPanel.add(comms);
+		shield = new JLabel("Shield");
+		powerPanel.add(shield);
+		guns = new JLabel("Guns");
+		powerPanel.add(guns);*/
 		
 	/*	bagC.gridy = 1;
 		bagC.ipadx = 150;

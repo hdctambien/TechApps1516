@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.*;
 import java.util.Scanner;
+
 public class process 
 {
 	
@@ -30,15 +31,28 @@ public class process
 	}
 	public static void main(String[] args)
 	{
-		
+		PilotClient pilot = new PilotClient();
+		pilot.setup();
 		Scanner input = new Scanner( System.in );
 		boolean done = false, finished = false;
+		boolean running = true;
+		
+		while(running = true){
+			System.out.println("Do something: ");
+			String choice = input.nextLine();
+			if(choice.compareTo("exit") == 0){
+				pilot.exit();
+				break;
+			}
+		}
+
 		
 		
 		
 		
 		
-		JPanel panel = new JPanel(), buttons = new JPanel(); 
+		
+		/*	JPanel panel = new JPanel(), buttons = new JPanel(); 
 		panel.setSize(1000,600);
 		
 				
@@ -56,7 +70,7 @@ public class process
 	//	frame.add(buttons);
 	
 	//	panel.setLayout(new GridLayout(7,7));
-	/*	while(done == false)
+		while(done == false)
 		{
 			System.out.println("What would you like to do?");
 			
@@ -87,8 +101,8 @@ public class process
 			
 			
 		}*/
-		double rand = Math.random();
-		new process();
+		
+	//	new process();
 		
 	//	createCircle(rand,panel);
 		
