@@ -52,7 +52,7 @@ public class PhysicsComponent extends Component
 		clone.xAcc = xAcc;
 		clone.yAcc = yAcc;
 		clone.heading = heading;
-		clone.setEntity(clone);
+		clone.setEntity(entity);
 		return clone;
 	}
 

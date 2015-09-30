@@ -3,18 +3,21 @@ package spacegame.map;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class GameMap implements ISerializable {
+public class GameMap implements ISerializable, EntityListener {
 
-	ArrayList<Entity> entities;
-	LinkedBlockingQueue<MapAction> actionQueue;
+	private ArrayList<Entity> entities;
+	private ArrayList<MapListener> listeners;
+	private LinkedBlockingQueue<MapAction> actionQueue;
 	private boolean cloned = false;
 	
 	public GameMap(){
 		entities = new ArrayList<Entity>();
+		listeners = new ArrayList<MapListener>();
 	}
 	
 	public void addEntity(Entity e){
 		entities.add(e);
+		e.addEntityListener(this);
 		if(cloned){
 			actionQueue.add(new MapAction(e.getUFID(),entities.size()-1,MapAction.ENTITY_ADD));
 		}		
@@ -27,8 +30,12 @@ public class GameMap implements ISerializable {
 	public void removeEntity(Entity e){
 		int index = entities.indexOf(e);
 		if(index!=-1){
-			int ufid = entities.remove(index).getUFID();
-			actionQueue.add(new MapAction(ufid,index,MapAction.ENTITY_REMOVE));
+			Entity removed = entities.remove(index); 
+			int ufid = removed.getUFID();
+			removed.removeEntityListener(this);
+			if(cloned){
+				actionQueue.add(new MapAction(ufid,index,MapAction.ENTITY_REMOVE));
+			}
 		}
 	}
 	
@@ -155,6 +162,28 @@ public class GameMap implements ISerializable {
 			}
 		}
 		return false;
+	}
+	
+	public void addMapListener(MapListener listener){
+		listeners.add(listener);
+	}
+	
+	public boolean removeMapListener(MapListener listener){
+		return listeners.remove(listener);
+	}
+	
+	private void fireMapEvent(MapEvent e){
+		if(!listeners.isEmpty()){
+			for(MapListener listener: listeners){
+				listener.mapChanged(e);
+			}
+		}
+	}
+
+	@Override
+	public void entityChanged(EntityEvent ee) {
+		String name = ee.getEntityName();
+		fireMapEvent(new MapEvent(name,getIndexByName(name), ee.getVarName(), ee.getValue()));
 	}
 	
 }

@@ -43,6 +43,7 @@ public class DebuggerClient {
 			//Basic name and job setup
 			client.sendMessage("set name "+name);			
 			client.sendMessage("set job DebuggerClient");
+			client.sendMessage("set ship Ship.1");
 			
 			enterProtocolLoop(in, client, basic);			
 		}catch(IOException e){

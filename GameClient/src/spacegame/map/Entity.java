@@ -7,13 +7,16 @@ import java.util.List;
 public class Entity implements ISerializable {
 
 	private Hashtable<String,Component> components;
+	private ArrayList<EntityListener> listeners;
 	private String name;
 	private int ufid; //Unique Factory Identifier
+	private boolean isUpdating;
 	
 	protected Entity(String name, int ufid){
 		this.name = name;
 		this.ufid = ufid;
 		components = new Hashtable<String,Component>();
+		isUpdating = false;
 	}
 	
 	public String getName(){
@@ -76,6 +79,9 @@ public class Entity implements ISerializable {
 	public boolean setVariable(String varname, String value){
 		for(Component c: getComponents()){
 			if(c.hasVariable(varname)){
+				if(!isUpdating){
+					fireEntityEvent(new EntityEvent(name, varname, value));
+				}
 				return c.setVariable(varname, value);
 			}
 		}
@@ -95,6 +101,13 @@ public class Entity implements ISerializable {
 		for(Component c: getComponents()){
 			c.createReferences();
 		}
+	}
+	
+	public boolean isUpdating(){
+		return isUpdating;
+	}
+	public void setUpdating(boolean updating){
+		isUpdating = updating;
 	}
 	
 	@Override
@@ -190,6 +203,22 @@ public class Entity implements ISerializable {
 		}else{
 			System.out.println("Entity.equals(obj) :: obj not instance of Entity");
 			return false;
+		}
+	}
+	
+	public void addEntityListener(EntityListener listener){
+		listeners.add(listener);
+	}
+	
+	public boolean removeEntityListener(EntityListener listener){
+		return listeners.remove(listener);
+	}
+	
+	private void fireEntityEvent(EntityEvent e){
+		if(!listeners.isEmpty()){
+			for(EntityListener listener: listeners){
+				listener.entityChanged(e);
+			}
 		}
 	}
 	

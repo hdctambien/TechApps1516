@@ -52,10 +52,26 @@ public class GameState {
 		if(ship.hasVariable(var)){
 			ship.setVariable(var, val);
 			r.reply("OK");
+			fireGameStateEvent(new GameStateEvent(var,val));
 		}else{
 			r.reply("UNK");
 		}
 	}
+	public synchronized void doMapSet(String entityName, String var, String val, ClientInfo info, Request r){
+		if(!map.hasEntityWithName(entityName)){
+			r.reply("UNK");
+			return;
+		}
+		Entity entity = map.getEntityByName(entityName);
+		if(entity.hasVariable(var)){
+			entity.setVariable(var, val);
+			r.reply("OK");
+			//fireGameStateEvent(new GameStateEvent(var,val));
+		}else{
+			r.reply("UNK");
+		}		
+	}
+	
 	private void fireGameStateEvent(GameStateEvent e){
 		if(!listeners.isEmpty()){
 			for(GameStateListener listener: listeners){
