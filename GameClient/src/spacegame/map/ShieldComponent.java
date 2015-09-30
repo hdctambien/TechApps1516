@@ -82,9 +82,9 @@ public class ShieldComponent extends Component
 	}
 
 	@Override
-	public String serialize() {
-		// TODO Auto-generated method stub
-		return null;
+	public String serialize() 
+	{
+		return "maxShield:"+maxShield+" shield:"+shield+" shieldRegenRate:"+shieldRegenRate;
 	}
 
 
