@@ -91,6 +91,13 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "id":
 					info.sendMessage("set id "+info.getUID());
+					break;
+				case "ship":
+					info.sendMessage("set ship "+info.getShip());
+					break;
+				case "map":
+					info.sendMessage(gameState.getMap().serialize());
+					break;
 				default:
 					gameState.doGet(words[1],info,r);
 					//r.reply("UNK");
@@ -110,6 +117,10 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					break;
 				case "job":
 					info.setJob(words[2]);
+					r.reply("OK");
+					break;
+				case "ship":
+					info.setShip(words[2]);
 					r.reply("OK");
 					break;
 				default:
