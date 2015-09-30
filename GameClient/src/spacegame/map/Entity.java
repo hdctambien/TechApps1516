@@ -34,7 +34,7 @@ public class Entity implements ISerializable {
 	}
 	
 	public boolean hasComponent(String key){
-		return components.contains(key);
+		return components.containsKey(key);
 	}
 	
 	public Component[] getComponents(){
@@ -151,16 +151,46 @@ public class Entity implements ISerializable {
 					default:
 						throw new RuntimeException("Unknown Component: "+key);
 				}
-				components.put(key, c);
 				if(!update){
 					c.unserialize(data[2]);
 				}
+				components.put(key, c);
+				c.setEntity(this);
 			}
 		}catch(RuntimeException e){//for all those index out of bounds that good occur but I don't want
 			//to bother testing for since they should cause a serial exception anyway
 			throw new SerialException("Entity unserialize failure",e);
+		}		
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof Entity){
+			Entity entity = (Entity) obj;
+			List<String> keys = new ArrayList<String>(components.keySet());
+			/*List<String> keys2 = new ArrayList<String>(entity.components.keySet());
+			for(String key: keys){
+				System.out.println(key);
+			}
+			for(String key: keys2){
+				System.out.println(key);
+			}*/
+			for(String key: keys){
+				if(entity.hasComponent(key)){
+					if(!entity.getComponent(key).equals(components.get(key))){
+						System.out.println("Entity.equals(obj) :: Components not equal: "+key);
+						return false;
+					}
+				}else{
+					System.out.println("Entity.equals(obj) :: Entity doesn't contain key: "+key);
+					return false;
+				}
+			}
+			return true;
+		}else{
+			System.out.println("Entity.equals(obj) :: obj not instance of Entity");
+			return false;
 		}
-		
 	}
 	
 }

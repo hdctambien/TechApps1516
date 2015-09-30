@@ -143,5 +143,19 @@ public class FuelComponent extends Component{
 	public void createReferences() {
 		power = getEntity().getComponent("Power");		
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof FuelComponent){
+			boolean equal = true;
+			FuelComponent f = (FuelComponent) obj;
+			equal = equal && (currentFuel == f.currentFuel);
+			equal = equal && (maxFuel == f.maxFuel);
+			equal = equal && (throttle == f.throttle);
+			return equal;
+		}else{
+			return false;
+		}
+	}
 
 }

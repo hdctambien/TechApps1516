@@ -72,4 +72,18 @@ public class PositionComponent extends Component
 	@Override
 	public void createReferences() {		
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PositionComponent){
+			boolean equal = true;
+			PositionComponent p = (PositionComponent) obj;
+			equal = equal && (posX == p.posX);
+			equal = equal && (posY == p.posY);
+			return equal;
+		}else{
+			return false;
+		}
+	}
+	
 }

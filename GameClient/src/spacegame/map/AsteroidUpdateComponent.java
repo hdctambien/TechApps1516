@@ -34,13 +34,9 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 		return EntityFactory.ASTEROID_UPDATE;
 	}
 
-	/*@Override
-	public void unserialize(String serial) {
-		if(serial.equals("AsteroidUpdate")){
-			//GOOD
-		}else{
-			System.out.println("Serialization error with AsteroidUpdateComponent. String recieved: "+serial);
-		}
-	}*/
+	@Override
+	public boolean equals(Object obj){
+		return (obj instanceof AsteroidUpdateComponent);
+	}
 
 }

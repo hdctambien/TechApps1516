@@ -103,4 +103,20 @@ public class PowerComponent extends Component
 	public void createReferences() {		
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PowerComponent){
+			boolean equal = true;
+			PowerComponent p = (PowerComponent) obj;
+			equal = equal && (power == p.power);
+			equal = equal && (powerComms == p.powerComms);
+			equal = equal && (powerFuel == p.powerFuel);
+			equal = equal && (powerShield == p.powerShield);
+			equal = equal && (powerGuns == p.powerGuns);			
+			return equal;
+		}else{
+			return false;
+		}
+	}
+	
 }

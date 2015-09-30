@@ -84,7 +84,7 @@ public class GameMap implements ISerializable {
 
 	@Override
 	public void unserialize(String serial) {
-		System.out.println(serial);
+		//System.out.println(serial);
 		try{
 			String[] entitiesSerial = serial.split("\n\\$");
 			String[] mapMeta = entitiesSerial[0].split(" ");
@@ -99,7 +99,7 @@ public class GameMap implements ISerializable {
 				}else{
 					Entity entity = new Entity("Entity",-1);
 					entity.unserialize(entitiesSerial[i].split(" ",4)[3]);
-							
+					entities.add(entity);
 							//entitiesSerial[i].substring(
 							//entitiesSerial[i].indexOf("Entity")+("Entity "+(i-1)).length()));
 				}				
@@ -108,4 +108,28 @@ public class GameMap implements ISerializable {
 			throw new SerialException("Map unserialize() failure",e);
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof GameMap){
+			boolean equal = true;
+			GameMap map = (GameMap)obj;
+			if(map.entities.size()!=entities.size()){
+				System.out.println("GameMap.equals(obj) :: GameMap sizes differ, "
+						+entities.size()+":"+map.entities.size());
+				return false;
+			}
+			for(int i = 0; i < entities.size(); i++){
+				if(!entities.get(i).equals(map.entities.get(i))){
+					System.out.println("GameMap.equals(obj) :: Entity not equal, index="+i);
+					return false;
+				}
+			}
+			return true;
+		}else{
+			System.out.println("GameMap.equals(obj) :: obj not instance of GameMap");
+			return false;
+		}
+	}
+	
 }

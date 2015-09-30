@@ -116,4 +116,20 @@ public class PhysicsComponent extends Component
 		position = getEntity().getComponent("Position");
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof PhysicsComponent){
+			boolean equal = true;
+			PhysicsComponent p = (PhysicsComponent) obj;
+			equal = equal && (xVel == p.xVel);
+			equal = equal && (yVel == p.yVel);
+			equal = equal && (heading == p.heading);
+			equal = equal && (xAcc == p.xAcc);
+			equal = equal && (yAcc == p.yAcc);
+			return equal;
+		}else{
+			return false;
+		}
+	}
+	
 }

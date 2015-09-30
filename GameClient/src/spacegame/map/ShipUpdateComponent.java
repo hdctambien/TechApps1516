@@ -47,4 +47,10 @@ public class ShipUpdateComponent extends UpdateComponent{
 	public String serialize() {
 		return EntityFactory.SHIP_UPDATE;
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		return (obj instanceof ShipUpdateComponent);
+	}
+	
 }
