@@ -87,11 +87,6 @@ public class ShieldComponent extends Component
 		return null;
 	}
 
-	@Override
-	public void unserialize(String serial) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void createReferences() {
