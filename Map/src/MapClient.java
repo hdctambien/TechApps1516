@@ -26,6 +26,7 @@ public class MapClient {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		client.sendMessage("set ship Ship.1");
 	}
 	
 	public static Client getClient()

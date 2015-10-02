@@ -72,34 +72,18 @@ public class ShipPanel{
 		
 		int x=100,y=100;
 		String choice;
-		while(running == true)
-		{
-			System.out.println("Choice");
-			choice = input.nextLine();
-			if(choice.compareTo("move") == 0)
-			{
-				while(x < 700)
-				{
-					x += 10;
-					y += 10;
-					ship.setBounds(x, y, 50, 50);
-					frame.revalidate();
-				}
-				System.out.println("What x?");
-			//	double x = input.nextDouble();
-			}
-		}
 		
-		choice = input.nextLine();
-		ship.setBounds(500, 500, 50, 50);
-		frame.revalidate();
+		
+	//	choice = input.nextLine();
+	//	ship.setBounds(500, 500, 50, 50);
+	//	frame.revalidate();
 		
 	}
 	public static void main(String[] args)
 	{
 		mapPanel();
 	}
-	public void moveShip(int xCord, int yCord)
+	public static void moveShip(int xCord, int yCord)
 	{
 		ship.setBounds(xCord, yCord, 50, 50);
 		frame.revalidate();
