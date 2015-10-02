@@ -9,6 +9,8 @@ import java.io.IOException;
 
 
 
+import java.util.Random;
+
 import spacegame.client.*;
 
 /**
@@ -18,7 +20,7 @@ import spacegame.client.*;
  */
 public class groundControlGame implements Runnable
 {
-	String iaddress = "10.11.1.110";
+	String iaddress = "10.11.1.112";
 	int port = 8080;
 	String name = "";
     boolean running = false;
@@ -36,6 +38,8 @@ public class groundControlGame implements Runnable
 	private double rocketPosY;     //m 
 	private double throttle;       //throttle percentage
 	
+	private Random Rand = new Random();
+	
 	public groundControlGame(String iAddress, int port, String name)
 	{
 		this.name = name;
@@ -49,6 +53,7 @@ public class groundControlGame implements Runnable
 		c.sendMessage("set name " + name);
 		c.sendMessage("set job GroundControl");
 		c.sendMessage("subscribe all");
+		run();
 	}
 	
 	public void run() 
@@ -57,7 +62,6 @@ public class groundControlGame implements Runnable
 	    guiThread = new groundControlGraphics(this,c);
 	    guiThread.start();
 	    gameLogic();
-	    
 	}	
 	
 	private void gameLogic()

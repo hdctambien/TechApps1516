@@ -17,6 +17,7 @@ public class Entity implements ISerializable {
 		this.ufid = ufid;
 		components = new Hashtable<String,Component>();
 		isUpdating = false;
+		listeners = new ArrayList<>();
 	}
 	
 	public String getName(){
