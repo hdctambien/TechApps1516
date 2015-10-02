@@ -16,7 +16,7 @@ public class SerialProtocol extends AbstractProtocol{
 	@Override
 	public synchronized void process(String command) {
 		if(command.startsWith("serial ")||command.startsWith("$serial ")){
-			serialBuilder.append(command);
+			serialBuilder.append("\n"+command);
 			if(command.equals("$serial END")){
 				serial = serialBuilder.toString();
 				hasSerial = true;
