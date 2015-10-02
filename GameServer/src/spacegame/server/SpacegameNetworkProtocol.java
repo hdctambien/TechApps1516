@@ -161,7 +161,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		if(words.length<2){
 			r.reply("ERR "+ERR_CMD_FORMAT);
 		}else{
-			stateUpdateHandler.addSubsriber(words[1], info);
+			stateUpdateHandler.addSubscriber(words[1], info);
 			r.reply("OK");
 		}
 	}

@@ -109,5 +109,5 @@ public class GameState {
 		map.addEntity(factory.createAsteroid());
 		map.addEntity(factory.createShip());
 		return map;
-	}
+	} 
 }
