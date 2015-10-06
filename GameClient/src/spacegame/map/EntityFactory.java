@@ -36,4 +36,9 @@ public class EntityFactory {
 		return asteroid;
 	}
 	
+	public static Entity createSerial(){
+		Entity serial = new Entity("Entity",-1);
+		return serial;
+	}
+	
 }
