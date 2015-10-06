@@ -1,23 +1,15 @@
-package Communications.src;
+package spacegame.communications;
 
-import javax.swing.AbstractButton;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import spacegame.client.Client;
-
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-
-//import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.sun.security.ntlm.Client;
+import spacegame.client.*;
 /* 
  * ButtonDemo.java requires the following files:
  *   images/right.gif

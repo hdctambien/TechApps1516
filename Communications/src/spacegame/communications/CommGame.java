@@ -1,10 +1,12 @@
+package spacegame.communications;
 /**
  * Created by Avery on 9/28/2010.;
  */
-package Communications.src;
+
 
 import java.io.IOException;
 
+import com.sun.security.ntlm.Client;
 
 import spacegame.client.*;
 
