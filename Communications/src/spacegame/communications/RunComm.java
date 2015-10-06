@@ -1,4 +1,5 @@
-package Communications.src;
+package spacegame.communications;
+
 
 import java.awt.Canvas;
 import java.io.IOException;

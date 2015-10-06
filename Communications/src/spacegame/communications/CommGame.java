@@ -1,10 +1,12 @@
+package spacegame.communications;
 /**
  * Created by Avery on 9/28/2010.;
  */
-package Communications.src;
+
 
 import java.io.IOException;
 
+//import com.sun.security.ntlm.Client;
 
 import spacegame.client.*;
 
@@ -41,16 +43,16 @@ public class CommGame implements Runnable
         gui = new CommGUI(this, this.client);
         Thread guiThread = new Thread(gui);
         guiThread.start();
-        try{
+       /* try{
             client = new Client(iaddress,port);
             clientThread = new Thread(client);
             clientThread.start();
 
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }*/
         protocol = new CommProtocol(client, this, gui);
-        protocolThread = new Thread(protocol);
+        //protocolThread = new Thread(protocol);
         protocolThread.start();
         //gui.close();
 

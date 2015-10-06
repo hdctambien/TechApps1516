@@ -46,6 +46,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "set":
 					doSet(msg, words, info, r);
 					break;
+				case "mapset":
+					doMapSet(msg,words,info,r);
+					break;
 				case "push":
 					doPush(msg, words, info, r);
 					break;
@@ -74,7 +77,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 			}
 		}
 	}
-	
+
 	public void doGet(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
 			r.reply("ERR "+ERR_CMD_FORMAT);
@@ -131,6 +134,14 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}
 	}
 	
+	public void doMapSet(String msg, String[] words, ClientInfo info, Request r) {
+		if(words.length<4){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			gameState.doMapSet(words[1],words[2],words[3],info,r);	
+		}		
+	}
+	
 	public void doPush(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
 			r.reply("ERR "+ERR_CMD_FORMAT);
@@ -150,7 +161,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		if(words.length<2){
 			r.reply("ERR "+ERR_CMD_FORMAT);
 		}else{
-			stateUpdateHandler.addSubsriber(words[1], info);
+			stateUpdateHandler.addSubscriber(words[1], info);
 			r.reply("OK");
 		}
 	}

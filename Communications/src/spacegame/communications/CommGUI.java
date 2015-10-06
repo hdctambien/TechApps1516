@@ -1,23 +1,16 @@
-package Communications.src;
+package spacegame.communications;
 
-import javax.swing.AbstractButton;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import spacegame.client.Client;
-
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-
-//import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+import spacegame.client.*;
 /* 
  * ButtonDemo.java requires the following files:
  *   images/right.gif
@@ -39,7 +32,7 @@ public class CommGUI extends Thread implements Runnable {
         client=c;
 
         JFrame windowFrame;
-        createAndShowGUI();
+//        createAndShowGUI();
 
         windowFrame = new JFrame();
         panel.setVisible(true);
@@ -58,7 +51,7 @@ public class CommGUI extends Thread implements Runnable {
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.setResizable(true);
         windowFrame.setVisible(true);
-		/*windowFrame.setPreferredSize(new Dimension(1000,700));
+		windowFrame.setPreferredSize(new Dimension(1000,700));
 		windowFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    c.sendMessage("exit");
@@ -97,7 +90,7 @@ public class CommGUI extends Thread implements Runnable {
             }
         }
     }
-    private static void createAndShowGUI() {
+   /* private static void createAndShowGUI() {
 
         //Create and set up the window.
         JFrame frame = new JFrame("ButtonDemo");
@@ -106,13 +99,13 @@ public class CommGUI extends Thread implements Runnable {
         //Create and set up the content pane.
         CommGUI newContentPane = new CommGUI(game, client);
        /* newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);*/
+        frame.setContentPane(newContentPane);//
 
         //Display the window.
         frame.pack();
         frame.setSize(600,600);
         frame.setVisible(true);
 
-    }
+    }*/
 
 }

@@ -8,6 +8,11 @@ import java.net.UnknownHostException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/**
+ * Starts ground control client, has a testing mode that ignores the smart server connection dialogs (testing = true)
+ * 
+ * @author Justin Pierre
+ */
 public class RunGroundControl
 {
 	private static groundControlGame game;

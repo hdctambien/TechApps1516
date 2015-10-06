@@ -3,6 +3,7 @@ package spacegame.groundcontrol;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -15,6 +16,12 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
+
+/**
+ * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
+ * 
+ * @author Justin Pierre
+ */
 
 class groundControlGraphics extends Thread 
 {
@@ -42,6 +49,11 @@ class groundControlGraphics extends Thread
 			buttonUpdated = false;
 		}
 	};
+	
+	public void addKeyListener(KeyListener k)
+	{
+		windowFrame.addKeyListener(k);
+	}
 	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
@@ -88,6 +100,8 @@ class groundControlGraphics extends Thread
 			});
 		windowFrame.add(windowPanel);
 		windowFrame.pack();
+		
+		
 		
 	}
 	public void run()

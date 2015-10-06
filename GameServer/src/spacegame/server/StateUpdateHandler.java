@@ -14,7 +14,7 @@ public class StateUpdateHandler implements GameStateListener {
 		subscribers = new HashMap<String,List<ClientInfo>>();
 	}
 	
-	public synchronized void addSubsriber(String var, ClientInfo client){
+	public synchronized void addSubscriber(String var, ClientInfo client){
 		if(subscribers.containsKey(var)){
 			List<ClientInfo> list = subscribers.get(var);
 			list.add(client);
