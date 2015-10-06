@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sun.security.ntlm.Client;
+
 import spacegame.client.*;
 /* 
  * ButtonDemo.java requires the following files:
@@ -31,7 +31,7 @@ public class CommGUI extends Thread implements Runnable {
         client=c;
 
         JFrame windowFrame;
-        createAndShowGUI();
+//        createAndShowGUI();
 
         windowFrame = new JFrame();
         panel.setVisible(true);
@@ -89,7 +89,7 @@ public class CommGUI extends Thread implements Runnable {
             }
         }
     }
-    private static void createAndShowGUI() {
+   /* private static void createAndShowGUI() {
 
         //Create and set up the window.
         JFrame frame = new JFrame("ButtonDemo");
@@ -98,13 +98,13 @@ public class CommGUI extends Thread implements Runnable {
         //Create and set up the content pane.
         CommGUI newContentPane = new CommGUI(game, client);
        /* newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);*/
+        frame.setContentPane(newContentPane);//
 
         //Display the window.
         frame.pack();
         frame.setSize(600,600);
         frame.setVisible(true);
 
-    }
+    }*/
 
 }

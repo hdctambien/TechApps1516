@@ -3,7 +3,7 @@ package spacegame.communications;
 import java.net.InetAddress;
 
 import spacegame.client.*;
-import com.sun.security.ntlm.Client;
+
 
 public class CommProtocol extends AbstractProtocol
 {
