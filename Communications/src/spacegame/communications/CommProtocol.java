@@ -1,9 +1,9 @@
-package Communications.src;
+package spacegame.communications;
 
 import java.net.InetAddress;
 
 import spacegame.client.*;
-//import CommGame;
+
 
 public class CommProtocol extends AbstractProtocol
 {

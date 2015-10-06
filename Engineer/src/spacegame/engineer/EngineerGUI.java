@@ -141,6 +141,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pG = ((JSlider) e.getSource()).getValue();
+					System.out.println(pG);
 					game.powerGuns(pG);
 				}					
 			});
