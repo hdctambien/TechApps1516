@@ -1,7 +1,10 @@
 package spacegame.groundcontrol;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -26,67 +29,52 @@ import spacegame.client.Client;
 class groundControlGraphics extends Thread 
 {
 	JFrame windowFrame;    
-    public JPanel windowPanel = new JPanel();
+    public JPanel windowPanel;
 	private groundControlGame gcGame;
-	private JButton testButton1;
-	private JSlider throttle;
-	private JSlider rocketHeading;
+	private GridBagLayout gridBag;
 	Client c;
-	private boolean buttonStatus = false;
-	private boolean buttonUpdated = true;
 	
-	
-	private MouseAdapter mouse = new MouseAdapter()
-	{ 
-		public void mousePressed(MouseEvent e)
-		{
-			buttonStatus = true;
-			buttonUpdated = false;
-		}
-		public void mouseReleased(MouseEvent e)
-		{
-			buttonStatus = false;
-			buttonUpdated = false;
-		}
-	};
-	
-	public void addKeyListener(KeyListener k)
-	{
-		windowFrame.addKeyListener(k);
-	}
+	private JSlider throttle;
+	private JPanel displayPanel;
 	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
 	{
+		gridBag = new GridBagLayout();		
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
+		windowPanel = new JPanel(gridBag);
 		windowPanel.setVisible(true);
 		this.c = c;
 		
-		testButton1 = new JButton();
-		testButton1.setText("Test Button");
-		testButton1.addMouseListener(mouse);
-		testButton1.setVisible(true);
-		
 		throttle = new JSlider();
-		rocketHeading = new JSlider();
-		
 		throttle.setMaximum(100);
 		throttle.setMinimum(0);
 		throttle.setMajorTickSpacing(10);
 		throttle.setOrientation(JSlider.VERTICAL);
 		throttle.setName("Throttle Position");
 		throttle.setEnabled(false);
+		GridBagConstraints throttleConst = new GridBagConstraints();
+		throttleConst.gridheight = 5;
+		throttleConst.gridwidth = 1;
+		throttleConst.gridx = 10;
+		throttleConst.gridy = 10;
 		
-		rocketHeading.setMaximum(180);
-		rocketHeading.setMinimum(-180);
-		rocketHeading.setMajorTickSpacing(15);
-		rocketHeading.setName("Rocket Heading (Degrees from Vertical)");
-		rocketHeading.setEnabled(false);
 		
+		displayPanel = new JPanel();
+		displayPanel.setBackground(Color.black);
+		displayPanel.setPreferredSize(new Dimension(1600,1000));
+		GridBagConstraints displayPanelConst = new GridBagConstraints();
+		displayPanelConst.gridheight = 10;
+		displayPanelConst.gridwidth = 16;
+		displayPanelConst.gridx = 0;
+		displayPanelConst.gridy = 0;
 		
-		windowPanel.add(testButton1);
-		windowPanel.add(rocketHeading);
+		gridBag.addLayoutComponent(displayPanel, displayPanelConst);
+		gridBag.addLayoutComponent(throttle, throttleConst);
+		windowPanel.add(displayPanel);
 		windowPanel.add(throttle);
+		
+		windowFrame.add(windowPanel);
 		windowFrame.setResizable(false);
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,7 +86,7 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.add(windowPanel);
+		
 		windowFrame.pack();
 		
 		
@@ -108,39 +96,15 @@ class groundControlGraphics extends Thread
 	{
 		while(gcGame.running)
 		{
-			if(!buttonUpdated)
+			try
 			{
-				c.sendMessage("set buttonStatus " + buttonStatus);
-				buttonUpdated = true;
+				Thread.sleep(50);
 			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			windowPanel.repaint();
 		}
-	}
-	public void updateRocketVelocity(double rocketVelocity) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateRocketHeading(double rH) 
-	{
-		rocketHeading.setValue((int) Math.round(rH));
-		System.out.println("Setting value of Rocket Heading to " + rH);
-	}
-	public void updateRocketPosX(double rPX) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateRocketPosY(double rPY) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateHasLink(boolean hL) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateThrottle(double t) 
-	{
-		throttle.setValue((int) Math.round(t));
 	}
 }
