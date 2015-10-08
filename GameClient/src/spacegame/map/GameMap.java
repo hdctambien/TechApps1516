@@ -9,7 +9,8 @@ public class GameMap implements ISerializable, EntityListener {
 	private ArrayList<MapListener> listeners;
 	private LinkedBlockingQueue<MapAction> actionQueue;
 	private boolean cloned = false;
-	private boolean updating = false;
+	private volatile boolean updating = false;
+	private volatile boolean locked = false;
 	
 	public GameMap(){
 		entities = new ArrayList<Entity>();
@@ -19,9 +20,16 @@ public class GameMap implements ISerializable, EntityListener {
 	public boolean isUpdating(){
 		return updating;
 	}
+	public boolean isLocked(){
+		return locked;
+	}
 	
 	public void setUpdating(boolean b){
 		updating = b;
+	}
+	
+	public void setLocked(boolean b){
+		locked = b;
 	}
 	
 	public void addEntity(Entity e){

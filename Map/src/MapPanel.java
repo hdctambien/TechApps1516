@@ -15,16 +15,11 @@ import javax.swing.JViewport;
 import spacegame.map.MapAction;
 
 public class MapPanel{
-	public static int xCord, yCord;
-	
-	
-	public static JFrame frame = new JFrame();
-	public static JPanel mapPanel;
-	public static JViewport view;
-	public static JLabel ship;
-	public static Point point;
-	public static MapComponent map;
-	public static void mapPanel()
+	public int xCord, yCord;
+	public JFrame frame = new JFrame();
+	public JPanel mapPanel;
+	public MapComponent ship;
+	public void mapPanel()
 	{
 		Scanner input = new Scanner( System.in );
 		boolean running = true;
@@ -37,68 +32,35 @@ public class MapPanel{
 		mapPanel = new JPanel();
 		mapPanel.setSize(1000,1000);
 		
-		map = new MapComponent();
-		map.setPreferredSize(new Dimension(1200,600));
-/*		JScrollPane pane = new JScrollPane();
-		pane.setViewport(view);
-		pane.setVisible(true);*/
-		
-		
-	/*	point = new Point();
-		point.setLocation(100,100);
-		
-		Dimension dimension = new Dimension();
-		dimension.setSize(800, 800);
-		Dimension dimension1 = new Dimension();
-		dimension1.setSize(100,100);
-		
-		pane.setPreferredSize(dimension);*/
-	
-
-/*		view = new JViewport();
-		view.setView(mapPanel);
-		view.setPreferredSize(new Dimension(100,100));
-		view.setExtentSize(dimension);
-		view.setOpaque(false);
-		view.setViewSize(dimension1);
-		view.setViewPosition(point);
-		view.setVisible(true); */
-		
-		//frame.setLayout(null);
+		ship = new MapComponent();
+		ship.setPreferredSize(new Dimension(1200,600));
 		frame.add(mapPanel, BorderLayout.NORTH);
-		frame.add(map, BorderLayout.SOUTH);
+		frame.add(ship, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,800);
-		frame.setVisible(true);
-		
-		
+		frame.setVisible(true);		
 		run();
-		
-	//	choice = input.nextLine();
-	//	ship.setBounds(500, 500, 50, 50);
-	//	frame.revalidate();
-		
 	}
-	public static void main(String[] args)
+	public void main(String[] args)
 	{
 		mapPanel();
 	}
-	public static void run()
+	public void run()
 	{
 		while(true)
 		{
-			map.setPosition(xCord, yCord);
-			map.repaint();
+			ship.setPosition(xCord, yCord);
+			ship.repaint();
 			frame.revalidate();
 		}
 	}
 
-	public static void setY(int posY)
+	public void setY(int posY)
 	{
 		yCord = posY;
 		System.out.println("set y to: "+ posY);
 	}
-	public static void setX(int posX)
+	public void setX(int posX)
 	{
 		xCord = posX;
 		System.out.println("set x to: "+ posX);

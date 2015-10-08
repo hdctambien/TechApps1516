@@ -1,10 +1,12 @@
 package spacegame.groundcontrol;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -30,21 +32,24 @@ class groundControlGraphics extends Thread
 {
 	JFrame windowFrame;    
     public JPanel windowPanel;
+    private JPanel dataPanel;
 	private groundControlGame gcGame;
 	private GridBagLayout gridBag;
 	Client c;
 	
 	private JSlider throttle;
+	private JSlider heading;
 	private JPanel displayPanel;
 	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
-	{
-		gridBag = new GridBagLayout();		
+	{		
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
-		windowPanel = new JPanel(gridBag);
+		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
+		dataPanel = new JPanel(new GridLayout());
 		this.c = c;
+		
 		
 		throttle = new JSlider();
 		throttle.setMaximum(100);
@@ -52,27 +57,37 @@ class groundControlGraphics extends Thread
 		throttle.setMajorTickSpacing(10);
 		throttle.setOrientation(JSlider.VERTICAL);
 		throttle.setName("Throttle Position");
-		throttle.setEnabled(false);
+		throttle.setEnabled(false);	
 		GridBagConstraints throttleConst = new GridBagConstraints();
-		throttleConst.gridheight = 5;
+		throttleConst.fill = throttleConst.BOTH;
+		throttleConst.gridx = 0;
+		throttleConst.gridy = 0;
 		throttleConst.gridwidth = 1;
-		throttleConst.gridx = 10;
-		throttleConst.gridy = 10;
+		throttleConst.gridheight = 5;
 		
+		
+		heading = new JSlider();
+		heading.setMaximum(180);
+		heading.setMinimum(-180);
+		heading.setMajorTickSpacing(30);
+		heading.setEnabled(false);
+		GridBagConstraints headingConst = new GridBagConstraints();
+		headingConst.fill = headingConst.BOTH;
+		headingConst.gridx = 1;
+		headingConst.gridy = 0;
+		headingConst.gridwidth = 5;
+		headingConst.gridheight = 1;
+		
+		
+		dataPanel.add(throttle,throttleConst);
+		dataPanel.add(heading,headingConst);
 		
 		displayPanel = new JPanel();
 		displayPanel.setBackground(Color.black);
 		displayPanel.setPreferredSize(new Dimension(1600,1000));
-		GridBagConstraints displayPanelConst = new GridBagConstraints();
-		displayPanelConst.gridheight = 10;
-		displayPanelConst.gridwidth = 16;
-		displayPanelConst.gridx = 0;
-		displayPanelConst.gridy = 0;
 		
-		gridBag.addLayoutComponent(displayPanel, displayPanelConst);
-		gridBag.addLayoutComponent(throttle, throttleConst);
-		windowPanel.add(displayPanel);
-		windowPanel.add(throttle);
+		windowPanel.add(displayPanel,BorderLayout.CENTER);
+		windowPanel.add(dataPanel,BorderLayout.SOUTH);
 		
 		windowFrame.add(windowPanel);
 		windowFrame.setResizable(false);

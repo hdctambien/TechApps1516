@@ -70,7 +70,7 @@ public class groundControlGame implements Runnable
 			map = serial.getMapFromSerial();
 			System.out.println("Map obtained!");
 			
-			MapUpdateProtocol update = new MapUpdateProtocol(c, map, SHIP_NAME);
+			MapUpdateProtocol update = new MapUpdateProtocol(c, map, SHIP_NAME, serial);
 			aggregator.addProtocol(update);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -98,8 +98,6 @@ public class groundControlGame implements Runnable
 			{
 				e.printStackTrace();
 			}
-			
-			
 		}
 	}
 }
