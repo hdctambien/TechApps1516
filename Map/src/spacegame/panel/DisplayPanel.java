@@ -26,7 +26,7 @@ public class DisplayPanel extends JPanel
 		else 
 		{
 			Graphics2D g2 = (Graphics2D) g;
-			
+			//DRAW ALL THE ENTITIES
 			
 			
 		}
