@@ -15,7 +15,7 @@ public class Main {
 	private static boolean done = false;
 	private static ClientInfo serverInfo;
 	
-	public static Server server;
+	public volatile static Server server;
 	
 	/**
 	 * Starts the server.
@@ -49,6 +49,10 @@ public class Main {
 		in.nextLine();//lets the user see all server messages before the final closing.
 		in.close();
 		System.exit(0);
+	}
+	
+	public static Server getServer(){
+		return server;
 	}
 
 }

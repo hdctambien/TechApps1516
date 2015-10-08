@@ -149,6 +149,7 @@ public class Entity implements ISerializable {
 					case EntityFactory.FUEL: c = new FuelComponent(); break;
 					case EntityFactory.POSITION: c = new PositionComponent(); break;
 					case EntityFactory.POWER: c = new PowerComponent(); break;
+					case EntityFactory.RENDER: c = new RenderComponent(null); break;
 					case EntityFactory.UPDATE:
 						update = true;
 						switch(data[2]){

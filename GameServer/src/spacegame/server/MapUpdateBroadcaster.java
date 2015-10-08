@@ -8,17 +8,15 @@ import spacegame.map.MapListener;
 public class MapUpdateBroadcaster implements MapListener {
 
 	private GameMap map;
-	private Server server;
 	
-	public MapUpdateBroadcaster(GameMap map, Server server){
+	public MapUpdateBroadcaster(GameMap map){
 		this.map = map;
-		this.server = server;
 		map.addMapListener(this);
 	}
 
 	@Override
 	public void mapChanged(MapEvent me) {
-		ClientInfo[] allClients = server.getAllClientInfo();
+		ClientInfo[] allClients = Main.server.getAllClientInfo();
 		String command = "NOOP";
 		switch(me.getEventType()){
 			case MapEvent.ENTITY_ADDED:
