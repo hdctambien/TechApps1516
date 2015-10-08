@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-public class ShipPanel{
+import spacegame.map.MapAction;
+
+public class MapPanel{
 	public static int xCord, yCord;
 	
 	
@@ -21,17 +23,22 @@ public class ShipPanel{
 	public static JViewport view;
 	public static JLabel ship;
 	public static Point point;
+	public static MapComponent map;
 	public static void mapPanel()
 	{
 		Scanner input = new Scanner( System.in );
 		boolean running = true;
-	//	final PilotClient pilot = new PilotClient();
-	//	pilot.setup();
-	//	pilot.subscribe();
+		
+		final MapClient pilot = new MapClient();
+		pilot.setup();
+		pilot.subscribe();
+		
 	
-		mapPanel = new JPanel(null);
+		mapPanel = new JPanel();
 		mapPanel.setSize(1000,1000);
 		
+		map = new MapComponent();
+		map.setPreferredSize(new Dimension(1200,600));
 /*		JScrollPane pane = new JScrollPane();
 		pane.setViewport(view);
 		pane.setVisible(true);*/
@@ -46,11 +53,7 @@ public class ShipPanel{
 		dimension1.setSize(100,100);
 		
 		pane.setPreferredSize(dimension);*/
-		
-		ship = new JLabel("test");
-		ship.setBounds(400,400,50,50);
-		mapPanel.add(ship);
-		
+	
 
 /*		view = new JViewport();
 		view.setView(mapPanel);
@@ -60,19 +63,16 @@ public class ShipPanel{
 		view.setViewSize(dimension1);
 		view.setViewPosition(point);
 		view.setVisible(true); */
-		DrawRect rect = new DrawRect();
-		mapPanel.add(rect);
-		rect.setVisible(true);
 		
-		frame.setLayout(null);
-		frame.add(mapPanel);
+		//frame.setLayout(null);
+		frame.add(mapPanel, BorderLayout.NORTH);
+		frame.add(map, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,800);
 		frame.setVisible(true);
 		
-		int x=100,y=100;
-		String choice;
 		
+		run();
 		
 	//	choice = input.nextLine();
 	//	ship.setBounds(500, 500, 50, 50);
@@ -83,18 +83,24 @@ public class ShipPanel{
 	{
 		mapPanel();
 	}
-	public static void moveShip(int xCord, int yCord)
+	public static void run()
 	{
-		ship.setBounds(xCord, yCord, 50, 50);
-		frame.revalidate();
+		while(true)
+		{
+			map.setPosition(xCord, yCord);
+			map.repaint();
+			frame.revalidate();
+		}
 	}
-	
-}
-class DrawRect extends JPanel
-{
-	public void paintComponent(Graphics2D g2d)
+
+	public static void setY(int posY)
 	{
-		super.paintComponent(g2d);
-		g2d.drawRect(100, 100, 50, 50);
+		yCord = posY;
+		System.out.println("set y to: "+ posY);
+	}
+	public static void setX(int posX)
+	{
+		xCord = posX;
+		System.out.println("set x to: "+ posX);
 	}
 }

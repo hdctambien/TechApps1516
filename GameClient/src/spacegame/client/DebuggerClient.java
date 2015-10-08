@@ -57,7 +57,7 @@ public class DebuggerClient {
 			client.sendMessage("set ship "+SHIP_NAME);
 			
 			constructMap(serial, client);
-			MapUpdateProtocol update = new MapUpdateProtocol(client, map, SHIP_NAME);
+			MapUpdateProtocol update = new MapUpdateProtocol(client, map, SHIP_NAME, serial);
 			
 			enterProtocolLoop(in, client, aggregator);			
 		}catch(IOException e){

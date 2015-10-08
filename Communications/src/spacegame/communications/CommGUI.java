@@ -1,5 +1,6 @@
 package spacegame.communications;
 
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -50,7 +51,7 @@ public class CommGUI extends Thread implements Runnable {
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.setResizable(true);
         windowFrame.setVisible(true);
-		/*windowFrame.setPreferredSize(new Dimension(1000,700));
+		windowFrame.setPreferredSize(new Dimension(1000,700));
 		windowFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    c.sendMessage("exit");
