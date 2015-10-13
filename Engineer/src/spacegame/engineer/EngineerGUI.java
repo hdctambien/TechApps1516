@@ -90,7 +90,7 @@ public class EngineerGUI extends Thread
 			}
 		});
 		
-		pFuel   = new JSlider(JSlider.VERTICAL, 0, 100, 25);
+		pFuel = new JSlider(JSlider.VERTICAL, 0, 100, 25);
 		pFuel.setMajorTickSpacing(10);
 		pFuel.setMinorTickSpacing(5);
 		pFuel.setPaintTicks(true);
