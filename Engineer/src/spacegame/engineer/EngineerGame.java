@@ -18,8 +18,6 @@ public class EngineerGame implements Runnable
 	String iaddress = "10.11.1.110";
 	int port = 8080;
 	
-	private boolean testing = false;
-	
 	private Thread protocolThread;
 	private Thread clientThread;
 	
@@ -46,12 +44,9 @@ public class EngineerGame implements Runnable
 		}
 		gui = new EngineerGUI(this, this.eClient);
 		gui.start();
-		if(!testing)
-		{
-			eProtocol = new EngineerProtocol(eClient, this, gui);
-			protocolThread = new Thread(eProtocol);
-			protocolThread.start();
-		}
+		eProtocol = new EngineerProtocol(eClient, this, gui);
+		protocolThread = new Thread(eProtocol);
+		protocolThread.start();
 	}
 	
 	public void Throttle(int throt)

@@ -31,14 +31,13 @@ public class EngineerGUI extends Thread
 	public JSlider pComms;
 	public JSlider pShield;
 	public JSlider pGuns;
-	private JPanel powerPanel;
-	
-	private JPanel tp, tp2, tp3;
+	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	
 	private JLabel fuel;
 	private JLabel comms;
 	private JLabel shield;
 	private JLabel guns;
+	private JLabel powerL;
 	
 	private JLabel thro;
 		
@@ -62,17 +61,14 @@ public class EngineerGUI extends Thread
 		bag = new GridBagLayout();
 		bagC = new GridBagConstraints();
 		
-		tp = new JPanel();
-		tp2 = new JPanel();
-		tp3 = new JPanel();
-		
-		//panel.setLayout(new GridLayout(2, 2));
-		frame.setLayout(new GridLayout(2, 2));
-		frame.add(panel);
-		frame.add(tp);
-		frame.add(tp2);
-		frame.add(tp3);
+		powerBG = new JPanel();
+		powerBG2 = new JPanel();
+		powerBGL = new JPanel();
+		powerBGL2 = new JPanel();
+
 		thro = new JLabel(Integer.toString(throt));
+		
+		//frame.add(panel);
 		
 		throttle = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
 		throttle.setMajorTickSpacing(10);
@@ -146,33 +142,67 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-		powerPanel = new JPanel();
+		panel.setLayout(null);
+		frame.setLayout(null);
+		powerBG.setBackground(Color.GREEN);
+		powerBG.setVisible(true);
+		powerBG2.setBackground(Color.WHITE);
+		powerBG2.setVisible(true);
+		powerBGL.setBackground(Color.WHITE);
+		powerBGL.setVisible(true);
+		powerBGL2.setBackground(Color.GREEN);
+		powerBGL2.setVisible(true);
 		
-		powerPanel.add(pFuel);
-		powerPanel.add(pComms);
-		powerPanel.add(pShield);
-		powerPanel.add(pGuns);
-		
-		panel.add(powerPanel, JFrame.LEFT_ALIGNMENT);
-		
-	/*	fuel = new JLabel("Fuel");
-		powerPanel.add(fuel);
-		comms = new JLabel("Comms");
-		powerPanel.add(comms);
+		fuel   = new JLabel("Fuel");
+		fuel.setBounds(35, 30, 25, 10);
+		comms  = new JLabel("Comms");
+		comms.setBounds(87, 30, 50, 10);
 		shield = new JLabel("Shield");
-		powerPanel.add(shield);
-		guns = new JLabel("Guns");
-		powerPanel.add(guns);*/
+		shield.setBounds(150, 30, 50, 10);
+		guns   = new JLabel("Guns");
+		guns.setBounds(213, 30, 30, 10);
+		powerL  = new JLabel("Power");
+		powerL.setBounds(122, 10, 50, 10);
 		
-	/*	bagC.gridy = 1;
-		bagC.ipadx = 150;
-		panel.add(throttle);
-		bagC.ipadx = 0;
-		bagC.gridy = 2;
-		bagC.ipady = 50;
-		panel.add(thro);
-		thro.setHorizontalAlignment(JLabel.CENTER);
-		throttle.setSize(500, 25);*/
+		pFuel.setOpaque(false);
+		pComms.setOpaque(false);
+		pShield.setOpaque(false);
+		pGuns.setOpaque(false);
+		
+		pFuel.setBounds(25, 40, 60, 150);
+		pComms.setBounds(85, 40, 60, 150);
+		pShield.setBounds(145, 40, 60, 150);
+		pGuns.setBounds(205, 40, 60, 150);
+		powerBG.setBounds(15, 15, 260, 187);
+		powerBG2.setBounds(17, 17, 256, 183);
+		powerBGL.setBounds(120, 8, 42, 15);
+		powerBGL2.setBounds(118, 6, 46, 19);
+		
+		frame.add(pFuel);
+		frame.add(fuel);
+		frame.add(pComms);
+		frame.add(comms);
+		frame.add(pShield);
+		frame.add(shield);
+		frame.add(pGuns);
+		frame.add(guns);
+		frame.add(powerL);
+		frame.add(powerBGL);
+		frame.add(powerBGL2);
+		frame.add(powerBG2);
+		frame.add(powerBG);
+		
+		
+		//panel.add(pFuel, bagC);
+		
+		//powerPanel.add(pFuel);
+		//powerPanel.add(pComms);
+		//powerPanel.add(pShield);
+		//powerPanel.add(pGuns);
+		
+		//tp.setBackground(Color.BLACK);
+		//panel.add(tp, BorderLayout.CENTER);
+		//panel.add(powerPanel, BorderLayout.NORTH);
 
 		panel.setVisible(true);
 		frame.setSize(size);
