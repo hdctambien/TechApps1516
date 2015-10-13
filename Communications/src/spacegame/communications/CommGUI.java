@@ -4,21 +4,16 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
 import spacegame.client.*;
-/* 
- * ButtonDemo.java requires the following files:
- *   images/right.gif
- *   images/middle.gif
- *   images/left.gif
- */
+
 public class CommGUI extends Thread implements Runnable {
 
+	
     protected JButton button;
     private static CommGame game;
     private static Client client;
@@ -32,7 +27,7 @@ public class CommGUI extends Thread implements Runnable {
         client=c;
 
         JFrame windowFrame;
-//        createAndShowGUI();
+
 
         windowFrame = new JFrame();
         panel.setVisible(true);
@@ -51,8 +46,12 @@ public class CommGUI extends Thread implements Runnable {
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.setResizable(true);
         windowFrame.setVisible(true);
-		windowFrame.setPreferredSize(new Dimension(1000,700));
-		windowFrame.addWindowListener(new WindowAdapter() {
+	    windowFrame.setSize(600,600);
+	    
+	    
+	    
+	    
+	/*	windowFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    c.sendMessage("exit");
 			  }
@@ -60,6 +59,7 @@ public class CommGUI extends Thread implements Runnable {
 		windowFrame.add(windowPanel);
 		windowFrame.pack();
     	*/
+		
 
 
     }

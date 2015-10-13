@@ -1,4 +1,5 @@
 package spacegame.communications;
+import spacegame.client.*;
 /**
  * Created by Avery on 9/28/2010.;
  */
@@ -28,11 +29,11 @@ public class CommGame implements Runnable
     CommGUI gui;
     private Client c;
 
-    public static void main(String args[])
+   /* public static void main(String args[])
     {
-        CommGame game = new CommGame("", 2, "");
+     //   CommGame game = new CommGame("", 2, "");
 
-    }
+    }*/
 
     public CommGame(String address, int p, String name)
     {
