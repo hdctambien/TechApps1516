@@ -25,7 +25,6 @@ public class EntityFactory {
 		ship.addComponent(FUEL, new FuelComponent());
 		ship.addComponent(UPDATE, new ShipUpdateComponent());
 		ship.addComponent(RENDER, new RenderComponent("MayMime.png"));
-		ship.createReferences();//DO NOT FORGET THIS, IT IS EXTRMEMELY IMPORTANT
 		return ship;
 	}
 	
@@ -35,7 +34,6 @@ public class EntityFactory {
 		asteroid.addComponent(PHYSICS,new PhysicsComponent());
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("MayMime.png"));
-		asteroid.createReferences();
 		return asteroid;
 	}
 	

@@ -14,7 +14,7 @@ public class RenderComponent extends Component {
 
 	@Override
 	public String serialize() {
-		return "imagePath: "+iPath;
+		return "imagePath:"+iPath;
 	}
 
 	@Override
@@ -50,8 +50,15 @@ public class RenderComponent extends Component {
 			return false;
 		}	
 	}
-
+	
 	@Override
-	public void createReferences() {
+	public boolean equals(Object obj){
+		if(obj instanceof RenderComponent){
+			RenderComponent r = (RenderComponent)obj;
+			return r.iPath.equals(iPath);
+		}else{
+			return false;
+		}
 	}
+
 }

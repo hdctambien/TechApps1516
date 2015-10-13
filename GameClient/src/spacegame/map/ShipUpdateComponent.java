@@ -1,11 +1,6 @@
 package spacegame.map;
 
 public class ShipUpdateComponent extends UpdateComponent{
-
-	private PositionComponent position;
-	private PhysicsComponent physics;
-	private PowerComponent power;
-	private FuelComponent fuel;
 	
 	public ShipUpdateComponent(){
 		
@@ -18,6 +13,11 @@ public class ShipUpdateComponent extends UpdateComponent{
 
 	@Override
 	public void update(long timeElapsed) {
+		//Get necessary Components from Entity
+		PhysicsComponent physics = (PhysicsComponent) getEntity().getComponent("Physics");
+		PowerComponent power = (PowerComponent) getEntity().getComponent("Power");
+		FuelComponent fuel = (FuelComponent) getEntity().getComponent("Fuel");
+		
 		power.calculatePower();
 		if(!fuel.isFull()){
 			fuel.regenFuel(timeElapsed);
@@ -33,14 +33,6 @@ public class ShipUpdateComponent extends UpdateComponent{
 	@Override
 	public Component clone(Entity entity) {
 		return new ShipUpdateComponent(entity);
-	}
-
-	@Override
-	public void createReferences() {
-		position = (PositionComponent) getEntity().getComponent("Position");
-		physics = (PhysicsComponent) getEntity().getComponent("Physics");
-		power = (PowerComponent) getEntity().getComponent("Power");
-		fuel = (FuelComponent) getEntity().getComponent("Fuel");		
 	}
 
 	@Override

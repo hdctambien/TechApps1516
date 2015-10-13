@@ -77,12 +77,5 @@ public class HealthComponent extends Component
 			default: 
 				return false;
 		}
-	}
-
-	@Override
-	public void createReferences() 
-	{
-		
-	}
-	
+	}	
 }

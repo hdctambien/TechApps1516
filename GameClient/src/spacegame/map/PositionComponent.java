@@ -64,10 +64,6 @@ public class PositionComponent extends Component
 	public String serialize() {
 		return "posX:"+posX+" posY:"+posY;
 	}
-
-	@Override
-	public void createReferences() {		
-	}
 	
 	@Override
 	public boolean equals(Object obj){

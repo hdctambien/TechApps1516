@@ -97,12 +97,6 @@ public class Entity implements ISerializable {
 		}
 		return "Bruh, I don't have this variable...";
 	}
-
-	protected void createReferences(){
-		for(Component c: getComponents()){
-			c.createReferences();
-		}
-	}
 	
 	public boolean isUpdating(){
 		return isUpdating;

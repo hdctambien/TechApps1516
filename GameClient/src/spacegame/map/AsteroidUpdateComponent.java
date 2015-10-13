@@ -1,8 +1,6 @@
 package spacegame.map;
 
 public class AsteroidUpdateComponent extends UpdateComponent {
-
-	private PhysicsComponent physics;
 	
 	public AsteroidUpdateComponent(){
 		
@@ -14,6 +12,7 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 
 	@Override
 	public void update(long timeElapsed) {
+		PhysicsComponent physics = (PhysicsComponent) getEntity().getComponent("Physics");
 		physics.accelerate(timeElapsed);
 		physics.move(timeElapsed);		
 	}
@@ -22,12 +21,6 @@ public class AsteroidUpdateComponent extends UpdateComponent {
 	public Component clone(Entity entity) {
 		return new AsteroidUpdateComponent(entity);
 	}
-
-	@Override
-	public void createReferences() {
-		physics = (PhysicsComponent) getEntity().getComponent("Physics");
-	}
-	
 
 	@Override
 	public String serialize() {

@@ -1,15 +1,14 @@
 package spacegame.map;
 
+import spacegame.GameConstants;
+
 public class ShieldComponent extends Component
 {
-	public static final double NANO = 1_000_000_000;
+	public static final double NANO = GameConstants.NANO;
 	private final int MAX_SHIELD = 1500;
 	private final double SHIELD_REGEN_RATE = 50.0;
 	private int maxShield = MAX_SHIELD;
 	private int shield;
-	
-	private Component power;
-	private Component health;
 	
 	public ShieldComponent() 
 	{
@@ -18,16 +17,20 @@ public class ShieldComponent extends Component
 	
 	public void takeDamage(int damageAmount)
 	{
+		HealthComponent health = (HealthComponent)getEntity().getComponent("shield");
+		
 		shield -= damageAmount;
 		if(shield <= 0)
 		{
-			((HealthComponent) health).takeDamage(0-shield);
+			health.takeDamage(0-shield);
 			shield = 0;
 		}
 	}
 	
 	public void regenShields(long timeElapsed)
 	{
+		Component power = getEntity().getComponent("Power");
+		
 		String shieldPowerString = power.getVariable("powerShield");
 		double powerShield = Double.parseDouble(shieldPowerString);
 		shield += powerShield*SHIELD_REGEN_RATE*timeElapsed/NANO;
@@ -94,13 +97,4 @@ public class ShieldComponent extends Component
 	{
 		return "maxShield:"+maxShield+" shield:"+shield;
 	}
-
-
-	@Override
-	public void createReferences() 
-	{
-		power = getEntity().getComponent("Power");
-		health = getEntity().getComponent("shield");		
-	}
-
 }

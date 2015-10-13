@@ -95,10 +95,6 @@ public class PowerComponent extends Component
 		return "power:"+power+" powerComms:"+powerComms+" powerFuel:"+powerFuel+" powerShield:"+powerShield+
 			" powerGuns:"+powerGuns;
 	}
-
-	@Override
-	public void createReferences() {		
-	}
 	
 	@Override
 	public boolean equals(Object obj){

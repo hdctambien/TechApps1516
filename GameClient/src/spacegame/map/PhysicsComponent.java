@@ -7,7 +7,6 @@ public class PhysicsComponent extends Component
 	private double xAcc;
 	private double yAcc;
 	private double heading;
-	private Component position;
 	
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
@@ -17,6 +16,7 @@ public class PhysicsComponent extends Component
 
 	public void move(long timeElapsed) 
 	{
+		Component position = getEntity().getComponent("Position");
 		position.setVariable("posX", position.getVariable("posX") + timeElapsed/(1_000_000_000.0) * xVel );
 		position.setVariable("posY", position.getVariable("posY") + timeElapsed/(1_000_000_000.0) * yVel );
 	}
@@ -105,11 +105,6 @@ public class PhysicsComponent extends Component
 	@Override
 	public String serialize() {
 		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc:"+yAcc;
-	}
-
-	@Override
-	public void createReferences() {
-		position = getEntity().getComponent("Position");
 	}
 	
 	@Override

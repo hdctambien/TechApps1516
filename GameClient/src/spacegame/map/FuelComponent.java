@@ -1,14 +1,14 @@
 package spacegame.map;
 
+import spacegame.GameConstants;
+
 public class FuelComponent extends Component{
 
 	private double currentFuel;
 	private double maxFuel;
 	private double throttle;
-
-	private Component power;
 	
-	public static final double NANO = 1_000_000_000;
+	public static final double NANO = GameConstants.NANO;
 	public static final double FUEL_CONS_RATE = 0.1;
 	public static final double FUEL_REGEN_RATE = 0.05;
 	public static final double DEFAULT_MAX_FUEL = 100;
@@ -22,6 +22,8 @@ public class FuelComponent extends Component{
 	}
 	
 	public void regenFuel(long timeElapsed){
+		PowerComponent power = (PowerComponent)getEntity().getComponent("Power");	
+		
 		String fuelPowerString = power.getVariable("powerFuel");
 		double powerFuel = Double.parseDouble(fuelPowerString);
 		currentFuel += powerFuel*FUEL_REGEN_RATE*timeElapsed/NANO;
@@ -133,11 +135,6 @@ public class FuelComponent extends Component{
 	@Override
 	public String serialize() {
 		return "currentFuel:"+currentFuel+" maxFuel:"+maxFuel+" throttle:"+throttle;
-	}
-
-	@Override
-	public void createReferences() {
-		power = getEntity().getComponent("Power");		
 	}
 	
 	@Override
