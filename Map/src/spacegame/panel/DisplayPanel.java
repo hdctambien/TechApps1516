@@ -1,5 +1,6 @@
 package spacegame.panel;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -14,9 +15,11 @@ public class DisplayPanel extends JPanel
 	public DisplayPanel(GameMap map)
 	{
 		this.map = map;		
+		this.setBackground(Color.RED);
+		this.setVisible(true);
 	}
 	
-	@Override
+/*	@Override
 	public void paintComponent(Graphics g)
 	{
 		if(map.isLocked())
@@ -27,8 +30,6 @@ public class DisplayPanel extends JPanel
 		{
 			Graphics2D g2 = (Graphics2D) g;
 			//DRAW ALL THE ENTITIES
-			
-			
 		}
-	}
+	}*/
 }

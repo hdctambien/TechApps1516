@@ -102,6 +102,7 @@ class groundControlGraphics extends Thread
 		pGunsConst.gridheight = 5;
 		pGunsConst.gridwidth = 1;
 		
+			
 		
 		
 		
@@ -137,9 +138,16 @@ class groundControlGraphics extends Thread
 		dataPanel.add(throttle,throttleConst);
 		dataPanel.add(heading,headingConst);
 		
+		dataPanel.add(pFuel, pFuelConst);
+		dataPanel.add(pComms, pCommsConst);
+		dataPanel.add(pGuns, pGunsConst);
+		dataPanel.add(pShield, pShieldConst);	
+		
+		
+		
 		displayPanel = new DisplayPanel(map);
 		displayPanel.setBackground(Color.black);
-		displayPanel.setPreferredSize(new Dimension(1600,1000));
+		displayPanel.setVisible(true);
 		
 		windowPanel.add(displayPanel,BorderLayout.CENTER);
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);
@@ -156,23 +164,12 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		
-		windowFrame.pack();
-		
-		
+		windowFrame.pack();		
 	}
 	public void run()
 	{
 		while(gcGame.running)
 		{
-			try
-			{
-				Thread.sleep(50);
-			}
-			catch(InterruptedException e)
-			{
-				e.printStackTrace();
-			}
 			windowPanel.repaint();
 		}
 	}
