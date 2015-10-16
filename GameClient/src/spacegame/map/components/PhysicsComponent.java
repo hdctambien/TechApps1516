@@ -8,8 +8,7 @@ public class PhysicsComponent extends Component
 	private double yVel;
 	private double xAcc;
 	private double yAcc;
-	private double heading;
-	
+
 	public final double MAX_ACCELERATION = 10; //Pixels / second
 	
 	public PhysicsComponent(){
@@ -31,6 +30,8 @@ public class PhysicsComponent extends Component
 	
 	public void throttleAcceleration(double throttle)
 	{
+		Component head = getEntity().getComponent("Heading");
+		double heading = head.getDouble("heading");
 		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
 		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
 	}
@@ -42,7 +43,6 @@ public class PhysicsComponent extends Component
 		c.setVariable("yVel", Double.toString(yVel));
 		c.setVariable("xAcc", Double.toString(xAcc));
 		c.setVariable("yAcc", Double.toString(yAcc));
-		c.setVariable("heading", Double.toString(heading));
 	}
 
 	@Override
@@ -53,7 +53,6 @@ public class PhysicsComponent extends Component
 		clone.yVel = yVel;
 		clone.xAcc = xAcc;
 		clone.yAcc = yAcc;
-		clone.heading = heading;
 		clone.setEntity(entity);
 		return clone;
 	}
@@ -82,7 +81,6 @@ public class PhysicsComponent extends Component
 		{
 			case "velocityX": return Double.toString(xVel);
 			case "velocityY": return Double.toString(yVel);
-			case "heading": return Double.toString(heading);
 			case "xAcc": return Double.toString(xAcc);
 			case "yAcc": return Double.toString(yAcc);
 			default: return null;
@@ -97,7 +95,6 @@ public class PhysicsComponent extends Component
 		{
 			case "velocityX": xVel = Double.parseDouble(value); return true;
 			case "velocityY": yVel = Double.parseDouble(value); return true;
-			case "heading": heading = Double.parseDouble(value); return true;
 			case "xAcc": xAcc = Double.parseDouble(value); return true;
 			case "yAcc": yAcc = Double.parseDouble(value); return true;
 			default: return false;
@@ -106,7 +103,7 @@ public class PhysicsComponent extends Component
 
 	@Override
 	public String serialize() {
-		return "velocityX:"+xVel+" velocityY:"+yVel+" heading:"+heading+" xAcc:"+xAcc+" yAcc:"+yAcc;
+		return "velocityX:"+xVel+" velocityY:"+yVel+" xAcc:"+xAcc+" yAcc:"+yAcc;
 	}
 	
 	@Override
@@ -116,7 +113,6 @@ public class PhysicsComponent extends Component
 			PhysicsComponent p = (PhysicsComponent) obj;
 			equal = equal && (xVel == p.xVel);
 			equal = equal && (yVel == p.yVel);
-			equal = equal && (heading == p.heading);
 			equal = equal && (xAcc == p.xAcc);
 			equal = equal && (yAcc == p.yAcc);
 			return equal;
