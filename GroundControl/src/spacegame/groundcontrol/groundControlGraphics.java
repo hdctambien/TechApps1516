@@ -21,6 +21,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
+import spacegame.map.GameMap;
+import spacegame.panel.DisplayPanel;
 
 /**
  * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
@@ -36,19 +38,73 @@ class groundControlGraphics extends Thread
 	private groundControlGame gcGame;
 	private GridBagLayout gridBag;
 	Client c;
+	private GameMap map;
 	
 	private JSlider throttle;
 	private JSlider heading;
-	private JPanel displayPanel;
+	private DisplayPanel displayPanel;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
+	private JSlider pFuel;
+	private JSlider pComms;
+	private JSlider pShield;
+	private JSlider pGuns;
+	
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map) 
 	{		
+		this.map = map;
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
 		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
 		this.c = c;
+		
+		
+		pFuel = new JSlider(JSlider.VERTICAL,0,100,25);
+		pFuel.setMinorTickSpacing(5);
+		pFuel.setMajorTickSpacing(10);
+		pFuel.setEnabled(false);
+		pComms = new JSlider(JSlider.VERTICAL,0,100,25);
+		pComms.setMinorTickSpacing(5);
+		pComms.setMajorTickSpacing(10);
+		pComms.setEnabled(false);
+		pShield = new JSlider(JSlider.VERTICAL,0,100,25);
+		pShield.setMinorTickSpacing(5);
+		pShield.setMajorTickSpacing(10);
+		pShield.setEnabled(false);
+		pGuns = new JSlider(JSlider.VERTICAL,0,100,25);
+		pGuns.setMinorTickSpacing(5);
+		pGuns.setMajorTickSpacing(10);
+		pGuns.setEnabled(false);
+		
+		GridBagConstraints pFuelConst = new GridBagConstraints();
+		pFuelConst.fill = pFuelConst.BOTH;
+		pFuelConst.gridx = 6;
+		pFuelConst.gridy = 0;
+		pFuelConst.gridheight = 5;
+		pFuelConst.gridwidth = 1;
+		GridBagConstraints pCommsConst = new GridBagConstraints();
+		pCommsConst.fill = pCommsConst.BOTH;
+		pCommsConst.gridx = 7;
+		pCommsConst.gridy = 0;
+		pCommsConst.gridheight = 5;
+		pCommsConst.gridwidth = 1;
+		GridBagConstraints pShieldConst = new GridBagConstraints();
+		pShieldConst.fill = pShieldConst.BOTH;
+		pShieldConst.gridx = 8;
+		pShieldConst.gridy = 0;
+		pShieldConst.gridheight = 5;
+		pShieldConst.gridwidth = 1;
+		GridBagConstraints pGunsConst = new GridBagConstraints();
+		pGunsConst.fill = pGunsConst.BOTH;
+		pGunsConst.gridx = 9;
+		pGunsConst.gridy = 0;
+		pGunsConst.gridheight = 5;
+		pGunsConst.gridwidth = 1;
+		
+			
+		
+		
 		
 		
 		throttle = new JSlider();
@@ -82,9 +138,16 @@ class groundControlGraphics extends Thread
 		dataPanel.add(throttle,throttleConst);
 		dataPanel.add(heading,headingConst);
 		
-		displayPanel = new JPanel();
+		dataPanel.add(pFuel, pFuelConst);
+		dataPanel.add(pComms, pCommsConst);
+		dataPanel.add(pGuns, pGunsConst);
+		dataPanel.add(pShield, pShieldConst);	
+		
+		
+		
+		displayPanel = new DisplayPanel(map);
 		displayPanel.setBackground(Color.black);
-		displayPanel.setPreferredSize(new Dimension(1600,1000));
+		displayPanel.setVisible(true);
 		
 		windowPanel.add(displayPanel,BorderLayout.CENTER);
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);
@@ -101,24 +164,12 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		
-		windowFrame.pack();
-		
-		
-		
+		windowFrame.pack();		
 	}
 	public void run()
 	{
 		while(gcGame.running)
 		{
-			try
-			{
-				Thread.sleep(50);
-			}
-			catch(InterruptedException e)
-			{
-				e.printStackTrace();
-			}
 			windowPanel.repaint();
 		}
 	}
