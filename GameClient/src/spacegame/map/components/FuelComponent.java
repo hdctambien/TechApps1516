@@ -1,6 +1,7 @@
-package spacegame.map;
+package spacegame.map.components;
 
 import spacegame.GameConstants;
+import spacegame.map.Entity;
 
 public class FuelComponent extends Component{
 

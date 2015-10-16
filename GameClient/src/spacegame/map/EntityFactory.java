@@ -1,5 +1,13 @@
 package spacegame.map;
 
+import spacegame.map.components.AsteroidUpdateComponent;
+import spacegame.map.components.FuelComponent;
+import spacegame.map.components.PhysicsComponent;
+import spacegame.map.components.PositionComponent;
+import spacegame.map.components.PowerComponent;
+import spacegame.map.components.RenderComponent;
+import spacegame.map.components.ShipUpdateComponent;
+
 public class EntityFactory {
 
 	public static final String POSITION = "Position";

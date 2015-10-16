@@ -1,4 +1,6 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
 
 public abstract class UpdateComponent extends Component {
 

@@ -1,4 +1,7 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
+import spacegame.map.ISerializable;
 
 public abstract class Component implements ISerializable{
 

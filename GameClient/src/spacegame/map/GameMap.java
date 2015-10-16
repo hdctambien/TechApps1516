@@ -20,6 +20,9 @@ public class GameMap implements ISerializable, EntityListener {
 	public boolean isUpdating(){
 		return updating;
 	}
+	public boolean hasActions(){
+		return !actionQueue.isEmpty();
+	}	
 	public boolean isLocked(){
 		return locked;
 	}
