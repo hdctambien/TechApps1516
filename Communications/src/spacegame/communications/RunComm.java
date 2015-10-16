@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class RunComm {
+/*public class RunComm {
 
     public static void main(String[] args) {
         String iAddress = "10.11.1.110";
@@ -20,10 +20,8 @@ public class RunComm {
 
 
     }
-}
-
-
-/*public class RunComm
+}*/
+public class RunComm
 {
     private static CommGame game;
     public static void main(String[] args)
@@ -80,4 +78,4 @@ public class RunComm {
             game.run();
         }
     }
-}*/
+}

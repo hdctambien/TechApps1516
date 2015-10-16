@@ -16,6 +16,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
@@ -32,6 +33,7 @@ import spacegame.panel.DisplayPanel;
 
 class groundControlGraphics extends Thread 
 {
+	private String SHIP_NAME;
 	JFrame windowFrame;    
     public JPanel windowPanel;
     private JPanel dataPanel;
@@ -44,20 +46,41 @@ class groundControlGraphics extends Thread
 	private JSlider heading;
 	private DisplayPanel displayPanel;
 	
+	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	private JSlider pFuel;
 	private JSlider pComms;
 	private JSlider pShield;
 	private JSlider pGuns;
+	private JLabel fuel;
+	private JLabel comms;
+	private JLabel shield;
+	private JLabel guns;
+	private JLabel powerL;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map) 
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map, String shipName) 
 	{		
+		SHIP_NAME = shipName;
 		this.map = map;
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
 		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
+		powerPanel = new JPanel(null);
 		this.c = c;
+		
+		powerBG = new JPanel();
+		powerBG2 = new JPanel();
+		powerBGL = new JPanel();
+		powerBGL2 = new JPanel();
+		powerBG.setBackground(Color.GREEN);
+		powerBG.setVisible(true);
+		powerBG2.setBackground(Color.WHITE);
+		powerBG2.setVisible(true);
+		powerBGL.setBackground(Color.WHITE);
+		powerBGL.setVisible(true);
+		powerBGL2.setBackground(Color.GREEN);
+		powerBGL2.setVisible(true);
 		
 		
 		pFuel = new JSlider(JSlider.VERTICAL,0,100,25);
@@ -76,36 +99,6 @@ class groundControlGraphics extends Thread
 		pGuns.setMinorTickSpacing(5);
 		pGuns.setMajorTickSpacing(10);
 		pGuns.setEnabled(false);
-		
-		GridBagConstraints pFuelConst = new GridBagConstraints();
-		pFuelConst.fill = pFuelConst.BOTH;
-		pFuelConst.gridx = 6;
-		pFuelConst.gridy = 0;
-		pFuelConst.gridheight = 5;
-		pFuelConst.gridwidth = 1;
-		GridBagConstraints pCommsConst = new GridBagConstraints();
-		pCommsConst.fill = pCommsConst.BOTH;
-		pCommsConst.gridx = 7;
-		pCommsConst.gridy = 0;
-		pCommsConst.gridheight = 5;
-		pCommsConst.gridwidth = 1;
-		GridBagConstraints pShieldConst = new GridBagConstraints();
-		pShieldConst.fill = pShieldConst.BOTH;
-		pShieldConst.gridx = 8;
-		pShieldConst.gridy = 0;
-		pShieldConst.gridheight = 5;
-		pShieldConst.gridwidth = 1;
-		GridBagConstraints pGunsConst = new GridBagConstraints();
-		pGunsConst.fill = pGunsConst.BOTH;
-		pGunsConst.gridx = 9;
-		pGunsConst.gridy = 0;
-		pGunsConst.gridheight = 5;
-		pGunsConst.gridwidth = 1;
-		
-			
-		
-		
-		
 		
 		throttle = new JSlider();
 		throttle.setMaximum(100);
@@ -136,13 +129,48 @@ class groundControlGraphics extends Thread
 		
 		
 		dataPanel.add(throttle,throttleConst);
-		dataPanel.add(heading,headingConst);
+		dataPanel.add(heading,headingConst);		
 		
-		dataPanel.add(pFuel, pFuelConst);
-		dataPanel.add(pComms, pCommsConst);
-		dataPanel.add(pGuns, pGunsConst);
-		dataPanel.add(pShield, pShieldConst);	
+		fuel   = new JLabel("Fuel");
+		fuel.setBounds(35, 30, 25, 10);
+		comms  = new JLabel("Comms");
+		comms.setBounds(87, 30, 50, 10);
+		shield = new JLabel("Shield");
+		shield.setBounds(150, 30, 50, 10);
+		guns   = new JLabel("Guns");
+		guns.setBounds(213, 30, 30, 10);
+		powerL  = new JLabel("Power");
+		powerL.setBounds(122, 10, 50, 10);
 		
+		pFuel.setOpaque(false);
+		pComms.setOpaque(false);
+		pShield.setOpaque(false);
+		pGuns.setOpaque(false);
+		
+		pFuel.setBounds(25, 40, 60, 150);
+		pComms.setBounds(85, 40, 60, 150);
+		pShield.setBounds(145, 40, 60, 150);
+		pGuns.setBounds(205, 40, 60, 150);
+		powerBG.setBounds(15, 15, 260, 179);
+		powerBG2.setBounds(17, 17, 256, 175);
+		powerBGL.setBounds(120, 8, 42, 15);
+		powerBGL2.setBounds(118, 6, 46, 19);
+		
+		powerPanel.add(pFuel);
+		powerPanel.add(fuel);
+		powerPanel.add(pComms);
+		powerPanel.add(comms);
+		powerPanel.add(pShield);
+		powerPanel.add(shield);
+		powerPanel.add(pGuns);
+		powerPanel.add(guns);
+		powerPanel.add(powerL);
+		powerPanel.add(powerBGL);
+		powerPanel.add(powerBGL2);
+		powerPanel.add(powerBG2);
+		powerPanel.add(powerBG);
+		
+		dataPanel.add(powerPanel);
 		
 		
 		displayPanel = new DisplayPanel(map);
@@ -170,6 +198,10 @@ class groundControlGraphics extends Thread
 	{
 		while(gcGame.running)
 		{
+			pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
+			pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
+			pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
+			pComms.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 			windowPanel.repaint();
 		}
 	}
