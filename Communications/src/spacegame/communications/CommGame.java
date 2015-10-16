@@ -8,7 +8,7 @@ import spacegame.client.*;
 import java.io.IOException;
 
 //import com.sun.security.ntlm.Client;
-
+import java.awt.Graphics;
 import spacegame.client.*;
 
 
@@ -29,11 +29,7 @@ public class CommGame implements Runnable
     CommGUI gui;
     private Client c;
 
-   /* public static void main(String args[])
-    {
-     //   CommGame game = new CommGame("", 2, "");
 
-    }*/
 
     public CommGame(String address, int p, String name)
     {
@@ -41,7 +37,7 @@ public class CommGame implements Runnable
         port=p;
 
 
-        gui = new CommGUI(this, this.client);
+        gui = new CommGUI(this, this.client);//, new Graphics);
         Thread guiThread = new Thread(gui);
         guiThread.start();
        /* try{
