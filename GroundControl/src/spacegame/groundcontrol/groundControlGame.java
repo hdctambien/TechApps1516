@@ -81,7 +81,7 @@ public class groundControlGame implements Runnable
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this,c,map);
+	    guiThread = new groundControlGraphics(this,c,map,SHIP_NAME);
 	    guiThread.start();
 	    gameLogic();
 	}	
