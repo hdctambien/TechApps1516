@@ -1,4 +1,4 @@
-package spacegame.util.gui;
+package spacegame.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -78,34 +78,5 @@ public class HeadingDial extends JComponent {
 		int x = offset+(int)Math.round(radius * Math.cos(heading));
 		int y = offset-(int)Math.round(radius * Math.sin(heading));
 		g2.drawLine(offset, radius+padding, x, y);
-	}
-	//Dirty Test method
-	public static void main(String[] args){
-		javax.swing.SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				JFrame frame = new JFrame("HeadingDialTest");
-				frame.setSize(200, 200);
-				HeadingDial dial = new HeadingDial();
-				dial.setHeading(0);
-				JButton button = new JButton("Change Heading");
-				button.addActionListener(new ActionListener(){
-					private HeadingDial dial;
-					public ActionListener setDial(HeadingDial dial){
-						this.dial = dial;
-						return this;
-					}
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						String str = JOptionPane.showInputDialog("Please enter new Heading:");
-						dial.setHeading(Double.parseDouble(str));
-						dial.repaint();
-					}
-				}.setDial(dial));
-				frame.add(dial, BorderLayout.NORTH);
-				frame.add(button, BorderLayout.SOUTH);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setVisible(true);
-			}
-		});
 	}
 }
