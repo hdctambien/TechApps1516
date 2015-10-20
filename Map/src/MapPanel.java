@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
+import spacegame.map.Entity;
+import spacegame.map.GameMap;
 import spacegame.map.MapAction;
 
 public class MapPanel extends JFrame{
@@ -20,13 +22,19 @@ public class MapPanel extends JFrame{
 	
 	
 	public JFrame frame = new JFrame();
-	public JPanel mapPanel;
 	public MapComponent map;
-	public MapPanel()
+	public GameMap game;
+	public final String SHIP_NAME = "Ship.1";
+	
+	Entity headingEntity;
+	Entity positionEntity;
+	public MapPanel(GameMap g)
 	{
 	/*	final MapClient pilot = new MapClient();
 		pilot.setup();
 		pilot.subscribe();*/
+		
+		game = g;
 		
 	
 		mapPanel = new JPanel();
@@ -40,11 +48,13 @@ public class MapPanel extends JFrame{
 		frame.setSize(800,800);
 		frame.setVisible(true);
 		
-	
+		
+		
+		
+		positionEntity = game.getEntityByName(SHIP_NAME);
+		
 		xCord = 200;
 		yCord = 200;
-		map.setHeading(heading);
-		map.setWidth(100);
 		run();
 	}
 	public void run()
@@ -59,9 +69,15 @@ public class MapPanel extends JFrame{
 			{
 				Thread.currentThread().interrupt();
 			}
-			map.setHeading(heading);
+			
+			heading = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
+			
+			xCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posX"));
+			yCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posY"));
+			
 			map.setPosition(xCord, yCord);
-
+			map.setHeading(heading);
+			
 			frame.revalidate();
 			map.repaint();
 		
