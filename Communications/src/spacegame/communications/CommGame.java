@@ -6,8 +6,6 @@ import spacegame.client.*;
 
 
 import java.io.IOException;
-
-//import com.sun.security.ntlm.Client;
 import java.awt.Graphics;
 import spacegame.client.*;
 
