@@ -1,12 +1,6 @@
 package spacegame.map;
 
-import spacegame.map.components.AsteroidUpdateComponent;
-import spacegame.map.components.FuelComponent;
-import spacegame.map.components.PhysicsComponent;
-import spacegame.map.components.PositionComponent;
-import spacegame.map.components.PowerComponent;
-import spacegame.map.components.RenderComponent;
-import spacegame.map.components.ShipUpdateComponent;
+import spacegame.map.components.*;
 
 public class EntityFactory {
 
@@ -18,6 +12,7 @@ public class EntityFactory {
 	public static final String ASTEROID_UPDATE = "AsteroidUpdate";
 	public static final String SHIP_UPDATE = "ShipUpdate";
 	public static final String RENDER = "Render";
+	public static final String HEADING = "Heading";
 	
 	private int ufid = 0;
 	
@@ -28,6 +23,7 @@ public class EntityFactory {
 	public Entity createShip(){
 		Entity ship = new Entity("Ship."+ufid, ufid++);
 		ship.addComponent(POSITION, new PositionComponent());
+		ship.addComponent(HEADING, new HeadingComponent());
 		ship.addComponent(PHYSICS, new PhysicsComponent());
 		ship.addComponent(POWER, new PowerComponent());
 		ship.addComponent(FUEL, new FuelComponent());
@@ -39,6 +35,7 @@ public class EntityFactory {
 	public Entity createAsteroid(){
 		Entity asteroid = new Entity("Asteroid."+ufid,ufid++);
 		asteroid.addComponent(POSITION, new PositionComponent());
+		asteroid.addComponent(HEADING, new HeadingComponent());
 		asteroid.addComponent(PHYSICS,new PhysicsComponent());
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("MayMime.png"));
