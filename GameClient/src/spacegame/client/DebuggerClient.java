@@ -1,7 +1,12 @@
 package spacegame.client;
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
+import spacegame.client.chat.ChatPanel;
+import spacegame.client.chat.ChatProtocol;
 import spacegame.map.GameMap;
 
 /**
@@ -59,6 +64,10 @@ public class DebuggerClient {
 			constructMap(serial, client);
 			MapUpdateProtocol update = new MapUpdateProtocol(client, map, SHIP_NAME, serial);
 			
+			if(name.equals("ChatTester")){//Test the chat panel
+				javax.swing.SwingUtilities.invokeLater(new ChatGUIRunner(client,aggregator));
+			}
+			
 			enterProtocolLoop(in, client, aggregator);			
 		}catch(IOException e){
 			e.printStackTrace();
@@ -108,4 +117,28 @@ public class DebuggerClient {
 			}
 		}
 	}
+}
+class ChatGUIRunner implements Runnable{
+	
+	private Client client;
+	private ProtocolAggregator aggregator;
+	
+	public ChatGUIRunner(Client c, ProtocolAggregator pa){
+		client = c;
+		aggregator = pa;
+	}
+	
+	public void run(){
+		JFrame frame = new JFrame("ChatTest");
+		frame.setSize(700, 400);
+		ChatPanel chat = new ChatPanel(600,350);
+		frame.add(chat,BorderLayout.SOUTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		ChatProtocol protocol = new ChatProtocol(client,chat);
+		chat.addChatListener(protocol);
+		aggregator.addProtocol(protocol);
+		
+	}
+	
 }

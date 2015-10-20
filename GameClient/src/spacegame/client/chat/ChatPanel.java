@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
@@ -18,8 +19,11 @@ public class ChatPanel extends JPanel implements ActionListener {
 	public static final int TXT_FIELD_HEIGHT = 20;
 	public static final int H_PADDING = 15+TXT_FIELD_HEIGHT;
 	
+	private LinkedList<ChatListener> chatListeners;
 	
 	public ChatPanel(int width, int height){
+		chatListeners = new LinkedList<ChatListener>();
+		
 		chatField = new JTextField();
 		outputBox = new JTextArea(width-W_PADDING,height-H_PADDING);
 		scroller = new JScrollPane(outputBox);
@@ -37,10 +41,31 @@ public class ChatPanel extends JPanel implements ActionListener {
 		setPreferredSize(new Dimension(width,height));
 	}
 
+	public void addChatListener(ChatListener listener){
+		chatListeners.add(listener);
+	}
+	
+	public void removeChatListener(ChatListener listener){
+		chatListeners.remove(listener);
+	}
+	
+	private void fireChatEvent(ChatEvent e){
+		for(ChatListener listener: chatListeners){
+			listener.chatRecieved(e);
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		outputBox.setText(outputBox.getText()+"[YOU] #"+chatField.getText()+"\n");
+		String text = chatField.getText();
+		addChat("[YOU] #"+text);
+		ChatEvent chat = new ChatEvent(text);
+		fireChatEvent(chat);
 		chatField.setText("");
+	}
+	
+	public void addChat(String message){
+		outputBox.setText(outputBox.getText()+message+"\n");
 	}
 	
 }
