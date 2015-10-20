@@ -1,4 +1,7 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
+import spacegame.map.ISerializable;
 
 public abstract class Component implements ISerializable{
 
@@ -25,7 +28,6 @@ public abstract class Component implements ISerializable{
 	public abstract boolean hasVariable(String varname);
 	public abstract String getVariable(String varname);
 	public abstract boolean setVariable(String varname, String value);
-	public abstract void createReferences();
 	
 	public boolean hasDouble(String name){return false;}
 	public double getDouble(String name){return Double.NaN;}

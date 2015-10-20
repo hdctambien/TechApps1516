@@ -1,4 +1,6 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
 
 public class HealthComponent extends Component
 {
@@ -77,12 +79,5 @@ public class HealthComponent extends Component
 			default: 
 				return false;
 		}
-	}
-
-	@Override
-	public void createReferences() 
-	{
-		
-	}
-	
+	}	
 }

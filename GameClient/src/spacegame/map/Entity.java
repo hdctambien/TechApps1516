@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import spacegame.map.components.AsteroidUpdateComponent;
+import spacegame.map.components.Component;
+import spacegame.map.components.FuelComponent;
+import spacegame.map.components.PhysicsComponent;
+import spacegame.map.components.PositionComponent;
+import spacegame.map.components.PowerComponent;
+import spacegame.map.components.RenderComponent;
+import spacegame.map.components.ShipUpdateComponent;
+import spacegame.map.components.UpdateComponent;
+
 public class Entity implements ISerializable {
 
 	private Hashtable<String,Component> components;
@@ -97,12 +107,6 @@ public class Entity implements ISerializable {
 		}
 		return "Bruh, I don't have this variable...";
 	}
-
-	protected void createReferences(){
-		for(Component c: getComponents()){
-			c.createReferences();
-		}
-	}
 	
 	public boolean isUpdating(){
 		return isUpdating;
@@ -149,6 +153,7 @@ public class Entity implements ISerializable {
 					case EntityFactory.FUEL: c = new FuelComponent(); break;
 					case EntityFactory.POSITION: c = new PositionComponent(); break;
 					case EntityFactory.POWER: c = new PowerComponent(); break;
+					case EntityFactory.RENDER: c = new RenderComponent(null); break;
 					case EntityFactory.UPDATE:
 						update = true;
 						switch(data[2]){

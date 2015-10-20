@@ -15,14 +15,14 @@ import javax.swing.JViewport;
 import spacegame.map.MapAction;
 
 public class MapPanel extends JFrame{
-	public static int xCord, yCord;
-	public static double heading = 45;
+	public int xCord, yCord;
+	public double heading = 45;
 	
 	
-	public  static JFrame frame = new JFrame();
-	public  static JPanel mapPanel;
-	public  static MapComponent map;
-	public static void mapPanel()
+	public JFrame frame = new JFrame();
+	public JPanel mapPanel;
+	public MapComponent map;
+	public MapPanel()
 	{
 	/*	final MapClient pilot = new MapClient();
 		pilot.setup();
@@ -35,7 +35,6 @@ public class MapPanel extends JFrame{
 		map = new MapComponent();
 		map.setPreferredSize(new Dimension(1200,600));
 
-//		frame.add(mapPanel, BorderLayout.NORTH);
 		frame.add(map, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,800);
@@ -45,15 +44,10 @@ public class MapPanel extends JFrame{
 		xCord = 200;
 		yCord = 200;
 		map.setHeading(heading);
-		
+		map.setWidth(100);
 		run();
-		
 	}
-	public static void main(String[] args)
-	{
-		mapPanel();
-	}
-	public static void run()
+	public void run()
 	{
 		while(true)
 		{
@@ -65,25 +59,31 @@ public class MapPanel extends JFrame{
 			{
 				Thread.currentThread().interrupt();
 			}
-			map.setHeading(0);
+			map.setHeading(heading);
 			map.setPosition(xCord, yCord);
+
 			frame.revalidate();
 			map.repaint();
+		
 		}
 	}
 
-	public static void setY(int posY)
+	public void setY(int posY)
 	{
 		yCord = posY;
 		System.out.println("set y to: "+ posY);
 	}
-	public static void setX(int posX)
+	public void setX(int posX)
 	{
 		xCord = posX;
 		System.out.println("set x to: "+ posX);
 	}
-	public static void setHeading(double h)
+	public void setHeading(double h)
 	{
 		heading = h;
+	}
+	public void setWidth(int width)
+	{
+		map.setWidth(width);
 	}
 }

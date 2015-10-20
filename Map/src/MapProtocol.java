@@ -3,8 +3,10 @@ import spacegame.client.Client;
 
 public class MapProtocol extends AbstractProtocol {
 
+	public MapPanel panel;
 	public MapProtocol(Client client) {
 		super(client);
+		panel = new MapPanel();
 	}
 
 	@Override
@@ -15,11 +17,11 @@ public class MapProtocol extends AbstractProtocol {
 		{
 			if(mess[1].compareTo("posX") == 0)
 			{
-				MapPanel.setX((int)Double.parseDouble(mess[2]));
+				panel.setX((int)Double.parseDouble(mess[2]));
 			}
 			if(mess[1].compareTo("posY") == 0)
 			{
-				MapPanel.setY((int)Double.parseDouble(mess[2]));
+				panel.setY((int)Double.parseDouble(mess[2]));
 			}
 		}
 		

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import spacegame.client.*;
+import spacegame.map.GameMap;
 
 /**
  * Starts up client and runs the game loop, initializes game logic and graphics threads.
@@ -25,44 +26,63 @@ public class groundControlGame implements Runnable
 	String iaddress = "10.11.1.110";
 	int port = 8080;
 	String name = "";
+	public final String SHIP_NAME = "Ship.1";
     boolean running = false;
     private groundControlGraphics guiThread;
 	private boolean isRunning = false;
-	private Client c;
-	
-	Client gcClient;
-	groundControlProtocol gcProtocol;
-	
-	private boolean hasLink;
-	private double velocity; // m/s
-	private double heading;  //degrees (-180 to 180)
-	private double posX = 0;     //m
-	private double posY = 0;     //m 
-	private double throttle;       //throttle percentage
+	Client c;
+	private static Thread clientThread;
+	private static Thread protocolThread;
+	private static ProtocolAggregator aggregator;
+	private static GameMap map;
 	
 	public groundControlGame(String iAddress, int port, String name)
 	{
 		this.name = name;
 		try {
-			gcClient = new Client(iaddress,port);
+			c = new Client(iaddress,port);
+			BasicProtocol basic = new BasicProtocol(c);
+			SerialProtocol serial = new SerialProtocol(c);
+			aggregator = new ProtocolAggregator(c);
+			aggregator.addProtocol(basic);
+			aggregator.addProtocol(serial);
+			
+			clientThread = new Thread(c);
+			clientThread.start();
+			protocolThread = new Thread(aggregator);
+			protocolThread.start();
+			
+			c.sendMessage("set name " + name);
+			c.sendMessage("set job GroundControl");
+			c.sendMessage("set ship " + SHIP_NAME);
+			
+			c.sendMessage("get map");
+			System.out.println("Getting Map...");
+			while(!serial.hasSerial()){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Building Map...");
+			map = serial.getMapFromSerial();
+			System.out.println("Map obtained!");
+			
+			MapUpdateProtocol update = new MapUpdateProtocol(c, map, SHIP_NAME, serial);
+			aggregator.addProtocol(update);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gcProtocol = new groundControlProtocol(gcClient, this);
-		c = gcProtocol.getClient();
-		c.sendMessage("set name " + name);
-		c.sendMessage("set job GroundControl");
-		c.sendMessage("set ship Ship.1");
-		c.sendMessage("subscribe all");
 		run();
 	}
 	
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this,c);
+	    guiThread = new groundControlGraphics(this,c,map);
 	    guiThread.start();
-	    guiThread.addKeyListener(arrowKeys);
 	    gameLogic();
 	}	
 	
@@ -78,86 +98,7 @@ public class groundControlGame implements Runnable
 			{
 				e.printStackTrace();
 			}
-			
 		}
-	}
-	
-	KeyListener arrowKeys = new KeyListener()
-	{
-		@Override
-		public void keyPressed(KeyEvent arg0) 
-		{
-			if(arg0.getKeyCode() == KeyEvent.VK_UP)
-			{
-				posY-=5;
-				c.sendMessage("set posY " + posY);
-			}
-			if(arg0.getKeyCode() == KeyEvent.VK_DOWN)
-			{
-				posY+=5;
-				c.sendMessage("set posY " + posY);
-			}	
-			if(arg0.getKeyCode() == KeyEvent.VK_LEFT)
-			{
-				posX-=5;
-				c.sendMessage("set posX " + posX);
-			}
-			if(arg0.getKeyCode() == KeyEvent.VK_RIGHT)
-			{
-				posX+=5;
-				c.sendMessage("set posX " + posX);
-			}	
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) 
-		{
-		
-		}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) 
-		{
-			
-			
-		}
-	};
-
-	public void setThrottle(String string) 
-	{
-		throttle = Double.parseDouble(string);
-		guiThread.updateThrottle(throttle);
-	}
-
-	public void setHasLink(String string) 
-	{
-		hasLink = Boolean.parseBoolean(string);	
-		guiThread.updateHasLink(hasLink);
-	}
-
-	public void setRocketPosX(String string) 
-	{
-		posX = Double.parseDouble(string);
-		guiThread.updateRocketPosX(posX);
-	}
-
-	public void setRocketPosY(String string) 
-	{
-		posY = Double.parseDouble(string);
-		guiThread.updateRocketPosY(posY);
-	}
-
-	public void setRocketHeading(String string) 
-	{
-		heading = Double.parseDouble(string);
-		guiThread.updateRocketHeading(heading);
-	}
-
-	public void setRocketVelocity(String string) 
-	{
-		velocity = Double.parseDouble(string);
-		guiThread.updateRocketVelocity(velocity);
-		
 	}
 }
 

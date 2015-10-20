@@ -1,23 +1,20 @@
 package spacegame.communications;
-
+import java.awt.*;
+//import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
 
 import spacegame.client.*;
-/* 
- * ButtonDemo.java requires the following files:
- *   images/right.gif
- *   images/middle.gif
- *   images/left.gif
- */
+
 public class CommGUI extends Thread implements Runnable {
+
 
     protected JButton button;
     private static CommGame game;
@@ -26,40 +23,81 @@ public class CommGUI extends Thread implements Runnable {
     public JPanel panel = new JPanel();
     private boolean buttonStatus = false;
     private boolean buttonUpdated = true;
+    public JFrame windowFrame;
 
     public CommGUI(CommGame g, Client c)     {
         game=g;
         client=c;
 
-        JFrame windowFrame;
-//        createAndShowGUI();
 
+    
+        
         windowFrame = new JFrame();
         panel.setVisible(true);
         this.client = c;
 
+        JPanel panel = new JPanel(new GridLayout(1,2)); // split the panel in 1 rows and 2 cols
 
 
+        JTextArea userField = new JTextArea("User:");
+        userField.setEditable(false);
 
-        button = new JButton();
-        button.setText("Test Button");
-        button.addMouseListener(mouse);
-        button.setVisible(true);
-        panel.add(button);
-        windowFrame.setResizable(false);
-        windowFrame.setTitle("Communcations");
-        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        windowFrame.setResizable(true);
+        JTextArea user = new JTextArea("myuser");
+        user.setEditable(true);
+
+        panel.add(userField);
+        panel.add(user);
+
+        windowFrame.getContentPane().add(panel);
+
         windowFrame.setVisible(true);
-		windowFrame.setPreferredSize(new Dimension(1000,700));
-		windowFrame.addWindowListener(new WindowAdapter() {
+        windowFrame.setSize(600, 600);
+        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        
+        
+        
+        
+        
+//       button = new JButton();
+//      button.setText("Test Button");
+//       button.addMouseListener(mouse);
+//       button.setVisible(true);
+//       panel.add(button);
+//       windowwindowFrame.setResizable(false);
+//       windowwindowFrame.setTitle("Communcations");
+//       windowwindowFrame.setDefaultCloseOperation(JwindowFrame.EXIT_ON_CLOSE);
+//       windowwindowFrame.setResizable(true);
+//       windowwindowFrame.setVisible(true);
+//	    windowwindowFrame.setSize(600,600);
+//	    JPanel panel = new JPanel(new BorderLayout());
+//	    JPanel panel2 = new JPanel(new BorderLayout());
+//	    windowwindowFrame.add(panel);
+//	    //windowwindowFrame.pack();
+//	    
+//	    
+//	    
+//	    
+//		JSlider pComms = new JSlider();
+//		JSlider pComms2 = new JSlider();
+//		panel.add(pComms, BorderLayout.CENTER);
+//		panel.add(pComms2, BorderLayout.LINE_START);
+		
+	    
+	    
+	    
+	    
+	    
+	/*	windowwindowFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.add(windowPanel);
-		windowFrame.pack();
+		windowwindowFrame.add(windowPanel);
+		windowwindowFrame.pack();
     	*/
+		
 
 
     }
@@ -67,17 +105,14 @@ public class CommGUI extends Thread implements Runnable {
     {
         public void mousePressed(MouseEvent e)
         {
-            buttonStatus = true;
-            buttonUpdated = false;
-            System.out.println("Button pressed");
+        	windowFrame.add(new JSlider());
         }
         public void mouseReleased(MouseEvent e)
         {
-            buttonStatus = false;
-            buttonUpdated = false;
-            System.out.println("Button released");
+        	
         }
     };
+    
     public void run()
     {
         while(game.running)
@@ -86,25 +121,24 @@ public class CommGUI extends Thread implements Runnable {
             {
                 client.sendMessage("set buttonStatus " + buttonStatus);
                 buttonUpdated = true;
-                System.out.println(buttonStatus);
             }
         }
     }
    /* private static void createAndShowGUI() {
 
         //Create and set up the window.
-        JFrame frame = new JFrame("ButtonDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JwindowFrame windowFrame = new JwindowFrame("ButtonDemo");
+        windowFrame.setDefaultCloseOperation(JwindowFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
         CommGUI newContentPane = new CommGUI(game, client);
        /* newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);//
+        windowFrame.setContentPane(newContentPane);//
 
         //Display the window.
-        frame.pack();
-        frame.setSize(600,600);
-        frame.setVisible(true);
+        windowFrame.pack();
+        windowFrame.setSize(600,600);
+        windowFrame.setVisible(true);
 
     }*/
 

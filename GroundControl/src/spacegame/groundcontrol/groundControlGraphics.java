@@ -1,7 +1,12 @@
 package spacegame.groundcontrol;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -16,6 +21,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
+import spacegame.map.GameMap;
+import spacegame.panel.DisplayPanel;
 
 /**
  * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
@@ -26,67 +33,126 @@ import spacegame.client.Client;
 class groundControlGraphics extends Thread 
 {
 	JFrame windowFrame;    
-    public JPanel windowPanel = new JPanel();
+    public JPanel windowPanel;
+    private JPanel dataPanel;
 	private groundControlGame gcGame;
-	private JButton testButton1;
-	private JSlider throttle;
-	private JSlider rocketHeading;
+	private GridBagLayout gridBag;
 	Client c;
-	private boolean buttonStatus = false;
-	private boolean buttonUpdated = true;
+	private GameMap map;
 	
+	private JSlider throttle;
+	private JSlider heading;
+	private DisplayPanel displayPanel;
 	
-	private MouseAdapter mouse = new MouseAdapter()
-	{ 
-		public void mousePressed(MouseEvent e)
-		{
-			buttonStatus = true;
-			buttonUpdated = false;
-		}
-		public void mouseReleased(MouseEvent e)
-		{
-			buttonStatus = false;
-			buttonUpdated = false;
-		}
-	};
+	private JSlider pFuel;
+	private JSlider pComms;
+	private JSlider pShield;
+	private JSlider pGuns;
 	
-	public void addKeyListener(KeyListener k)
-	{
-		windowFrame.addKeyListener(k);
-	}
-	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c) 
-	{
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map) 
+	{		
+		this.map = map;
 		gcGame = groundControlGame;
 		windowFrame = new JFrame();
+		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
+		dataPanel = new JPanel(new GridLayout());
 		this.c = c;
 		
-		testButton1 = new JButton();
-		testButton1.setText("Test Button");
-		testButton1.addMouseListener(mouse);
-		testButton1.setVisible(true);
+		
+		pFuel = new JSlider(JSlider.VERTICAL,0,100,25);
+		pFuel.setMinorTickSpacing(5);
+		pFuel.setMajorTickSpacing(10);
+		pFuel.setEnabled(false);
+		pComms = new JSlider(JSlider.VERTICAL,0,100,25);
+		pComms.setMinorTickSpacing(5);
+		pComms.setMajorTickSpacing(10);
+		pComms.setEnabled(false);
+		pShield = new JSlider(JSlider.VERTICAL,0,100,25);
+		pShield.setMinorTickSpacing(5);
+		pShield.setMajorTickSpacing(10);
+		pShield.setEnabled(false);
+		pGuns = new JSlider(JSlider.VERTICAL,0,100,25);
+		pGuns.setMinorTickSpacing(5);
+		pGuns.setMajorTickSpacing(10);
+		pGuns.setEnabled(false);
+		
+		GridBagConstraints pFuelConst = new GridBagConstraints();
+		pFuelConst.fill = pFuelConst.BOTH;
+		pFuelConst.gridx = 6;
+		pFuelConst.gridy = 0;
+		pFuelConst.gridheight = 5;
+		pFuelConst.gridwidth = 1;
+		GridBagConstraints pCommsConst = new GridBagConstraints();
+		pCommsConst.fill = pCommsConst.BOTH;
+		pCommsConst.gridx = 7;
+		pCommsConst.gridy = 0;
+		pCommsConst.gridheight = 5;
+		pCommsConst.gridwidth = 1;
+		GridBagConstraints pShieldConst = new GridBagConstraints();
+		pShieldConst.fill = pShieldConst.BOTH;
+		pShieldConst.gridx = 8;
+		pShieldConst.gridy = 0;
+		pShieldConst.gridheight = 5;
+		pShieldConst.gridwidth = 1;
+		GridBagConstraints pGunsConst = new GridBagConstraints();
+		pGunsConst.fill = pGunsConst.BOTH;
+		pGunsConst.gridx = 9;
+		pGunsConst.gridy = 0;
+		pGunsConst.gridheight = 5;
+		pGunsConst.gridwidth = 1;
+		
+			
+		
+		
+		
 		
 		throttle = new JSlider();
-		rocketHeading = new JSlider();
-		
 		throttle.setMaximum(100);
 		throttle.setMinimum(0);
 		throttle.setMajorTickSpacing(10);
 		throttle.setOrientation(JSlider.VERTICAL);
 		throttle.setName("Throttle Position");
-		throttle.setEnabled(false);
+		throttle.setEnabled(false);	
+		GridBagConstraints throttleConst = new GridBagConstraints();
+		throttleConst.fill = throttleConst.BOTH;
+		throttleConst.gridx = 0;
+		throttleConst.gridy = 0;
+		throttleConst.gridwidth = 1;
+		throttleConst.gridheight = 5;
 		
-		rocketHeading.setMaximum(180);
-		rocketHeading.setMinimum(-180);
-		rocketHeading.setMajorTickSpacing(15);
-		rocketHeading.setName("Rocket Heading (Degrees from Vertical)");
-		rocketHeading.setEnabled(false);
+		
+		heading = new JSlider();
+		heading.setMaximum(180);
+		heading.setMinimum(-180);
+		heading.setMajorTickSpacing(30);
+		heading.setEnabled(false);
+		GridBagConstraints headingConst = new GridBagConstraints();
+		headingConst.fill = headingConst.BOTH;
+		headingConst.gridx = 1;
+		headingConst.gridy = 0;
+		headingConst.gridwidth = 5;
+		headingConst.gridheight = 1;
 		
 		
-		windowPanel.add(testButton1);
-		windowPanel.add(rocketHeading);
-		windowPanel.add(throttle);
+		dataPanel.add(throttle,throttleConst);
+		dataPanel.add(heading,headingConst);
+		
+		dataPanel.add(pFuel, pFuelConst);
+		dataPanel.add(pComms, pCommsConst);
+		dataPanel.add(pGuns, pGunsConst);
+		dataPanel.add(pShield, pShieldConst);	
+		
+		
+		
+		displayPanel = new DisplayPanel(map);
+		displayPanel.setBackground(Color.black);
+		displayPanel.setVisible(true);
+		
+		windowPanel.add(displayPanel,BorderLayout.CENTER);
+		windowPanel.add(dataPanel,BorderLayout.SOUTH);
+		
+		windowFrame.add(windowPanel);
 		windowFrame.setResizable(false);
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,49 +164,13 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.add(windowPanel);
-		windowFrame.pack();
-		
-		
-		
+		windowFrame.pack();		
 	}
 	public void run()
 	{
 		while(gcGame.running)
 		{
-			if(!buttonUpdated)
-			{
-				c.sendMessage("set buttonStatus " + buttonStatus);
-				buttonUpdated = true;
-			}
+			windowPanel.repaint();
 		}
-	}
-	public void updateRocketVelocity(double rocketVelocity) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateRocketHeading(double rH) 
-	{
-		rocketHeading.setValue((int) Math.round(rH));
-		System.out.println("Setting value of Rocket Heading to " + rH);
-	}
-	public void updateRocketPosX(double rPX) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateRocketPosY(double rPY) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateHasLink(boolean hL) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	public void updateThrottle(double t) 
-	{
-		throttle.setValue((int) Math.round(t));
 	}
 }

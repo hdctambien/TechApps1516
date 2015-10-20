@@ -9,10 +9,30 @@ public class GameMap implements ISerializable, EntityListener {
 	private ArrayList<MapListener> listeners;
 	private LinkedBlockingQueue<MapAction> actionQueue;
 	private boolean cloned = false;
+	private volatile boolean updating = false;
+	private volatile boolean locked = false;
 	
 	public GameMap(){
 		entities = new ArrayList<Entity>();
 		listeners = new ArrayList<MapListener>();
+	}
+	
+	public boolean isUpdating(){
+		return updating;
+	}
+	public boolean hasActions(){
+		return !actionQueue.isEmpty();
+	}	
+	public boolean isLocked(){
+		return locked;
+	}
+	
+	public void setUpdating(boolean b){
+		updating = b;
+	}
+	
+	public void setLocked(boolean b){
+		locked = b;
 	}
 	
 	public void addEntity(Entity e){
@@ -20,23 +40,32 @@ public class GameMap implements ISerializable, EntityListener {
 		e.addEntityListener(this);
 		if(cloned){
 			actionQueue.add(new MapAction(e.getUFID(),entities.size()-1,MapAction.ENTITY_ADD));
-		}		
+		}else if(!updating){
+			fireMapEvent(new MapEvent(
+					new MapAction(e.getUFID(),entities.size()-1,MapAction.ENTITY_ADD)));
+		}
 	}
 	
 	public Entity[] getEntities(){
 		return entities.toArray(new Entity[entities.size()]);
 	}
 	
-	public void removeEntity(Entity e){
-		int index = entities.indexOf(e);
-		if(index!=-1){
-			Entity removed = entities.remove(index); 
+	public void removeEntity(int index){
+		if(index>=0&&index<entities.size()){
+			Entity removed = entities.remove(index);
 			int ufid = removed.getUFID();
 			removed.removeEntityListener(this);
 			if(cloned){
 				actionQueue.add(new MapAction(ufid,index,MapAction.ENTITY_REMOVE));
+			}else if(!updating){
+				fireMapEvent(new MapEvent(new MapAction(ufid,index,MapAction.ENTITY_REMOVE)));
 			}
 		}
+	}
+	
+	public void removeEntity(Entity e){
+		int index = entities.indexOf(e);
+		removeEntity(index);
 	}
 	
 	public void update(long timeElapsed){

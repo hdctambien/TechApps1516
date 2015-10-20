@@ -11,16 +11,29 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 	
 	private GameMap map;
 	private String ship;
+	private SerialProtocol serial;
+
+	public static final int ENTITY_NOT_EXPECTED = 0;
+	public static final int ENTITY_EXPECTED = 1;
+	public static final int ENTITY_SERIAL_EXPECTED =2;
+	private int expectingEntity = ENTITY_NOT_EXPECTED;
 	
-	public MapUpdateProtocol(Client client, GameMap map, String shipName) {
+	public MapUpdateProtocol(Client client, GameMap map, String shipName, SerialProtocol serial) {
 		super(client);
 		this.map = map;
+		this.serial = serial;
 		map.addMapListener(this);
 		ship = shipName;
 	}
 
 	@Override
 	public void process(String command) {
+		if(expectingEntity == ENTITY_SERIAL_EXPECTED && serial.hasEntity()){
+			map.setUpdating(true);
+			map.addEntity(serial.getEntityFromSerial());
+			map.setUpdating(false);
+			expectingEntity = ENTITY_NOT_EXPECTED;
+		}
 		String[] cmds = command.split(" ");
 		switch(cmds[0]){
 			case "set":
@@ -37,14 +50,44 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 					doMapSet(command,cmds[1],cmds[2],cmds[3]);
 				}
 				break;
+			case "delete":
+				if(cmds.length<2){
+					client.sendMessage("ERR "+ERR_CMD_FORMAT+" "+command);
+				}else{
+					doDelete(command, cmds[1]);
+				}
+				break;
+			case "add":
+				expectingEntity++;
+				break;
+			case "$erial END":
+				expectingEntity++;
+				break;
 		}
 	}
 
 	@Override
 	public void mapChanged(MapEvent me) {
-		client.sendMessage("mapset "+me.getEntityName()+" "+me.getVarName()+" "+me.getValue());
+		switch(me.getEventType()){
+			case MapEvent.ENTITY_CHANGED:
+				client.sendMessage("mapset "+me.getEntityName()+" "+me.getVarName()+" "+me.getValue());
+				break;
+			//These events shouldn't be happening on the client side, only server should be deleting
+			//and adding stuff
+			case MapEvent.ENTITY_ADDED:
+				break;
+			case MapEvent.ENTITY_REMOVED:
+				break;
+		}		
 	}
 
+	public void doDelete(String message, String index){
+		int i = Integer.parseInt(index);
+		map.setUpdating(true);
+		map.removeEntity(i);
+		map.setUpdating(false);
+	}
+	
 	public void doSet(String message, String var, String val){
 		if(!map.hasEntityWithName(ship)){
 			client.sendMessage("UNK "+message);

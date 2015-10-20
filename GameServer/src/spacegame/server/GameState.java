@@ -18,7 +18,7 @@ public class GameState {
 	
 	public GameState(){
 		map = createTestMap();
-
+		MapUpdateBroadcaster broadcaster = new MapUpdateBroadcaster(map);
 		listeners = new ArrayList<GameStateListener>();
 	}
 	public void addGameStateListener(GameStateListener listener){

@@ -1,4 +1,6 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
 
 public class PositionComponent extends Component
 {
@@ -63,10 +65,6 @@ public class PositionComponent extends Component
 	@Override
 	public String serialize() {
 		return "posX:"+posX+" posY:"+posY;
-	}
-
-	@Override
-	public void createReferences() {		
 	}
 	
 	@Override

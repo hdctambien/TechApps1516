@@ -47,6 +47,10 @@ public class MapComponent extends JComponent {
 	{
 		this.heading1 = heading;
 	}
+	public void setWidth(int width)
+	{
+		this.width = width;
+	}
 	public int getX()
 	{
 		return x;
@@ -55,6 +59,7 @@ public class MapComponent extends JComponent {
 	{
 		return y;
 	}
+	
 
 	
 }

@@ -1,4 +1,6 @@
-package spacegame.map;
+package spacegame.map.components;
+
+import spacegame.map.Entity;
 
 public class PowerComponent extends Component
 {
@@ -94,10 +96,6 @@ public class PowerComponent extends Component
 	public String serialize() {
 		return "power:"+power+" powerComms:"+powerComms+" powerFuel:"+powerFuel+" powerShield:"+powerShield+
 			" powerGuns:"+powerGuns;
-	}
-
-	@Override
-	public void createReferences() {		
 	}
 	
 	@Override
