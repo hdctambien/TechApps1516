@@ -6,12 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
+import javax.swing.*;
+
 import java.awt.Graphics;
 
 
@@ -42,8 +38,15 @@ public class CommGUI extends JPanel implements Runnable {
         this.client = c;
 
         JPanel sliderPanel = new JPanel(); // split the panel in 1 rows and 2 cols
+        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
+        JLabel label = new JLabel("h");
+        sliderPanel.add(label);
+        sliderPanel.add(Box.createRigidArea(new Dimension(1,5)));
+        sliderPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-
+        
+        
+        
         JTextArea userField = new JTextArea("User:");
         userField.setEditable(false);
 
@@ -69,17 +72,7 @@ public class CommGUI extends JPanel implements Runnable {
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         windowFrame.add(b);
         windowFrame.pack();
-       
-      //  repaint();
-	    
-	/*	windowwindowFrame.addWindowListener(new WindowAdapter() {
-			  public void windowClosing(WindowEvent e) {
-			    c.sendMessage("exit");
-			  }
-			});
-		windowwindowFrame.add(windowPanel);
-		windowwindowFrame.pack();
-    	*/
+      
 }		
     @Override
     protected void paintComponent(Graphics g) {
