@@ -5,11 +5,9 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
+
+import javax.swing.*;
+
 import java.awt.Graphics;
 
 
@@ -40,8 +38,15 @@ public class CommGUI extends JPanel implements Runnable {
         this.client = c;
 
         JPanel sliderPanel = new JPanel(); // split the panel in 1 rows and 2 cols
+        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
+        JLabel label = new JLabel("h");
+        sliderPanel.add(label);
+        sliderPanel.add(Box.createRigidArea(new Dimension(1,5)));
+        sliderPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-
+        
+        
+        
         JTextArea userField = new JTextArea("User:");
         userField.setEditable(false);
 
@@ -58,43 +63,21 @@ public class CommGUI extends JPanel implements Runnable {
         sliderPanel.add(pComms);
         windowFrame.getContentPane().add(sliderPanel);
         
+        final Box b = Box.createHorizontalBox();
         
         windowFrame.setVisible(true);
-        windowFrame.setSize(600, 600);
+     
+        windowFrame.setLayout(null);
+		windowFrame.setPreferredSize(new Dimension(1000,700));
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        repaint();
-//       button = new JButton();
-//      button.setText("Test Button");
-//       button.addMouseListener(mouse);
-//       button.setVisible(true);
-//       panel.add(button);
-//       windowwindowFrame.setResizable(false);
-//       windowwindowFrame.setTitle("Communcations");
-//       windowwindowFrame.setDefaultCloseOperation(JwindowFrame.EXIT_ON_CLOSE);
-//       windowwindowFrame.setResizable(true);
-//       windowwindowFrame.setVisible(true);
-//	    windowwindowFrame.setSize(600,600);
-//	    JPanel panel = new JPanel(new BorderLayout());
-//	    JPanel panel2 = new JPanel(new BorderLayout());
-//	    windowwindowFrame.add(panel);
-//	    //windowwindowFrame.pack();
-//	    
-//	    
-//	    
-//	    
-	/*	windowwindowFrame.addWindowListener(new WindowAdapter() {
-			  public void windowClosing(WindowEvent e) {
-			    c.sendMessage("exit");
-			  }
-			});
-		windowwindowFrame.add(windowPanel);
-		windowwindowFrame.pack();
-    	*/
+        windowFrame.add(b);
+        windowFrame.pack();
+      
 }		
     @Override
     protected void paintComponent(Graphics g) {
     	super.paintComponent(g);
-
+    	g.setColor(Color.BLACK);
     	g.fillRect(10, 10, 10, 10);
     }
 

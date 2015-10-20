@@ -23,7 +23,6 @@ import javax.swing.JTextArea;
 
 import spacegame.client.Client;
 import spacegame.map.GameMap;
-import spacegame.panel.DisplayPanel;
 
 /**
  * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
@@ -44,9 +43,8 @@ class groundControlGraphics extends Thread
 	
 	private JSlider throttle;
 	private JSlider heading;
-	private DisplayPanel displayPanel;
 	
-	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
+	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2, displayPanel;
 	private JSlider pFuel;
 	private JSlider pComms;
 	private JSlider pShield;
@@ -67,7 +65,10 @@ class groundControlGraphics extends Thread
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
+		displayPanel = new JPanel(null);
 		this.c = c;
+		
+		displayPanel.setBackground(Color.BLACK);
 		
 		powerBG = new JPanel();
 		powerBG2 = new JPanel();
@@ -171,11 +172,6 @@ class groundControlGraphics extends Thread
 		powerPanel.add(powerBG);
 		
 		dataPanel.add(powerPanel);
-		
-		
-		displayPanel = new DisplayPanel(map);
-		displayPanel.setBackground(Color.black);
-		displayPanel.setVisible(true);
 		
 		windowPanel.add(displayPanel,BorderLayout.CENTER);
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);

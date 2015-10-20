@@ -12,46 +12,75 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
+import spacegame.map.Entity;
+import spacegame.map.GameMap;
 import spacegame.map.MapAction;
 
-public class MapPanel{
+public class MapPanel extends JFrame{
 	public int xCord, yCord;
+	public double heading = 45;
+	
+	
 	public JFrame frame = new JFrame();
-	public JPanel mapPanel;
-	public MapComponent ship;
-	public void mapPanel()
+	public MapComponent map;
+	public GameMap game;
+	public final String SHIP_NAME = "Ship.1";
+	
+	Entity headingEntity;
+	Entity positionEntity;
+	public MapPanel(GameMap g)
 	{
-		Scanner input = new Scanner( System.in );
-		boolean running = true;
-		
-		final MapClient pilot = new MapClient();
+	/*	final MapClient pilot = new MapClient();
 		pilot.setup();
-		pilot.subscribe();
+		pilot.subscribe();*/
+		
+		game = g;
 		
 	
 		mapPanel = new JPanel();
 		mapPanel.setSize(1000,1000);
 		
-		ship = new MapComponent();
-		ship.setPreferredSize(new Dimension(1200,600));
-		frame.add(mapPanel, BorderLayout.NORTH);
-		frame.add(ship, BorderLayout.SOUTH);
+		map = new MapComponent();
+		map.setPreferredSize(new Dimension(1200,600));
+
+		frame.add(map, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,800);
-		frame.setVisible(true);		
+		frame.setVisible(true);
+		
+		
+		
+		
+		positionEntity = game.getEntityByName(SHIP_NAME);
+		
+		xCord = 200;
+		yCord = 200;
 		run();
-	}
-	public void main(String[] args)
-	{
-		mapPanel();
 	}
 	public void run()
 	{
 		while(true)
 		{
-			ship.setPosition(xCord, yCord);
-			ship.repaint();
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch(InterruptedException ex)
+			{
+				Thread.currentThread().interrupt();
+			}
+			
+			heading = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
+			
+			xCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posX"));
+			yCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posY"));
+			
+			map.setPosition(xCord, yCord);
+			map.setHeading(heading);
+			
 			frame.revalidate();
+			map.repaint();
+		
 		}
 	}
 
@@ -64,5 +93,13 @@ public class MapPanel{
 	{
 		xCord = posX;
 		System.out.println("set x to: "+ posX);
+	}
+	public void setHeading(double h)
+	{
+		heading = h;
+	}
+	public void setWidth(int width)
+	{
+		map.setWidth(width);
 	}
 }
