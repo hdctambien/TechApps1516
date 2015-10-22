@@ -23,9 +23,12 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
+import spacegame.client.ProtocolAggregator;
+import spacegame.client.chat.ChatPanel;
 import spacegame.map.GameMap;
-import spacegame.util.gui.HeadingDial;
+import spacegame.gui.HeadingDial;
 import spacegame.mapgui.MapComponent;
+import spacegame.client.chat.*;
 
 /**
  * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
@@ -45,7 +48,6 @@ class groundControlGraphics extends Thread
 	private GameMap map;
 	
 	private JSlider throttle;
-	private JSlider heading;
 	
 	private MapComponent mapPanel;
 	
@@ -60,16 +62,21 @@ class groundControlGraphics extends Thread
 	private JLabel guns;
 	private JLabel powerL;
 	
+	private ChatProtocol chatProtocol;
+	private static ProtocolAggregator aggregator;
+	
 	private HeadingDial headingDial;
+	private ChatPanel chatPanel;
 	boolean right = false;
 	boolean left = false;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map, String shipName) 
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map, String shipName, ProtocolAggregator aggregator) 
 	{		
 		headingDial = new HeadingDial();
 		SHIP_NAME = shipName;
 		this.map = map;
 		gcGame = groundControlGame;
+		chatPanel = new ChatPanel(300,225);
 		windowFrame = new JFrame();
 		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
@@ -77,6 +84,20 @@ class groundControlGraphics extends Thread
 		powerPanel = new JPanel(null);
 		mapPanel = new MapComponent();
 		this.c = c;
+		
+		
+		try
+		{
+			this.aggregator = aggregator;
+			chatProtocol = new ChatProtocol(c, chatPanel);
+			chatPanel.addChatListener(chatProtocol);
+			aggregator.addProtocol(chatProtocol);
+		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
+		}
+		
 		
 		powerBG = new JPanel();
 		powerBG2 = new JPanel();
@@ -115,30 +136,7 @@ class groundControlGraphics extends Thread
 		throttle.setMajorTickSpacing(10);
 		throttle.setOrientation(JSlider.VERTICAL);
 		throttle.setName("Throttle Position");
-		throttle.setEnabled(false);	
-		GridBagConstraints throttleConst = new GridBagConstraints();
-		throttleConst.fill = throttleConst.BOTH;
-		throttleConst.gridx = 0;
-		throttleConst.gridy = 0;
-		throttleConst.gridwidth = 1;
-		throttleConst.gridheight = 5;
-		
-		
-		heading = new JSlider();
-		heading.setMaximum(180);
-		heading.setMinimum(-180);
-		heading.setMajorTickSpacing(30);
-		heading.setEnabled(false);
-		GridBagConstraints headingConst = new GridBagConstraints();
-		headingConst.fill = headingConst.BOTH;
-		headingConst.gridx = 1;
-		headingConst.gridy = 0;
-		headingConst.gridwidth = 5;
-		headingConst.gridheight = 1;
-		
-		
-		dataPanel.add(throttle,throttleConst);
-		dataPanel.add(heading,headingConst);		
+		throttle.setEnabled(false);		
 		
 		fuel   = new JLabel("Fuel");
 		fuel.setBounds(35, 30, 25, 10);
@@ -181,8 +179,10 @@ class groundControlGraphics extends Thread
 		
 		headingDial.setRadius(100);
 		
+		dataPanel.add(throttle);
 		dataPanel.add(headingDial);
 		dataPanel.add(powerPanel);
+		dataPanel.add(chatPanel);
 		
 		windowPanel.add(mapPanel,BorderLayout.CENTER);
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);
@@ -194,15 +194,16 @@ class groundControlGraphics extends Thread
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		windowFrame.setResizable(true);
-		windowFrame.setVisible(true);
-		windowFrame.setPreferredSize(new Dimension(1000,700));
 		windowFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.pack();
 		windowPanel.requestFocus();
+		windowFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		windowFrame.setUndecorated(true);
+		windowFrame.pack();
+		windowFrame.setVisible(true);
 	}
 	public void run()
 	{
