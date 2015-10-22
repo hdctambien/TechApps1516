@@ -41,6 +41,24 @@ public class PositionComponent extends Component
 	}
 
 	@Override
+	public double getDouble(String varname){
+		switch(varname){
+			case "posX": return posX;
+			case "posY": return posY;
+			default: return Double.NaN;
+		}
+	}
+	
+	@Override
+	public boolean setDouble(String varname,double value){
+		switch(varname){
+			case "posX": posX = value; return true;
+			case "posY": posY = value; return true;
+			default: return false;
+		}
+	}
+	
+	@Override
 	public String getVariable(String varname) 
 	{
 		switch(varname)

@@ -18,8 +18,8 @@ public class PhysicsComponent extends Component
 	public void move(long timeElapsed) 
 	{
 		Component position = getEntity().getComponent("Position");
-		position.setVariable("posX", position.getVariable("posX") + timeElapsed/(1_000_000_000.0) * xVel );
-		position.setVariable("posY", position.getVariable("posY") + timeElapsed/(1_000_000_000.0) * yVel );
+		position.setDouble("posX", position.getDouble("posX") + timeElapsed/(1_000_000_000.0) * xVel );
+		position.setDouble("posY", position.getDouble("posY") + timeElapsed/(1_000_000_000.0) * yVel );
 	}
 	
 	public void accelerate(long timeElapsed)

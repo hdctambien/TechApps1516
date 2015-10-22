@@ -13,7 +13,8 @@ import spacegame.map.GameMap;
 public class GameState {
 	
 	private GameMap map;
-	
+	private ServerUpdater updater;
+	private Thread updaterThread;
 	private ArrayList<GameStateListener> listeners;
 
 	@SuppressWarnings("unused")
@@ -22,8 +23,27 @@ public class GameState {
 	public GameState(){
 		map = createTestMap();
 		broadcaster = new MapUpdateBroadcaster(map);
+		updater = new ServerUpdater(map);
+		updaterThread = new Thread(updater);
+		updaterThread.start();
 		listeners = new ArrayList<GameStateListener>();
 	}
+	
+	public void stopUpdater(){
+		updater.stopUpdating();
+		Thread.yield();
+		/*
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(updaterThread.isAlive()){
+			updaterThread.interrupt();
+			System.out.println("Update loop failed to close: forcibly terminated.");
+		}*/
+	}
+	
 	public void addGameStateListener(GameStateListener listener){
 		listeners.add(listener);
 	}

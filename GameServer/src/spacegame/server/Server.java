@@ -15,11 +15,12 @@ public class Server implements Runnable{
 	List<ClientInfo> infos;
 	RequestProcessor processor;
 	Thread processorThread;
+	SpacegameNetworkProtocol protocol;
 	
 	public Server(){
 		serviceThreads = new ArrayList<Thread>();
 		//ProtocolHandler echo = new EchoProtocol();
-		ProtocolHandler protocol = new SpacegameNetworkProtocol();
+		protocol = new SpacegameNetworkProtocol();
 		processor = new RequestProcessor(protocol);
 		processorThread = new Thread(processor);
 		
@@ -63,6 +64,8 @@ public class Server implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		protocol.getGameState().stopUpdater();
+		System.out.println("Map update loop terminated.");
 		if(!forwarders.isEmpty()){
 			for(RequestForwarder forwarder: forwarders){
 				forwarder.tryTerminate();

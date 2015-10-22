@@ -10,10 +10,11 @@ public abstract class Updater implements Runnable {
 	private volatile boolean done;	
 	
 	private long prevNanoTime;
-	public static final long IO_UPDATE_TIME = 5_000; //5ms == 5,000ns
+	public static final long IO_UPDATE_TIME = 5_000_000; //5ms == 5,000,000ns
 	
 	public Updater(GameMap map){
 		this.map = map;
+		ioActions = new LinkedBlockingQueue<MapEvent>();
 		map.setTrackChanges(false);
 	}
 	

@@ -79,8 +79,9 @@ public class RequestForwarder implements Runnable{
 		}catch(IOException e){
 			System.out.println("IO Error occurred in RequestForwarder read thread!");
 			e.printStackTrace();
+			//Remove from server list to prevent 'ghost' clients
+			Main.server.removeClient(this);
 		}
-		
 	}
 
 	/**

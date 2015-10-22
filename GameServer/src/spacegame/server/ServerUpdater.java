@@ -7,7 +7,7 @@ public class ServerUpdater extends Updater {
 
 	private long lastNanoTime;
 	
-	public static final long MAP_PUSH_TIME = 5_000_000; //5s = 5,000,000ns
+	public static final long MAP_PUSH_TIME = 5_000_000_000L; //5s = 5,000,000,000ns	
 	
 	public ServerUpdater(GameMap map) {
 		super(map);
@@ -19,8 +19,15 @@ public class ServerUpdater extends Updater {
 		long nanoTime = System.nanoTime();
 		if((nanoTime-lastNanoTime)>MAP_PUSH_TIME){//Map push time
 			lastNanoTime = nanoTime;
-			//TODO: push the map
+			String message = "pushmap\n"+getMap().serialize();
+			broadcast(message);
 		}
 	}
 
+	private void broadcast(String message){
+		ClientInfo[] clients = Main.server.getAllClientInfo();
+		for(ClientInfo client: clients){
+			client.sendMessage(message);
+		}
+	}
 }
