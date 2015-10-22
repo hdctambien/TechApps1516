@@ -1,3 +1,5 @@
+package spacegame.mapgui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -35,10 +37,6 @@ public class MapPanel extends JFrame{
 		pilot.subscribe();*/
 		
 		game = g;
-		
-	
-		mapPanel = new JPanel();
-		mapPanel.setSize(1000,1000);
 		
 		map = new MapComponent();
 		map.setPreferredSize(new Dimension(1200,600));

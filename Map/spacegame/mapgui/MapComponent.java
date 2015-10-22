@@ -1,3 +1,5 @@
+package spacegame.mapgui;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,7 +10,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JComponent;
-
 
 public class MapComponent extends JComponent {
 	private double heading = 0, heading1;

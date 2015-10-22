@@ -1,3 +1,5 @@
+package spacegame.mapgui;
+
 import spacegame.client.AbstractProtocol;
 import spacegame.client.Client;
 
@@ -6,7 +8,7 @@ public class MapProtocol extends AbstractProtocol {
 	public MapPanel panel;
 	public MapProtocol(Client client) {
 		super(client);
-		panel = new MapPanel();
+		panel = new MapPanel(null);
 	}
 
 	@Override
