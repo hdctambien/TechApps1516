@@ -1,3 +1,5 @@
+package spacegame.mapgui;
+
 import java.io.IOException;
 import java.util.Scanner;
 import spacegame.client.*;

@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,8 @@ import javax.swing.JTextArea;
 
 import spacegame.client.Client;
 import spacegame.map.GameMap;
+import spacegame.util.gui.HeadingDial;
+import spacegame.mapgui.MapComponent;
 
 /**
  * Runs on the Graphics thread started by groundControlGame, opens up a JFrame and displays some basic info for now.
@@ -44,7 +47,9 @@ class groundControlGraphics extends Thread
 	private JSlider throttle;
 	private JSlider heading;
 	
-	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2, displayPanel;
+	private MapComponent mapPanel;
+	
+	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	private JSlider pFuel;
 	private JSlider pComms;
 	private JSlider pShield;
@@ -55,8 +60,13 @@ class groundControlGraphics extends Thread
 	private JLabel guns;
 	private JLabel powerL;
 	
+	private HeadingDial headingDial;
+	boolean right = false;
+	boolean left = false;
+	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map, String shipName) 
 	{		
+		headingDial = new HeadingDial();
 		SHIP_NAME = shipName;
 		this.map = map;
 		gcGame = groundControlGame;
@@ -65,10 +75,8 @@ class groundControlGraphics extends Thread
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
-		displayPanel = new JPanel(null);
+		mapPanel = new MapComponent();
 		this.c = c;
-		
-		displayPanel.setBackground(Color.BLACK);
 		
 		powerBG = new JPanel();
 		powerBG2 = new JPanel();
@@ -171,10 +179,15 @@ class groundControlGraphics extends Thread
 		powerPanel.add(powerBG2);
 		powerPanel.add(powerBG);
 		
+		headingDial.setRadius(100);
+		
+		dataPanel.add(headingDial);
 		dataPanel.add(powerPanel);
 		
-		windowPanel.add(displayPanel,BorderLayout.CENTER);
+		windowPanel.add(mapPanel,BorderLayout.CENTER);
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);
+		
+		windowPanel.addKeyListener(new KeyControl());
 		
 		windowFrame.add(windowPanel);
 		windowFrame.setResizable(false);
@@ -188,17 +201,55 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		windowFrame.pack();		
+		windowFrame.pack();
+		windowPanel.requestFocus();
 	}
 	public void run()
 	{
 		while(gcGame.running)
 		{
+			if(right)
+				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(-0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
+			if(left)
+				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
+			
+			mapPanel.setHeading((Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180));
+			mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+			
+			headingDial.setHeading(Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180);
 			pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
 			pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 			pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
 			pComms.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 			windowPanel.repaint();
+		}
+	}
+	
+private class KeyControl implements KeyListener 
+{
+	    public void keyPressed(KeyEvent e) {
+	        if(e.getKeyCode() == KeyEvent.VK_RIGHT) 
+	        {
+	        	right = true;
+	        }
+	        if(e.getKeyCode() == KeyEvent.VK_LEFT) 
+	        {
+	        	left = true;
+	        }
+	    }
+
+		@Override
+		public void keyReleased(KeyEvent arg0) 
+		{
+			left = false;
+			right = false;
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) 
+		{
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }
