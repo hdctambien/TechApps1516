@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 import spacegame.client.*;
+import spacegame.map.GameMap;
 
 public class EngineerGame implements Runnable
 {
@@ -17,9 +18,14 @@ public class EngineerGame implements Runnable
 	EngineerProtocol eProtocol;
 	String iaddress = "10.11.1.110";
 	int port = 8080;
+	private String SHIP_NAME = "Ship.1";
 	
 	private Thread protocolThread;
 	private Thread clientThread;
+	
+	private ProtocolAggregator aggregator;
+	
+	private GameMap map;
 	
 	private double pFR = .25;
 	private double pCR = .25;
@@ -34,19 +40,44 @@ public class EngineerGame implements Runnable
 		
 	public EngineerGame()
 	{	
-		try 
-		{
+		try {
 			eClient = new Client(iaddress,port);
+			BasicProtocol basic = new BasicProtocol(eClient);
+			SerialProtocol serial = new SerialProtocol(eClient);
+			aggregator = new ProtocolAggregator(eClient);
+			aggregator.addProtocol(basic);
+			aggregator.addProtocol(serial);
+			
 			clientThread = new Thread(eClient);
 			clientThread.start();
+			protocolThread = new Thread(aggregator);
+			protocolThread.start();
+			
+			//eClient.sendMessage("set name " + name);
+			eClient.sendMessage("set job Engineer");
+			eClient.sendMessage("set ship " + SHIP_NAME);
+			
+			eClient.sendMessage("get map");
+			System.out.println("Getting Map...");
+			while(!serial.hasSerial()){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Building Map...");
+			map = serial.getMapFromSerial();
+			System.out.println("Map obtained!");
+			
+			MapUpdateProtocol update = new MapUpdateProtocol(eClient, map, SHIP_NAME, serial);
+			aggregator.addProtocol(update);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gui = new EngineerGUI(this, this.eClient);
+		gui = new EngineerGUI(this, this.eClient, aggregator, map);
 		gui.start();
-		eProtocol = new EngineerProtocol(eClient, this, gui);
-		protocolThread = new Thread(eProtocol);
-		protocolThread.start();
 	}
 	
 	public void Throttle(int throt)
@@ -81,10 +112,10 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				eClient.sendMessage("set powerFuel " + Integer.toString((int)pFt));
-				eClient.sendMessage("set powerComms " + Integer.toString((int)pCt));
-				eClient.sendMessage("set powerGuns " + Integer.toString((int)pGt));
-				eClient.sendMessage("set powerShield " + Integer.toString((int)pSt));break;
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
 				
 			case "pF": 
 				if(pS + pG + pF + pC > 100)
@@ -104,10 +135,10 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				eClient.sendMessage("set powerShield " + Integer.toString((int)pSt));
-				eClient.sendMessage("set powerComms " + Integer.toString((int)pCt));
-				eClient.sendMessage("set powerGuns " + Integer.toString((int)pGt));
-				eClient.sendMessage("set powerFuel " + Integer.toString((int)pFt));break;
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
 				
 			case "pC": 
 				if(pS + pG + pF + pC > 100)
@@ -127,10 +158,10 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				eClient.sendMessage("set powerFuel " + Integer.toString((int)pFt));
-				eClient.sendMessage("set powerShield " + Integer.toString((int)pSt));
-				eClient.sendMessage("set powerGuns " + Integer.toString((int)pGt));
-				eClient.sendMessage("set powerComms " + Integer.toString((int)pCt));break;
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
 				
 			case "pG": 
 				if(pS + pG + pF + pC > 100)
@@ -150,10 +181,10 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				eClient.sendMessage("set powerFuel " + Integer.toString((int)pFt));
-				eClient.sendMessage("set powerShield " + Integer.toString((int)pSt));
-				eClient.sendMessage("set powerComms " + Integer.toString((int)pCt));
-				eClient.sendMessage("set powerGuns " + Integer.toString((int)pGt));break;
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
+				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
 				
 			default:
 				pCt = 25;
