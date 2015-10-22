@@ -12,6 +12,7 @@ import java.awt.Graphics;
 
 
 import spacegame.client.*;
+import spacegame.gui.*;
 
 public class CommGUI extends JPanel implements Runnable {
 
@@ -20,10 +21,11 @@ public class CommGUI extends JPanel implements Runnable {
     private static CommGame game;
     private static Client client;
     private MouseListener m;
-   // public JPanel panel = new JPanel();
+  //  public JPanel panel = new JPanel();
     private boolean buttonStatus = false;
     private boolean buttonUpdated = true;
     public JFrame windowFrame;
+    private HeadingDial headingDial = new HeadingDial();
  
 
     public CommGUI(CommGame game, Client c){//, Graphics g)     {
@@ -34,52 +36,48 @@ public class CommGUI extends JPanel implements Runnable {
     
         
         windowFrame = new JFrame();
-        //panel.setVisible(true);
         this.client = c;
 
-        JPanel sliderPanel = new JPanel(); // split the panel in 1 rows and 2 cols
-        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
-        JLabel label = new JLabel("h");
-        sliderPanel.add(label);
-        sliderPanel.add(Box.createRigidArea(new Dimension(1,5)));
-        sliderPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        
-        
-        
-        JTextArea userField = new JTextArea("User:");
-        userField.setEditable(false);
-
-        JTextArea user = new JTextArea("myuser");
-        user.setEditable(true);
-
-       // panel.add(userField);
-       // panel.add(user);
-     
-       //panel.add(pComms, BorderLayout.CENTER);
+        //gui test
+        JButton cancelButton = new JButton("cancel");
+        JButton setButton = new JButton("set");        		
+        JScrollPane listScroller = new JScrollPane();
+        listScroller.setPreferredSize(new Dimension(250, 80));
+        listScroller.setAlignmentX(LEFT_ALIGNMENT);
+        JPanel listPane = new JPanel();
+        listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
+        JLabel label = new JLabel("sup bruh");
+        listPane.add(label);
+        listPane.add(Box.createRigidArea(new Dimension(0,5)));
+        listPane.add(listScroller);
+        listPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        JPanel buttonPane = new JPanel();
+        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+        buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+        buttonPane.add(Box.createHorizontalGlue());
+        buttonPane.add(cancelButton);
+        buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
+        buttonPane.add(setButton);
        
-        JSlider pComms = new JSlider();
-  
-        sliderPanel.add(pComms);
-        windowFrame.getContentPane().add(sliderPanel);
+        headingDial.setRadius(100);
         
-        final Box b = Box.createHorizontalBox();
+        
+        Container contentPane = windowFrame.getContentPane();
+        contentPane.add(listPane, BorderLayout.CENTER);
+        
+        contentPane.add(headingDial, BorderLayout.EAST);
+        contentPane.add(buttonPane, BorderLayout.PAGE_END);
         
         windowFrame.setVisible(true);
-     
-        windowFrame.setLayout(null);
+       
 		windowFrame.setPreferredSize(new Dimension(1000,700));
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        windowFrame.add(b);
+     
         windowFrame.pack();
       
 }		
-    @Override
-    protected void paintComponent(Graphics g) {
-    	super.paintComponent(g);
-    	g.setColor(Color.BLACK);
-    	g.fillRect(10, 10, 10, 10);
-    }
+
 
 
     private MouseAdapter mouse = new MouseAdapter()
