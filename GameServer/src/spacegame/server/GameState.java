@@ -15,10 +15,13 @@ public class GameState {
 	private GameMap map;
 	
 	private ArrayList<GameStateListener> listeners;
+
+	@SuppressWarnings("unused")
+	private MapUpdateBroadcaster broadcaster;
 	
 	public GameState(){
 		map = createTestMap();
-		MapUpdateBroadcaster broadcaster = new MapUpdateBroadcaster(map);
+		broadcaster = new MapUpdateBroadcaster(map);
 		listeners = new ArrayList<GameStateListener>();
 	}
 	public void addGameStateListener(GameStateListener listener){

@@ -8,13 +8,21 @@ public class GameMap implements ISerializable, EntityListener {
 	private ArrayList<Entity> entities;
 	private ArrayList<MapListener> listeners;
 	private LinkedBlockingQueue<MapAction> actionQueue;
-	private boolean cloned = false;
+	private LinkedBlockingQueue<MapEvent> eventQueue;
 	private volatile boolean updating = false;
 	private volatile boolean locked = false;
+	private volatile boolean trackChanges = false;
+	private volatile boolean trackActions = false;
 	
 	public GameMap(){
 		entities = new ArrayList<Entity>();
 		listeners = new ArrayList<MapListener>();
+		actionQueue = new LinkedBlockingQueue<MapAction>();
+		eventQueue = new LinkedBlockingQueue<MapEvent>();
+	}
+	public GameMap(boolean trackChanges){
+		this();
+		this.trackChanges = trackChanges; 
 	}
 	
 	public boolean isUpdating(){
@@ -26,6 +34,15 @@ public class GameMap implements ISerializable, EntityListener {
 	public boolean isLocked(){
 		return locked;
 	}
+	public boolean isTrackingChanges(){
+		return trackChanges;
+	}
+	public boolean isTrackingActions(){
+		return trackActions;
+	}
+	public boolean isTrackingBoth(){
+		return trackActions && trackChanges;
+	}
 	
 	public void setUpdating(boolean b){
 		updating = b;
@@ -34,11 +51,21 @@ public class GameMap implements ISerializable, EntityListener {
 	public void setLocked(boolean b){
 		locked = b;
 	}
+	public void setTrackChanges(boolean b){
+		trackChanges = b;
+	}
+	public void setTrackActions(boolean b){
+		trackActions = b;
+	}
+	public void setTrackBoth(boolean b){
+		trackChanges = b;
+		trackActions = b;
+	}
 	
 	public void addEntity(Entity e){
 		entities.add(e);
 		e.addEntityListener(this);
-		if(cloned){
+		if(trackActions){
 			actionQueue.add(new MapAction(e.getUFID(),entities.size()-1,MapAction.ENTITY_ADD));
 		}else if(!updating){
 			fireMapEvent(new MapEvent(
@@ -55,7 +82,7 @@ public class GameMap implements ISerializable, EntityListener {
 			Entity removed = entities.remove(index);
 			int ufid = removed.getUFID();
 			removed.removeEntityListener(this);
-			if(cloned){
+			if(trackActions){
 				actionQueue.add(new MapAction(ufid,index,MapAction.ENTITY_REMOVE));
 			}else if(!updating){
 				fireMapEvent(new MapEvent(new MapAction(ufid,index,MapAction.ENTITY_REMOVE)));
@@ -75,22 +102,42 @@ public class GameMap implements ISerializable, EntityListener {
 	}
 	
 	public void sync(GameMap map){
-		//additions and deletions handled first
-		while(!actionQueue.isEmpty()){
-			MapAction action = actionQueue.poll();
-			if(action.getAction()==MapAction.ENTITY_ADD){
-				map.addEntity(entities.get(action.getMapIndex()));
-			}else if(action.getAction()==MapAction.ENTITY_REMOVE){
-				map.entities.remove(action.getMapIndex());
+		if(trackChanges){
+			while(!eventQueue.isEmpty()){
+				MapEvent event = eventQueue.poll();
+				map.executeMapEvent(event);							
 			}
-		}
-		for(int i = 0; i < entities.size(); i++){
-			if(entities.get(i).getUFID()!=map.entities.get(i).getUFID()){
-				System.err.println("Error: entities synched in map do not have matching UFIDs!");
+		}else{
+			//additions and deletions handled first
+			while(!actionQueue.isEmpty()){
+				MapAction action = actionQueue.poll();
+				if(action.getAction()==MapAction.ENTITY_ADD){
+					map.addEntity(entities.get(action.getMapIndex()));
+				}else if(action.getAction()==MapAction.ENTITY_REMOVE){
+					map.entities.remove(action.getMapIndex());
+				}
 			}
-			entities.get(i).sync(map.entities.get(i));
+			for(int i = 0; i < entities.size(); i++){
+				if(entities.get(i).getUFID()!=map.entities.get(i).getUFID()){
+					System.err.println("Error: entities synched in map do not have matching UFIDs!");
+				}
+				entities.get(i).sync(map.entities.get(i));
+			}
+		}		
+	}
+	
+	public void executeMapEvent(MapEvent event){
+		switch(event.getEventType()){
+			case MapEvent.ENTITY_ADDED:
+				addEntity(entities.get(event.getMapAction().getMapIndex()));
+				break;
+			case MapEvent.ENTITY_REMOVED:
+				entities.remove(event.getMapAction().getMapIndex());
+				break;
+			case MapEvent.ENTITY_CHANGED:
+				entities.get(event.getIndex()).setVariable(event.getVarName(), event.getValue());
+				break;
 		}
-		
 	}
 	
 	public GameMap clone(){
@@ -98,7 +145,6 @@ public class GameMap implements ISerializable, EntityListener {
 		for(Entity e: entities){
 			map.addEntity(e.clone());
 		}
-		cloned = true;
 		return map;
 	}
 
@@ -206,6 +252,9 @@ public class GameMap implements ISerializable, EntityListener {
 			for(MapListener listener: listeners){
 				listener.mapChanged(e);
 			}
+		}
+		if(trackChanges){
+			eventQueue.add(e);
 		}
 	}
 
