@@ -8,6 +8,8 @@ public class ClientUpdater extends Updater {
 	private GameMap renderMap;
 	private volatile boolean renderLock = false;
 	private volatile boolean dirty = false;
+	private volatile boolean scheduleIOPush = false;
+	private GameMap ioPush;
 	
 	public ClientUpdater(GameMap map) {
 		super(map);
@@ -30,6 +32,11 @@ public class ClientUpdater extends Updater {
 		return renderMap;
 	}
 	
+	public void scheduleMapPush(GameMap ioMap){
+		ioPush = ioMap;
+		scheduleIOPush = true;
+	}
+	
 	@Override
 	public void afterUpdate() {//SYNC RENDER MAP
 		dirty = true;
@@ -40,6 +47,11 @@ public class ClientUpdater extends Updater {
 		}
 		map.sync(renderMap);
 		dirty = false;
+		if(scheduleIOPush){
+			ioPush.sync(getMap());
+			ioPush = null;
+			scheduleIOPush = false;
+		}
 	}
 
 }

@@ -19,7 +19,7 @@ public class ServerUpdater extends Updater {
 		long nanoTime = System.nanoTime();
 		if((nanoTime-lastNanoTime)>MAP_PUSH_TIME){//Map push time
 			lastNanoTime = nanoTime;
-			String message = "pushmap\n"+getMap().serialize();
+			String message = "pushmap\n"+getMap().serialize()+"\nmappush";
 			broadcast(message);
 		}
 	}

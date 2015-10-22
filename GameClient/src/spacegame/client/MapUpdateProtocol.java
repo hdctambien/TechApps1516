@@ -9,31 +9,30 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 
 	public static final int ERR_CMD_FORMAT = 1;
 	
-	private GameMap map;
 	private String ship;
 	private SerialProtocol serial;
-
+	private ClientUpdater updater;
+	
 	public static final int ENTITY_NOT_EXPECTED = 0;
 	public static final int ENTITY_EXPECTED = 1;
 	public static final int ENTITY_SERIAL_EXPECTED =2;
-	private int expectingEntity = ENTITY_NOT_EXPECTED;
+	//private int expectingEntity = ENTITY_NOT_EXPECTED;
 	
-	public MapUpdateProtocol(Client client, GameMap map, String shipName, SerialProtocol serial) {
+	public MapUpdateProtocol(Client client, ClientUpdater updater, String shipName, SerialProtocol serial) {
 		super(client);
-		this.map = map;
 		this.serial = serial;
-		map.addMapListener(this);
+		updater.getMap().addMapListener(this);
 		ship = shipName;
 	}
 
 	@Override
 	public void process(String command) {
-		if(expectingEntity == ENTITY_SERIAL_EXPECTED && serial.hasEntity()){
+		/*if(expectingEntity == ENTITY_SERIAL_EXPECTED && serial.hasEntity()){
 			map.setUpdating(true);
 			map.addEntity(serial.getEntityFromSerial());
 			map.setUpdating(false);
 			expectingEntity = ENTITY_NOT_EXPECTED;
-		}
+		}*/
 		String[] cmds = command.split(" ");
 		switch(cmds[0]){
 			case "set":
@@ -50,7 +49,10 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 					doMapSet(command,cmds[1],cmds[2],cmds[3]);
 				}
 				break;
-			case "delete":
+			case "mappush":
+				updater.scheduleMapPush(serial.getMapFromSerial());
+				break;
+			/*case "delete":
 				if(cmds.length<2){
 					client.sendMessage("ERR "+ERR_CMD_FORMAT+" "+command);
 				}else{
@@ -62,7 +64,7 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 				break;
 			case "$erial END":
 				expectingEntity++;
-				break;
+				break;*/
 		}
 	}
 
@@ -81,39 +83,37 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 		}		
 	}
 
-	public void doDelete(String message, String index){
+	/*public void doDelete(String message, String index){
 		int i = Integer.parseInt(index);
 		map.setUpdating(true);
 		map.removeEntity(i);
 		map.setUpdating(false);
-	}
+	}*/
 	
 	public void doSet(String message, String var, String val){
+		GameMap map = updater.getMap();
 		if(!map.hasEntityWithName(ship)){
 			client.sendMessage("UNK "+message);
 		}else{
-			Entity entity = map.getEntityByName(ship);
-			if(entity.hasVariable(var)){
-				entity.setUpdating(true);
-				entity.setVariable(var, val);
-				entity.setUpdating(false);
-				client.sendMessage("OK "+message);
-			}else{
+			int index = map.getIndexByName(ship);
+			if(map.getEntities()[index].hasVariable(var)){
 				client.sendMessage("UNK "+message);
-			}		
+			}else{
+				updater.addIOAction(new MapEvent(ship,index,var,val));
+				client.sendMessage("OK "+message);
+			}	
 		}
 	}
 	
 	public void doMapSet(String message, String entityName, String var, String val){
+		GameMap map = updater.getMap();
 		if(!map.hasEntityWithName(entityName)){
 			client.sendMessage("UNK "+message);
 			return;
 		}
 		Entity entity = map.getEntityByName(entityName);
 		if(entity.hasVariable(var)){
-			entity.setUpdating(true);
-			entity.setVariable(var, val);
-			entity.setUpdating(false);
+			updater.addIOAction(new MapEvent(entityName,map.getIndexByName(entityName),var,val));
 			client.sendMessage("OK "+message);
 		}else{
 			client.sendMessage("UNK "+message);
