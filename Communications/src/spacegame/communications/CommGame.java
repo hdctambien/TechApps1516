@@ -55,6 +55,7 @@ public class CommGame implements Runnable
     public void run()
     {
         running=true;
+        System.out.println("sdfs");
     }
 
 }
