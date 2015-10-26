@@ -35,7 +35,6 @@ public class groundControlGame implements Runnable
 	private static Thread protocolThread;
 	static ProtocolAggregator aggregator;
 	private static GameMap map;
-	private static ClientUpdater clientUpdater;
 	
 	public groundControlGame(String iAddress, int port, String name)
 	{
@@ -71,8 +70,7 @@ public class groundControlGame implements Runnable
 			map = serial.getMapFromSerial();
 			System.out.println("Map obtained!");
 			
-			clientUpdater = new ClientUpdater(map);
-			MapUpdateProtocol update = new MapUpdateProtocol(c, clientUpdater, SHIP_NAME, serial);
+			MapUpdateProtocol update = new MapUpdateProtocol(c, map, SHIP_NAME, serial);
 			aggregator.addProtocol(update);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,7 +81,7 @@ public class groundControlGame implements Runnable
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this,c,SHIP_NAME,aggregator,clientUpdater);
+	    guiThread = new groundControlGraphics(this,c,map,SHIP_NAME,aggregator);
 	    guiThread.start();
 	    gameLogic();
 	}	
