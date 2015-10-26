@@ -30,7 +30,7 @@ public class CommGUI extends JPanel implements Runnable {
     public CommGUI(CommGame game, Client c, MapPanel map){
         
     	windowFrame.setVisible(true);
-   		windowFrame.setSize(new Dimension(1600,900));
+    	windowFrame.setSize(new Dimension(1600,900));
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     	
