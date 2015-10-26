@@ -42,7 +42,7 @@ public class ClientUpdater extends Updater {
 		dirty = true;
 		{
 			if(!isRenderLocked()){//drawing is using the renderMap
-				setRenderLock(true);
+				setRenderLock(true);				
 			}else{return;}
 		}
 		map.sync(renderMap);

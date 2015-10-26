@@ -21,6 +21,7 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 	public MapUpdateProtocol(Client client, ClientUpdater updater, String shipName, SerialProtocol serial) {
 		super(client);
 		this.serial = serial;
+		this.updater = updater;
 		updater.getMap().addMapListener(this);
 		ship = shipName;
 	}

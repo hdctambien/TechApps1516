@@ -28,8 +28,10 @@ public class DebuggerClient {
 	private static volatile boolean done;
 	private static Thread clientThread;
 	private static Thread protocolThread;
+	private static Thread updaterThread;
 	private static ProtocolAggregator aggregator;
 	private static GameMap map;
+	private static ClientUpdater updater;
 	
 	/**
 	 * This is the main method that launches the basic DebuggerClient. It creates a Client and a BasicProtocol,
@@ -62,7 +64,10 @@ public class DebuggerClient {
 			client.sendMessage("set ship "+SHIP_NAME);
 			
 			constructMap(serial, client);
-			MapUpdateProtocol update = new MapUpdateProtocol(client, map, SHIP_NAME, serial);
+			updater = new ClientUpdater(map);
+			MapUpdateProtocol update = new MapUpdateProtocol(client, updater, SHIP_NAME, serial);
+			aggregator.addProtocol(update);
+			updaterThread = new Thread(updater);
 			
 			if(name.equals("ChatTester")){//Test the chat panel
 				javax.swing.SwingUtilities.invokeLater(new ChatGUIRunner(client,aggregator));
@@ -111,9 +116,11 @@ public class DebuggerClient {
 				done = true;
 				client.stop();
 				protocol.stop();
+				updater.stopUpdating();
 			}else if(client.isExit()){
 				done = true;
-				protocol.stop();		
+				protocol.stop();
+				updater.stopUpdating();
 			}
 		}
 	}
