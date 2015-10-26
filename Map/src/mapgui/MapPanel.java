@@ -20,7 +20,7 @@ import spacegame.map.MapAction;
 
 public class MapPanel
 {
-	public int xCord, yCord;
+	public int xCord, yCord, width = 50;
 	public double heading = 45;
 	
 	
@@ -58,15 +58,16 @@ public class MapPanel
 		{
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			}
 			catch(InterruptedException ex)
 			{
 				Thread.currentThread().interrupt();
 			}
-			heading += 20;
-			xCord += 10;
-			yCord += 10;
+			width += 1;
+			heading += 2;
+			xCord += 1;
+			yCord += 1;
 		//	heading = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
 			
 		//	xCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posX"));
@@ -74,6 +75,7 @@ public class MapPanel
 			
 			map.setPosition(xCord, yCord);
 			map.setHeading(heading);
+			map.setWidth(width);
 			
 			frame.revalidate();
 			map.repaint();

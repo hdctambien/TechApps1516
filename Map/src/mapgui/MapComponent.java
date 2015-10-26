@@ -22,21 +22,21 @@ public class MapComponent extends JComponent {
 	}
 	
 	public void setPosition(int x, int y){
-		System.out.println("Set Position"+x+", "+y);
+		System.out.println("Set Position "+x+", "+y);
 		this.x = x;
 		this.y = y;
 	}
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		Shape shape = new Rectangle(x,y,width,width);
+		Shape shape = new Rectangle(x-width/2,y-width/2,width,width);
 		AffineTransform transform = new AffineTransform();
 		System.out.println("X,Y: "+x+ ", "+y);
 		System.out.println("width: "+width);
 		g.setColor(Color.RED);
 		
 		System.out.println("Heading1: "+heading);
-		transform.rotate(Math.toRadians(heading),x+width/2,y+width/2);
+		transform.rotate(Math.toRadians(heading),x,y);
 		shape = transform.createTransformedShape(shape);
 		
 		g2.draw(shape);
