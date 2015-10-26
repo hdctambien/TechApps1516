@@ -27,7 +27,7 @@ public class CommGUI extends JPanel implements Runnable {
     private HeadingDial headingDial = new HeadingDial();
     public Container contentPane;
 
-    public CommGUI(CommGame game, Client c){//, Graphics g)     {
+    public CommGUI(CommGame game, Client c){
         this.game=game;
         client=c;
 
@@ -80,6 +80,7 @@ public class CommGUI extends JPanel implements Runnable {
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
      
         windowFrame.pack();
+     
    
       
 }		
@@ -88,25 +89,30 @@ public class CommGUI extends JPanel implements Runnable {
     {
         public void mousePressed(MouseEvent e)
         {
+        	System.out.println("click");
         	mouseClick = true;
         }
         public void mouseReleased(MouseEvent e)
         {
+        	System.out.println("unclick");
         	mouseClick = false;
         }
     };
     
     public void run()
     {
-    	while(game.running)
+    	System.out.println("game running1");
+    	for(double i=0;true;)
     	{
+    		System.out.println("game running2");
     		if(mouseClick)
     		{
-    			for(int i=0;i<10;i++)
-            	{
-            		headingDial.setHeading(i);
-            		windowFrame.repaint();
-            	}
+    			i+=.0001;
+    			headingDial.setRadius((int)i+1);
+    			System.out.println("test");
+            	headingDial.setHeading(i);
+            	windowFrame.repaint();
+            	
     		}
     		
     		windowFrame.repaint();
