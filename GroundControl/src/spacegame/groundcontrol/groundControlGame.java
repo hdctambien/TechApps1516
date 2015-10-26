@@ -33,7 +33,7 @@ public class groundControlGame implements Runnable
 	Client c;
 	private static Thread clientThread;
 	private static Thread protocolThread;
-	private static ProtocolAggregator aggregator;
+	static ProtocolAggregator aggregator;
 	private static GameMap map;
 	
 	public groundControlGame(String iAddress, int port, String name)
@@ -81,7 +81,7 @@ public class groundControlGame implements Runnable
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this,c,map,SHIP_NAME);
+	    guiThread = new groundControlGraphics(this,c,map,SHIP_NAME,aggregator);
 	    guiThread.start();
 	    gameLogic();
 	}	

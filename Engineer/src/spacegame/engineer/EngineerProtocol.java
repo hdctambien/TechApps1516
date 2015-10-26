@@ -14,6 +14,7 @@ public class EngineerProtocol extends AbstractProtocol
 	private Client client;
 	private Thread tClient;
 	private Thread tP;
+	private String SHIP_NAME;
 	
 	public EngineerProtocol(Client client, EngineerGame engiGame, EngineerGUI gui)
 	{
@@ -29,7 +30,7 @@ public class EngineerProtocol extends AbstractProtocol
 		this.client= client;
 		client.sendMessage("set job Engineer");
 		client.sendMessage("set ship Ship.1");
-		//client.sendMessage("subscribe all");
+		SHIP_NAME = "Ship.1";
 	}
 	
 	public void process(String stringIn)
