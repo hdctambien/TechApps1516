@@ -23,6 +23,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
 import spacegame.map.GameMap;
@@ -46,6 +47,9 @@ class groundControlGraphics extends Thread
 	private GridBagLayout gridBag;
 	Client c;
 	private GameMap map;
+	private GameMap renderMap;
+	private ClientUpdater clientUpdater;
+	
 	
 	private JSlider throttle;
 	
@@ -70,11 +74,13 @@ class groundControlGraphics extends Thread
 	boolean right = false;
 	boolean left = false;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c, GameMap map, String shipName, ProtocolAggregator aggregator) 
+	public groundControlGraphics(groundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
 	{		
 		headingDial = new HeadingDial();
 		SHIP_NAME = shipName;
-		this.map = map;
+		map = cU.getMap();
+		renderMap = cU.getRenderMap();
+		clientUpdater = cU;
 		gcGame = groundControlGame;
 		chatPanel = new ChatPanel(300,225);
 		windowFrame = new JFrame();
@@ -213,17 +219,30 @@ class groundControlGraphics extends Thread
 				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(-0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
 			if(left)
 				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
-			
-			mapPanel.setHeading((Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180));
-			mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
-			
-			headingDial.setHeading(Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180);
-			pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
-			pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
-			pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
-			pComms.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
-			windowPanel.repaint();
-		}
+
+			if(clientUpdater.isRenderLocked())
+			{
+				System.out.println("LOCKED");
+				continue;
+			}
+			else
+			{
+				clientUpdater.setRenderLock(true); 
+				
+				System.out.println("Is unlocked at some point");
+				
+				mapPanel.setHeading((Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180));
+				mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+				
+				headingDial.setHeading(Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180);
+				pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
+				pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
+				pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
+				pComms.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
+				windowPanel.repaint();
+				clientUpdater.setRenderLock(false);
+			}
+		} 
 	}
 	
 private class KeyControl implements KeyListener 
