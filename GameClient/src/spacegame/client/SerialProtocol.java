@@ -1,5 +1,7 @@
 package spacegame.client;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import spacegame.map.GameMap;
 
 public class SerialProtocol extends AbstractProtocol{
@@ -7,12 +9,12 @@ public class SerialProtocol extends AbstractProtocol{
 	private StringBuilder serialBuilder;
 	//private StringBuilder entityBuilder;
     //private Queue<String> entitySerialQueue;
-	private volatile String serial;
-	private volatile boolean hasSerial;
+	private LinkedBlockingQueue<String> serialQueue;
 	
 	public SerialProtocol(Client client) {
 		super(client);
 		serialBuilder = new StringBuilder();
+		serialQueue = new LinkedBlockingQueue<String>();
 		//entityBuilder = new StringBuilder();
 		//entitySerialQueue = new LinkedBlockingQueue<String>();
 	}
@@ -22,8 +24,9 @@ public class SerialProtocol extends AbstractProtocol{
 		if(command.startsWith("serial ")||command.startsWith("$serial ")){
 			serialBuilder.append("\n"+command);
 			if(command.equals("$serial END")){
-				serial = serialBuilder.toString();
-				hasSerial = true;
+				String serial = serialBuilder.toString();
+				serialQueue.add(serial);
+				serialBuilder = new StringBuilder();
 			}
 		}/*else if(command.startsWith("$erial")){
 			entityBuilder.append("\n"+command);
@@ -35,12 +38,11 @@ public class SerialProtocol extends AbstractProtocol{
 	}
 	
 	public synchronized boolean hasSerial(){
-		return hasSerial;
+		return !serialQueue.isEmpty();
 	}
 	
 	public synchronized String getSerial(){
-		hasSerial = false;
-		return serial;
+		return serialQueue.poll();
 	}
 	
 	/*public synchronized boolean hasEntity(){
@@ -60,7 +62,13 @@ public class SerialProtocol extends AbstractProtocol{
 	
 	public GameMap getMapFromSerial(){
 		GameMap map = new GameMap();
-		map.unserialize(getSerial());
+		String serial = getSerial();
+		/*if(serial.startsWith("\n")){
+			System.out.println("Starts with Newline: BAD");
+			serial = serial.substring(1, serial.length());
+		}*/
+		System.out.println("GET SERIAL\n"+serial);
+		map.unserialize(serial);
 		return map;
 	}
 

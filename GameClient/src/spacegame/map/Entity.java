@@ -139,6 +139,7 @@ public class Entity implements ISerializable {
 		String[] meta = lines[0].split(" ");
 		try{
 			name = meta[0];
+			System.out.println(meta[0]);
 			String[] nameUfid = meta[0].split("\\.");
 			ufid = Integer.parseInt(nameUfid[1]);
 			//String[] sizeS = meta[1].split("=");

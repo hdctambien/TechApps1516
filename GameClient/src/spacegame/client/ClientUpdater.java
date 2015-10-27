@@ -35,7 +35,7 @@ public class ClientUpdater extends Updater {
 	public void scheduleMapPush(GameMap ioMap){
 		ioPush = ioMap;
 		scheduleIOPush = true;
-	}
+	}	
 	
 	@Override
 	public void afterUpdate() {//SYNC RENDER MAP

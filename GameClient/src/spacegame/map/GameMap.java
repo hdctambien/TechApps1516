@@ -170,6 +170,7 @@ public class GameMap implements ISerializable, EntityListener {
 		try{
 			String[] entitiesSerial = serial.split("\n\\$");
 			String[] mapMeta = entitiesSerial[0].split(" ");
+			for(int i = 0; i < mapMeta.length;i++){System.out.println("mapMeta["+i+"]="+mapMeta[i]);}
 			//mapMeta[0] : serial
 			//mapMeta[1] : GameMap
 			String[] sizeSerial = mapMeta[2].split("=");
@@ -187,6 +188,7 @@ public class GameMap implements ISerializable, EntityListener {
 				}				
 			}
 		} catch(RuntimeException e){
+			e.printStackTrace();
 			throw new SerialException("Map unserialize() failure",e);
 		}
 	}
