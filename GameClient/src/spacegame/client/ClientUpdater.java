@@ -1,6 +1,7 @@
 package spacegame.client;
 
 import spacegame.map.GameMap;
+import spacegame.map.MapEvent;
 import spacegame.map.Updater;
 
 public class ClientUpdater extends Updater {
@@ -30,6 +31,13 @@ public class ClientUpdater extends Updater {
 	
 	public GameMap getRenderMap(){
 		return renderMap;
+	}
+	
+	public void addUserAction(String entity, String variable, String value, Client client){
+		int index = getMap().getIndexByName(entity);
+		MapEvent event = new MapEvent(entity, index, variable, value);
+		addIOAction(event);
+		client.sendMessage("mapset "+entity+" "+variable+" "+value);
 	}
 	
 	public void scheduleMapPush(GameMap ioMap){
