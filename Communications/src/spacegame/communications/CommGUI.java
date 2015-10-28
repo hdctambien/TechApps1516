@@ -26,8 +26,11 @@ public class CommGUI extends JPanel implements Runnable {
     public JFrame windowFrame;
     private HeadingDial headingDial = new HeadingDial();
     public Container contentPane;
+    
+    private JPanel windowPanel = new JPanel(new BorderLayout());
+    private JPanel dataPanel = new JPanel(new BorderLayout());
 
-    public CommGUI(CommGame game, Client c, MapPanel map){
+    public CommGUI(CommGame game, Client c, MapComponent map){
         
     	windowFrame.setVisible(true);
     	windowFrame.setSize(new Dimension(1600,900));
@@ -41,43 +44,20 @@ public class CommGUI extends JPanel implements Runnable {
         this.client = c;
 
 
-        
-//        JButton cancelButton = new JButton("cancel");
-//        JButton setButton = new JButton("set");       	
-     
-       
-        
-//        JScrollPane listScroller = new JScrollPane();
-       
-//        map.setAlignmentX(LEFT_ALIGNMENT);
-//        JPanel listPane = new JPanel();
-//        listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
-//        JLabel label = new JLabel("sup bruh");
-//        listPane.add(label);
-//        listPane.add(Box.createRigidArea(new Dimension(0,5)));
-//        listPane.add(listScroller);
-//        listPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        
-        
-//        	JPanel buttonPane = new JPanel();
-//        	buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-//        	buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-//        	buttonPane.add(Box.createHorizontalGlue());
-        	
-        	
-//        buttonPane.add(cancelButton);
-//        buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
-//        buttonPane.add(setButton);
-        
 
        
         headingDial.setRadius(100);
+        dataPanel.add(headingDial, BorderLayout.CENTER);
         
+       // windowPanel.setSize(map.size());
+        windowPanel.add(map,BorderLayout.CENTER);           
+
         
         contentPane = windowFrame.getContentPane();
-        contentPane.add(map, BorderLayout.CENTER);
+        contentPane.add(windowPanel, BorderLayout.CENTER);
+        contentPane.add(dataPanel, BorderLayout.EAST);
         
-        contentPane.add(headingDial, BorderLayout.EAST);
+        
 //        contentPane.add(buttonPane, BorderLayout.PAGE_END);
         contentPane.addMouseListener(mouse);
         
@@ -90,6 +70,8 @@ public class CommGUI extends JPanel implements Runnable {
    
       
 }		
+    
+    
     private boolean mouseClick = false;
 	private MouseAdapter mouse = new MouseAdapter()
     {
