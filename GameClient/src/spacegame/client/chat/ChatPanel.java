@@ -31,14 +31,14 @@ public class ChatPanel extends JPanel implements ActionListener {
 		
 		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	//	chatField.setPreferredSize(new Dimension(width-W_PADDING,TXT_FIELD_HEIGHT));
-	//	scroller.setPreferredSize(new Dimension(width-W_PADDING,height-H_PADDING));
+		chatField.setPreferredSize(new Dimension(width-W_PADDING,TXT_FIELD_HEIGHT));
+		scroller.setPreferredSize(new Dimension(width-W_PADDING,height-H_PADDING));
 		outputBox.setEditable(false);
 		outputBox.setLineWrap(true);
 		chatField.addActionListener(this);
 		add(scroller,BorderLayout.NORTH);
 		add(chatField,BorderLayout.SOUTH);
-	//	setPreferredSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
 	}
 
 	public void addChatListener(ChatListener listener){

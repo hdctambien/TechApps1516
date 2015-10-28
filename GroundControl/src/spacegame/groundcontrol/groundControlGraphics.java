@@ -196,7 +196,6 @@ class groundControlGraphics extends Thread
 		windowPanel.addKeyListener(new KeyControl());
 		
 		windowFrame.add(windowPanel);
-		windowFrame.setResizable(false);
 		windowFrame.setTitle("SpaceGame Ground Controller");
 		windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		windowFrame.setResizable(true);
@@ -216,20 +215,19 @@ class groundControlGraphics extends Thread
 		while(gcGame.running)
 		{
 			if(right)
-				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(-0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
+				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(-0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))), c);
 			if(left)
-				map.getEntityByName(SHIP_NAME).getComponent("Heading").setVariable("heading", Double.toString(0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
-
+				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))), c);
+				
+			
+			
 			if(clientUpdater.isRenderLocked())
 			{
-				System.out.println("LOCKED");
 				continue;
 			}
 			else
 			{
 				clientUpdater.setRenderLock(true); 
-				
-				System.out.println("Is unlocked at some point");
 				
 				mapPanel.setHeading((Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180));
 				mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
