@@ -1,6 +1,7 @@
 package mapgui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ import javax.swing.JViewport;
 import spacegame.map.Entity;
 import spacegame.map.GameMap;
 import spacegame.map.MapAction;
+import spacegame.map.components.Component;
 
 public class MapPanel
 {
@@ -28,6 +30,10 @@ public class MapPanel
 	public MapComponent map;
 	public GameMap game;
 	public final String SHIP_NAME = "Ship.1";
+	
+	Entity ship;
+	Component physComponent;
+	Component posComponent;
 	
 	Entity headingEntity;
 	Entity positionEntity;
@@ -47,7 +53,12 @@ public class MapPanel
 		frame.setSize(800,800);
 		frame.setVisible(true);
 		
-	//	positionEntity = game.getEntityByName(SHIP_NAME);
+		System.out.println(game.getEntities());
+		ship = game.getEntityByName(SHIP_NAME);
+		physComponent = ship.getComponent("Physics");
+		posComponent = ship.getComponent("Position");
+		
+		
 		xCord = 100;
 		yCord = 100;
 		run();
@@ -64,14 +75,13 @@ public class MapPanel
 			{
 				Thread.currentThread().interrupt();
 			}
-			width += 1;
-			heading += 2;
-			xCord += 1;
-			yCord += 1;
-		//	heading = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
 			
-		//	xCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posX"));
-		//	yCord = Integer.parseInt(positionEntity.getComponent("Position").getVariable("posY"));
+			posComponent.setVariable("posX", Integer.toString(xCord + 10));
+			posComponent.setVariable("posY", Integer.toString(yCord + 10));
+			
+			xCord = Integer.parseInt(posComponent.getVariable("posX"));
+			yCord = Integer.parseInt(posComponent.getVariable("posY"));
+		
 			
 			map.setPosition(xCord, yCord);
 			map.setHeading(heading);
