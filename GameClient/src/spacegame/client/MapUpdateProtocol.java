@@ -12,6 +12,7 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 	private String ship;
 	private SerialProtocol serial;
 	private ClientUpdater updater;
+	private boolean expectingSerialMap=false;
 	
 	public static final int ENTITY_NOT_EXPECTED = 0;
 	public static final int ENTITY_EXPECTED = 1;
@@ -25,6 +26,13 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 		updater.getMap().addMapListener(this);
 		ship = shipName;
 	}
+	
+	public void changeMap(String entity, String variable, String value){
+		client.sendMessage("mapset "+entity+" "+variable+" "+value);
+		GameMap map = updater.getMap();
+		int index = map.getIndexByName(entity);
+		updater.addIOAction(new MapEvent(entity,index,variable,value));
+	}
 
 	@Override
 	public void process(String command) {
@@ -34,6 +42,10 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 			map.setUpdating(false);
 			expectingEntity = ENTITY_NOT_EXPECTED;
 		}*/
+		if(expectingSerialMap&&serial.hasSerial()){
+			updater.scheduleMapPush(serial.getMapFromSerial());
+			expectingSerialMap = false;
+		}
 		String[] cmds = command.split(" ");
 		switch(cmds[0]){
 			case "set":
@@ -51,7 +63,12 @@ public class MapUpdateProtocol extends AbstractProtocol implements MapListener{
 				}
 				break;
 			case "mappush":
-				updater.scheduleMapPush(serial.getMapFromSerial());
+				if(serial.hasSerial()){
+					updater.scheduleMapPush(serial.getMapFromSerial());
+					expectingSerialMap = false;
+				}else{
+					expectingSerialMap = true;
+				}
 				break;
 			/*case "delete":
 				if(cmds.length<2){

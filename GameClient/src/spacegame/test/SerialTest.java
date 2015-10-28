@@ -20,6 +20,13 @@ public class SerialTest {
 		map2.unserialize(map.serialize());
 	}
 	@Test
+	public void testRecreateRecentSerialBug(){
+		GameMap map = createTestMap();
+		GameMap map2 = new GameMap();
+		map2.unserialize("\n"+map.serialize());
+	}
+	
+	@Test
 	public void testSerialStringEquals(){
 		GameMap map = createTestMap();
 		GameMap map2 = new GameMap();

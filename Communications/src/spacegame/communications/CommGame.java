@@ -3,7 +3,8 @@ import spacegame.client.*;
 /**
  * Created by Avery on 9/28/2010.;
  */
-
+import spacegame.map.GameMap;
+import spacegame.mapgui.MapPanel;
 
 import java.io.IOException;
 import java.awt.Graphics;
@@ -22,7 +23,7 @@ public class CommGame implements Runnable
     //JButton get;
     private Thread protocolThread;
     private Thread clientThread;
-
+    private MapPanel map = new MapPanel(new GameMap());//import from client
     boolean running = false;
     CommGUI gui;
     private Client c;
@@ -34,8 +35,8 @@ public class CommGame implements Runnable
         iaddress=address;
         port=p;
 
-
-        gui = new CommGUI(this, this.client);//, new Graphics);
+        
+        gui = new CommGUI(this, this.client, map);
         Thread guiThread = new Thread(gui);
         guiThread.start();
        /* try{
@@ -49,12 +50,16 @@ public class CommGame implements Runnable
         protocol = new CommProtocol(client, this, gui);
         //protocolThread = new Thread(protocol);
         protocolThread.start();
-        //gui.close();
+      
+        Thread gameThread = new Thread(this);
+        gameThread.start();
+        
 
     }
     public void run()
     {
         running=true;
+        
         System.out.println("sdfs");
     }
 

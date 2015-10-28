@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
 import spacegame.map.GameMap;
+import spacegame.map.MapEvent;
 
 /**
  * This class is a launcher for a basic, command line, client that can be used to debug the server and protocol
@@ -93,6 +94,7 @@ public class DebuggerClient {
 			}
 		}
 		System.out.println("Building Map...");
+		System.out.println("HAS SERIAL: "+serial.hasSerial());
 		map = serial.getMapFromSerial();
 		System.out.println("Map obtained!");
 	}
@@ -112,6 +114,13 @@ public class DebuggerClient {
 			client.sendMessage(message);
 			System.out.println(":::Message sent to server!");
 			
+			if(message.startsWith("set")){
+				doSet(message);
+			}
+			else if(message.startsWith("mapset")){
+				doMapSet(message);
+			}
+			
 			if(message.equals("exit")){
 				done = true;
 				client.stop();
@@ -124,6 +133,21 @@ public class DebuggerClient {
 			}
 		}
 	}
+	private static void doSet(String message){
+		String[] pieces = message.split(" ");
+		if(pieces.length>=3){
+			MapEvent event = new MapEvent(SHIP_NAME,map.getIndexByName(SHIP_NAME),pieces[1],pieces[2]);
+			updater.addIOAction(event);
+		}
+	}
+	private static void doMapSet(String message){
+		String[] pieces = message.split(" ");
+		if(pieces.length>=4){
+			MapEvent event = new MapEvent(pieces[1],map.getIndexByName(pieces[1]),pieces[2],pieces[3]);
+			updater.addIOAction(event);
+		}
+	}
+	
 }
 class ChatGUIRunner implements Runnable{
 	
