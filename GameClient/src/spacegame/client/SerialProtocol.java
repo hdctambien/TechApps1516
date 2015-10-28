@@ -67,7 +67,7 @@ public class SerialProtocol extends AbstractProtocol{
 			System.out.println("Starts with Newline: BAD");
 			serial = serial.substring(1, serial.length());
 		}*/
-		System.out.println("GET SERIAL\n"+serial);
+		//System.out.println("GET SERIAL\n"+serial);
 		map.unserialize(serial);
 		return map;
 	}
