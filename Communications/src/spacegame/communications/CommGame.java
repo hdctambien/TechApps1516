@@ -4,6 +4,7 @@ import spacegame.client.*;
  * Created by Avery on 9/28/2010.;
  */
 import spacegame.map.GameMap;
+import spacegame.mapgui.MapComponent;
 import spacegame.mapgui.MapPanel;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class CommGame implements Runnable
     //JButton get;
     private Thread protocolThread;
     private Thread clientThread;
-    private MapPanel map = new MapPanel(new GameMap());//import from client
+    private MapComponent map = new MapComponent();//import from client
     boolean running = false;
     CommGUI gui;
     private Client c;

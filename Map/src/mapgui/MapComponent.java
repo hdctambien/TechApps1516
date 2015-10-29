@@ -65,8 +65,5 @@ public class MapComponent extends JComponent {
 	public int getY()
 	{
 		return y;
-	}
-	
-
-	
+	}	
 }

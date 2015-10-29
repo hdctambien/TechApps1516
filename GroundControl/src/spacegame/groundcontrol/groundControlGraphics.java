@@ -66,6 +66,8 @@ class groundControlGraphics extends Thread
 	private JLabel guns;
 	private JLabel powerL;
 	
+	private double heading = 0;
+	
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
 	
@@ -90,7 +92,7 @@ class groundControlGraphics extends Thread
 		powerPanel = new JPanel(null);
 		mapPanel = new MapComponent();
 		this.c = c;
-		
+
 		
 		try
 		{
@@ -204,22 +206,35 @@ class groundControlGraphics extends Thread
 			    c.sendMessage("exit");
 			  }
 			});
-		windowPanel.requestFocus();
 		windowFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		windowFrame.setUndecorated(true);
 		windowFrame.pack();
 		windowFrame.setVisible(true);
+		windowPanel.requestFocus();
 	}
 	public void run()
 	{
 		while(gcGame.running)
 		{
 			if(right)
-				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(-0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))), c);
+			{
+				heading += -0.01;
+				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
+			}
 			if(left)
-				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(0.01 + Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))), c);
+			{
+				heading += 0.01;
+				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
+			}
 				
-			
+			try
+			{
+				Thread.sleep(25);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 			
 			if(clientUpdater.isRenderLocked())
 			{
@@ -229,10 +244,10 @@ class groundControlGraphics extends Thread
 			{
 				clientUpdater.setRenderLock(true); 
 				
-				mapPanel.setHeading((Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180));
+				mapPanel.setHeading(heading * 180 / Math.PI);
 				mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
 				
-				headingDial.setHeading(Math.PI*Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))/180);
+				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
 				pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 				pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
