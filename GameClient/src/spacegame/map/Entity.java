@@ -6,6 +6,7 @@ import java.util.List;
 
 import spacegame.map.components.AsteroidUpdateComponent;
 import spacegame.map.components.Component;
+import spacegame.map.components.EntityReferenceComponent;
 import spacegame.map.components.FuelComponent;
 import spacegame.map.components.HeadingComponent;
 import spacegame.map.components.PhysicsComponent;
@@ -74,9 +75,27 @@ public class Entity implements ISerializable {
 		Entity entity = new Entity(name, ufid);
 		List<String> keys = new ArrayList<String>(components.keySet());
 		for(String key: keys){
-			entity.addComponent(key,components.get(key).clone(entity));
+			Component c = components.get(key);
+			Component cc = c.clone(entity);
+			/*if(c instanceof EntityReferenceComponent){
+				cc = c.clone(entity);
+				EntityReferenceComponent erc = (EntityReferenceComponent)c;
+				erc.createReference(otherMap);
+			}*/
+			entity.addComponent(key,cc);
 		}
 		return entity;
+	}
+	
+	public void createReferences(GameMap map){
+		List<String> keys = new ArrayList<String>(components.keySet());
+		for(String key: keys){
+			Component c = components.get(key);
+			if(c instanceof EntityReferenceComponent){
+				EntityReferenceComponent erc = (EntityReferenceComponent)c;
+				erc.createReference(map);
+			}
+		}
 	}
 	
 	public boolean hasVariable(String varname){
@@ -172,7 +191,13 @@ public class Entity implements ISerializable {
 						}
 						break;
 					default:
-						throw new RuntimeException("Unknown Component: "+key);
+						if(key.startsWith(EntityFactory.REF_HEADER)){
+							c = new EntityReferenceComponent((String)null);
+						}else if(key.startsWith(EntityFactory.LIST_REF_HEADER)){
+							throw new RuntimeException("MULTIPLE ENTITY REFERENCE UNSUPPORTED");
+						}else{
+							throw new RuntimeException("Unknown Component: "+key);
+						}
 				}
 				if(!update){
 					c.unserialize(data[2]);

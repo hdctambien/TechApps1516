@@ -64,6 +64,10 @@ public class SerialTest {
 		EntityFactory factory = new EntityFactory();
 		map.addEntity(factory.createAsteroid());
 		map.addEntity(factory.createShip());
+		Entity[] entities = factory.createEntityReferenceSerialTest();
+		for(int i = 0; i<entities.length;i++){
+			map.addEntity(entities[i]);
+		}
 		return map;
 	}
 

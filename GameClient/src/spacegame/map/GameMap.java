@@ -145,6 +145,9 @@ public class GameMap implements ISerializable, EntityListener {
 		for(Entity e: entities){
 			map.addEntity(e.clone());
 		}
+		for(Entity e: map.entities){
+			e.createReferences(map);
+		}
 		return map;
 	}
 

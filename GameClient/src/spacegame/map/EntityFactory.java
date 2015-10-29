@@ -14,6 +14,9 @@ public class EntityFactory {
 	public static final String RENDER = "Render";
 	public static final String HEADING = "Heading";
 	
+	public static final String REF_HEADER = "Ref"; //for EntityReferenceComponent
+	public static final String LIST_REF_HEADER = "Listref"; //for MultipleReferenceComponent
+	
 	private int ufid = 0;
 	
 	public EntityFactory(){
@@ -21,7 +24,7 @@ public class EntityFactory {
 	}
 	
 	public Entity createShip(){
-		Entity ship = new Entity("Ship."+ufid, ufid++);
+		Entity ship = createEntity("Ship");
 		ship.addComponent(POSITION, new PositionComponent());
 		ship.addComponent(HEADING, new HeadingComponent());
 		ship.addComponent(PHYSICS, new PhysicsComponent());
@@ -33,13 +36,26 @@ public class EntityFactory {
 	}
 	
 	public Entity createAsteroid(){
-		Entity asteroid = new Entity("Asteroid."+ufid,ufid++);
+		Entity asteroid = createEntity("Asteroid");
 		asteroid.addComponent(POSITION, new PositionComponent());
 		asteroid.addComponent(HEADING, new HeadingComponent());
 		asteroid.addComponent(PHYSICS,new PhysicsComponent());
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("MayMime.png"));
 		return asteroid;
+	}
+	public Entity[] createEntityReferenceSerialTest(){
+		Entity test = createEntity("SerialTest");
+		Entity ref = createEntity("TestRef");
+		test.addComponent(HEADING, new HeadingComponent());
+		ref.addComponent(POSITION, new PositionComponent());
+		test.addComponent(REF_HEADER+"testSub", new EntityReferenceComponent(ref.getName(),ref));
+		ref.addComponent(REF_HEADER+"testSuper", new EntityReferenceComponent(test.getName(),test));
+		return new Entity[]{test,ref};
+	}
+	
+	private Entity createEntity(String name){
+		return new Entity(name+"."+ufid,ufid++);
 	}
 	
 	public static Entity createSerial(){
