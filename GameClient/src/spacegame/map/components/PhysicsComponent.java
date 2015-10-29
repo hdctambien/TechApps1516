@@ -10,22 +10,24 @@ public class PhysicsComponent extends Component
 	private double yAcc;
 
 	public final double MAX_ACCELERATION = 10; //Pixels / second
+	public final double NANO = 1_000_000_000.0;
 	
-	public PhysicsComponent(){
+	public PhysicsComponent()
+	{
 		
 	}
 
 	public void move(long timeElapsed) 
 	{
 		Component position = getEntity().getComponent("Position");
-		position.setDouble("posX", position.getDouble("posX") + timeElapsed/(1_000_000_000.0) * xVel );
-		position.setDouble("posY", position.getDouble("posY") + timeElapsed/(1_000_000_000.0) * yVel );
+		position.setDouble("posX", position.getDouble("posX") + timeElapsed/(NANO) * xVel );
+		position.setDouble("posY", position.getDouble("posY") + timeElapsed/(NANO) * yVel );
 	}
 	
 	public void accelerate(long timeElapsed)
 	{
-		xVel += timeElapsed/(1_000_000_000.0) * xAcc;
-		yVel += timeElapsed/(1_000_000_000.0) * yAcc;
+		xVel += timeElapsed/(NANO) * xAcc;
+		yVel += timeElapsed/(NANO) * yAcc;
 	}
 	
 	public void throttleAcceleration(double throttle)

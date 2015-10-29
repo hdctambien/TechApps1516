@@ -33,6 +33,10 @@ public abstract class Component implements ISerializable{
 	public double getDouble(String name){return Double.NaN;}
 	public boolean setDouble(String name, double value){return false;}
 	
+	public boolean hasInt(String name){return false;}
+	public int getInt(String name){return Integer.MIN_VALUE;}
+	public boolean setInt(String name, int value){return false;}
+	
 	public void unserialize(String serial){
 		String[] vars = serial.split(" ");
 		for(int i = 0; i < vars.length; i++){

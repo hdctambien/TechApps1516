@@ -41,6 +41,14 @@ public class PositionComponent extends Component
 	}
 
 	@Override
+	public boolean hasDouble(String varname){
+		switch(varname){
+			case "posX": case "posY": return true;
+			default: return false;
+		}
+	}
+	
+	@Override
 	public double getDouble(String varname){
 		switch(varname){
 			case "posX": return posX;
