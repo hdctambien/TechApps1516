@@ -9,9 +9,11 @@ import spacegame.map.components.Component;
 import spacegame.map.components.EntityReferenceComponent;
 import spacegame.map.components.FuelComponent;
 import spacegame.map.components.HeadingComponent;
+import spacegame.map.components.MultipleReferenceComponent;
 import spacegame.map.components.PhysicsComponent;
 import spacegame.map.components.PositionComponent;
 import spacegame.map.components.PowerComponent;
+import spacegame.map.components.ReferenceComponent;
 import spacegame.map.components.RenderComponent;
 import spacegame.map.components.ShipUpdateComponent;
 import spacegame.map.components.UpdateComponent;
@@ -91,9 +93,9 @@ public class Entity implements ISerializable {
 		List<String> keys = new ArrayList<String>(components.keySet());
 		for(String key: keys){
 			Component c = components.get(key);
-			if(c instanceof EntityReferenceComponent){
-				EntityReferenceComponent erc = (EntityReferenceComponent)c;
-				erc.createReference(map);
+			if(c instanceof ReferenceComponent){
+				ReferenceComponent rc = (ReferenceComponent)c;
+				rc.createReferences(map);
 			}
 		}
 	}
@@ -194,7 +196,7 @@ public class Entity implements ISerializable {
 						if(key.startsWith(EntityFactory.REF_HEADER)){
 							c = new EntityReferenceComponent((String)null);
 						}else if(key.startsWith(EntityFactory.LIST_REF_HEADER)){
-							throw new RuntimeException("MULTIPLE ENTITY REFERENCE UNSUPPORTED");
+							c = new MultipleReferenceComponent();
 						}else{
 							throw new RuntimeException("Unknown Component: "+key);
 						}

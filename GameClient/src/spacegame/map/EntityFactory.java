@@ -44,6 +44,7 @@ public class EntityFactory {
 		asteroid.addComponent(RENDER, new RenderComponent("MayMime.png"));
 		return asteroid;
 	}
+	
 	public Entity[] createEntityReferenceSerialTest(){
 		Entity test = createEntity("SerialTest");
 		Entity ref = createEntity("TestRef");
@@ -52,6 +53,22 @@ public class EntityFactory {
 		test.addComponent(REF_HEADER+"testSub", new EntityReferenceComponent(ref.getName(),ref));
 		ref.addComponent(REF_HEADER+"testSuper", new EntityReferenceComponent(test.getName(),test));
 		return new Entity[]{test,ref};
+	}
+	
+	public Entity[] createMultipleReferenceSerialTest(){
+		Entity test = createEntity("TestMaster");
+		Entity ref = createEntity("TestSlave");
+		Entity ref2 = createEntity("TestSlave");
+		Entity ref3 = createEntity("TestSlave");
+		test.addComponent(HEADING, new HeadingComponent());
+		ref.addComponent(POSITION, new PositionComponent());
+		ref2.addComponent(POSITION, new PositionComponent());
+		ref3.addComponent(POSITION, new PositionComponent());
+		test.addComponent(LIST_REF_HEADER+"testSlaves", new MultipleReferenceComponent(
+				new String[]{ref.getName(),ref2.getName(),ref3.getName()},
+				new Entity[]{ref,ref2,ref3}));
+		ref.addComponent(REF_HEADER+"testMaster", new EntityReferenceComponent(test.getName(),test));
+		return new Entity[]{test,ref,ref2,ref3};
 	}
 	
 	private Entity createEntity(String name){

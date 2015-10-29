@@ -3,7 +3,7 @@ package spacegame.map.components;
 import spacegame.map.Entity;
 import spacegame.map.GameMap;
 
-public class EntityReferenceComponent extends Component {
+public class EntityReferenceComponent extends ReferenceComponent {
 
 	String name;
 	Entity refEntity;
@@ -26,8 +26,9 @@ public class EntityReferenceComponent extends Component {
 		name = entityName;
 		refEntity = referenceEntity;
 	}
-
-	public void createReference(GameMap map){
+	
+	@Override
+	public void createReferences(GameMap map){
 		refEntity = map.getEntityByName(name);
 	}
 	
