@@ -33,6 +33,7 @@ public class groundControlGame implements Runnable
 	Client c;
 	private static Thread clientThread;
 	private static Thread protocolThread;
+	private static Thread updaterThread;
 	static ProtocolAggregator aggregator;
 	private static GameMap map;
 	private static ClientUpdater clientUpdater;
@@ -72,6 +73,8 @@ public class groundControlGame implements Runnable
 			System.out.println("Map obtained!");
 			
 			clientUpdater = new ClientUpdater(map);
+			updaterThread = new Thread(clientUpdater);
+			updaterThread.start();
 			MapUpdateProtocol update = new MapUpdateProtocol(c, clientUpdater, SHIP_NAME, serial);
 			aggregator.addProtocol(update);
 		} catch (IOException e) {

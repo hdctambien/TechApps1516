@@ -28,7 +28,6 @@ import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
 import spacegame.map.GameMap;
 import spacegame.gui.HeadingDial;
-import spacegame.mapgui.MapComponent;
 import spacegame.client.chat.*;
 
 /**
@@ -50,10 +49,9 @@ class groundControlGraphics extends Thread
 	private GameMap renderMap;
 	private ClientUpdater clientUpdater;
 	
-	
 	private JSlider throttle;
 	
-	private MapComponent mapPanel;
+	private mapgui.MapComponent mapPanel;
 	
 	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	private JSlider pFuel;
@@ -67,6 +65,12 @@ class groundControlGraphics extends Thread
 	private JLabel powerL;
 	
 	private double heading = 0;
+	private int x = 100;
+	private int y = 100;
+	
+	private double xD = 100;
+	private double yD = 100;
+	
 	
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
@@ -75,6 +79,7 @@ class groundControlGraphics extends Thread
 	private ChatPanel chatPanel;
 	boolean right = false;
 	boolean left = false;
+	boolean move = false;
 	
 	public groundControlGraphics(groundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
 	{		
@@ -90,7 +95,7 @@ class groundControlGraphics extends Thread
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
-		mapPanel = new MapComponent();
+		mapPanel = new mapgui.MapComponent();
 		this.c = c;
 
 		
@@ -218,13 +223,21 @@ class groundControlGraphics extends Thread
 		{
 			if(right)
 			{
-				heading += -0.01;
+				heading += -0.03;
 				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
 			}
 			if(left)
 			{
-				heading += 0.01;
+				heading += 0.03;
 				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
+			}
+			
+			if(move)
+			{
+				xD += 1 *  Math.cos(heading);
+				yD += 1 *  Math.sin(heading);
+				x = (int) xD;
+				y = (int) yD;
 			}
 				
 			try
@@ -235,8 +248,7 @@ class groundControlGraphics extends Thread
 			{
 				e.printStackTrace();
 			}
-			
-			if(clientUpdater.isRenderLocked())
+			if(!(clientUpdater.isDirty() || clientUpdater.isRenderLocked()) && clientUpdater.isDrawDirty())
 			{
 				continue;
 			}
@@ -245,7 +257,7 @@ class groundControlGraphics extends Thread
 				clientUpdater.setRenderLock(true); 
 				
 				mapPanel.setHeading(heading * 180 / Math.PI);
-				mapPanel.setPosition(100,100);
+				mapPanel.setPosition(x,y);
 				
 				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
@@ -254,6 +266,7 @@ class groundControlGraphics extends Thread
 				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 				windowPanel.repaint();
 				clientUpdater.setRenderLock(false);
+				clientUpdater.setDrawDirty(false);
 			}
 		} 
 	}
@@ -269,6 +282,10 @@ private class KeyControl implements KeyListener
 	        {
 	        	left = true;
 	        }
+	        if(e.getKeyCode() == KeyEvent.VK_UP)
+	        {
+	        	move = true;
+	        }
 	    }
 
 		@Override
@@ -276,6 +293,7 @@ private class KeyControl implements KeyListener
 		{
 			left = false;
 			right = false;
+			move = false;
 		}
 
 		@Override

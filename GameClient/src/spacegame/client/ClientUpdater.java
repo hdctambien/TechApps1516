@@ -9,6 +9,7 @@ public class ClientUpdater extends Updater {
 	private GameMap renderMap;
 	private volatile boolean renderLock = false;
 	private volatile boolean dirty = false;
+	private volatile boolean drawDirty = true;
 	private volatile boolean scheduleIOPush = false;
 	private GameMap ioPush;
 	
@@ -27,6 +28,14 @@ public class ClientUpdater extends Updater {
 	
 	public boolean isDirty(){
 		return dirty;
+	}
+	
+	public synchronized boolean isDrawDirty(){
+		return drawDirty;
+	}
+	
+	public synchronized void setDrawDirty(boolean dd){
+		drawDirty = dd;
 	}
 	
 	public GameMap getRenderMap(){
@@ -48,6 +57,7 @@ public class ClientUpdater extends Updater {
 	@Override
 	public void afterUpdate() {//SYNC RENDER MAP
 		dirty = true;
+		System.out.println(isRenderLocked());
 		{
 			if(!isRenderLocked()){//drawing is using the renderMap
 				setRenderLock(true);				
@@ -55,11 +65,14 @@ public class ClientUpdater extends Updater {
 		}
 		map.sync(renderMap);
 		dirty = false;
+		setDrawDirty(true);
+		setRenderLock(false);
 		if(scheduleIOPush){
 			ioPush.sync(getMap());
 			ioPush = null;
 			scheduleIOPush = false;
 		}
+		
 	}
 
 }
