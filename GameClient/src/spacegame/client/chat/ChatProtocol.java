@@ -25,7 +25,11 @@ public class ChatProtocol extends AbstractProtocol implements ChatListener {
 
 	@Override
 	public void chatRecieved(ChatEvent chat) {
+		if(chat.getChat().startsWith("~")){
+			sendMessage(chat.getChat().substring(1));
+		}else{
 		sendMessage("#"+chat.getChat());
+		}
 	}
 
 }
