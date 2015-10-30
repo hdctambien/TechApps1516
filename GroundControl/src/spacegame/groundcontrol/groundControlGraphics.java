@@ -234,10 +234,11 @@ class groundControlGraphics extends Thread
 			
 			if(move)
 			{
-				xD += 1 *  Math.cos(heading);
-				yD += 1 *  Math.sin(heading);
-				x = (int) xD;
-				y = (int) yD;
+				clientUpdater.addUserAction(SHIP_NAME, "velocity", Double.toString(10), c);
+			}
+			else
+			{
+				clientUpdater.addUserAction(SHIP_NAME, "velocity", Double.toString(0), c);
 			}
 				
 			try
@@ -257,7 +258,7 @@ class groundControlGraphics extends Thread
 				clientUpdater.setRenderLock(true); 
 				
 				mapPanel.setHeading(heading * 180 / Math.PI);
-				mapPanel.setPosition(x,y);
+				mapPanel.setPosition(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
 				
 				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));

@@ -1,4 +1,4 @@
-package mapgui;
+package src.mapgui;
 
 import spacegame.map.GameMap;
 
