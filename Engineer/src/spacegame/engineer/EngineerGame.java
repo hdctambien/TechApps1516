@@ -1,11 +1,6 @@
 package spacegame.engineer;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-
-import javax.swing.*;
 
 import spacegame.client.*;
 import spacegame.map.GameMap;
@@ -26,18 +21,13 @@ public class EngineerGame implements Runnable
 	private ProtocolAggregator aggregator;
 	
 	private GameMap map;
-	
-	private double pFR = .25;
-	private double pCR = .25;
-	private double pGR = .25;
-	private double pSR = .25;
+	private ClientUpdater cUpdater;
 	
 	private double pSt = 25;
 	private double pGt = 25;
 	private double pFt = 25;
 	private double pCt = 25;
-	private double power;
-		
+	
 	public EngineerGame()
 	{	
 		try {
@@ -71,7 +61,8 @@ public class EngineerGame implements Runnable
 			map = serial.getMapFromSerial();
 			System.out.println("Map obtained!");
 			
-			MapUpdateProtocol update = new MapUpdateProtocol(eClient, map, SHIP_NAME, serial);
+			cUpdater = new ClientUpdater(map);
+			MapUpdateProtocol update = new MapUpdateProtocol(eClient, cUpdater, SHIP_NAME, serial);
 			aggregator.addProtocol(update);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,17 +78,11 @@ public class EngineerGame implements Runnable
 	
 	public void powerDist(double pS, double pF, double pC, double pG, String change)
 	{
-		pSR = pS/100;
-		pFR = pF/100;
-		pCR = pC/100;
-		pGR = pG/100;
-		
 		switch(change)
 		{
 			case "pS":
 				if(pS + pG + pF + pC > 100)
 				{
-					power = 100 - pS;
 					if(pFt > 0)
 						pFt--;
 					if(pCt > 0)
@@ -112,15 +97,14 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pF": 
 				if(pS + pG + pF + pC > 100)
 				{					
-					power = 100 - pF;
 					if(pCt > 0)
 						pCt--;
 					if(pGt > 0)
@@ -135,15 +119,14 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pC": 
 				if(pS + pG + pF + pC > 100)
 				{
-					power = 100 - pC;
 					if(pFt > 0)
 						pFt--;
 					if(pGt > 0)
@@ -158,15 +141,14 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pG": 
 				if(pS + pG + pF + pC > 100)
 				{					
-					power = 100 - pG;
 					if(pFt > 0)
 						pFt--;
 					if(pCt > 0)
@@ -181,10 +163,10 @@ public class EngineerGame implements Runnable
 				gui.pShield.setValue((int)pSt);
 				gui.pGuns.setValue((int)pGt);
 				
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerFuel", Integer.toString((int)pFt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerComms", Integer.toString((int)pCt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerGuns", Integer.toString((int)pGt));
-				map.getEntityByName(SHIP_NAME).getComponent("Power").setVariable("powerShield", Integer.toString((int)pSt));break;
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			default:
 				pCt = 25;
