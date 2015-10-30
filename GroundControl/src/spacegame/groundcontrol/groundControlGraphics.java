@@ -245,13 +245,13 @@ class groundControlGraphics extends Thread
 				clientUpdater.setRenderLock(true); 
 				
 				mapPanel.setHeading(heading * 180 / Math.PI);
-				mapPanel.setPosition((int) Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),(int)Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+				mapPanel.setPosition(100,100);
 				
 				headingDial.setHeading(heading);
-				pFuel.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
-				pGuns.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
-				pShield.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
-				pComms.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
+				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
+				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
+				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
+				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 				windowPanel.repaint();
 				clientUpdater.setRenderLock(false);
 			}
