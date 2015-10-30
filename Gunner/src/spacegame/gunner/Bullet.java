@@ -11,14 +11,12 @@ public class Bullet extends Sprite {
     }
     
     private void initBullet() {
-        loadImage("missile.png");
+        loadImage("Jellyfish.jpg");//make a sprite
         getImageDimensions();        
     }
 
     public void move() {
-        
         x += BULLET_SPEED;
-        
         if (x > BOARD_WIDTH)
             vis = false;
     }

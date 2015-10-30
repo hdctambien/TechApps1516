@@ -1,4 +1,4 @@
-package mapgui;
+package src.mapgui;
 
 import java.awt.Color;
 import java.awt.Graphics;
