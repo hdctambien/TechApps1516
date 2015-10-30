@@ -234,11 +234,13 @@ class groundControlGraphics extends Thread
 			
 			if(move)
 			{
-				clientUpdater.addUserAction(SHIP_NAME, "velocity", Double.toString(10), c);
+				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) == 0)
+					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(100), c);
 			}
 			else
 			{
-				clientUpdater.addUserAction(SHIP_NAME, "velocity", Double.toString(0), c);
+				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) == 100)
+					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(0), c);
 			}
 				
 			try
@@ -258,8 +260,10 @@ class groundControlGraphics extends Thread
 				clientUpdater.setRenderLock(true); 
 				
 				mapPanel.setHeading(heading * 180 / Math.PI);
-				mapPanel.setPosition(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")),Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+				mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
+						(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
 				
+				throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
 				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
 				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
