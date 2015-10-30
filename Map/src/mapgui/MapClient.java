@@ -1,4 +1,4 @@
-package src.mapgui;
+package mapgui;
 
 import java.io.IOException;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package src.mapgui;
+package mapgui;
 
 import javax.swing.JViewport;
 

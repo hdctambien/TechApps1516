@@ -1,4 +1,4 @@
-package src.mapgui;
+package mapgui;
 
 import spacegame.client.AbstractProtocol;
 import spacegame.client.Client;
