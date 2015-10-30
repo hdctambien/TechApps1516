@@ -57,7 +57,6 @@ public class ClientUpdater extends Updater {
 	@Override
 	public void afterUpdate() {//SYNC RENDER MAP
 		dirty = true;
-		System.out.println(isRenderLocked());
 		{
 			if(!isRenderLocked()){//drawing is using the renderMap
 				setRenderLock(true);				
