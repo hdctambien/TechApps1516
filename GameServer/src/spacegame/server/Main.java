@@ -41,6 +41,12 @@ public class Main {
 			if(cmd.equals("exit")){
 				done = true;
 				//System.exit(0);
+			}else if(cmd.equals("dps")){//Debug Physics setup
+				server.processor.addRequest(new Request("set ship Ship.1",serverInfo));
+				server.processor.addRequest(new Request("set heading 45",serverInfo));
+				server.processor.addRequest(new Request("set powerFuel 1000",serverInfo));
+				server.processor.addRequest(new Request("set throttle 100",serverInfo));
+				server.processor.addRequest(new Request("tdp",serverInfo));
 			}else{
 				server.processor.addRequest(new Request(cmd,serverInfo));
 			}
