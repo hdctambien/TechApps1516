@@ -35,7 +35,8 @@ public class EngineerGUI extends Thread
 	
 	private JPanel reactor;
 	private Graphics r;
-	private BufferedImage water;
+	private Image water;
+	private Image waterScale;
 	
 	private JSlider throttle;
 	
@@ -88,50 +89,25 @@ public class EngineerGUI extends Thread
 			e1.printStackTrace();
 		}
 		
-		WIN_HEIGHT = 700;
-		WIN_WIDTH  = 700;
-		size = new Dimension(WIN_HEIGHT, WIN_WIDTH);
+		WIN_HEIGHT = 800;
+		WIN_WIDTH  = 1200;
+		size = new Dimension(WIN_WIDTH, WIN_HEIGHT);
 		frame = new JFrame("Engineer");
 		panel = new JPanel();
 		powerPanel = new JPanel();
 		bag = new GridBagLayout();
 		bagC = new GridBagConstraints();
-		chat = new ChatPanel(250, 250);
 		
-		aggregator = pa;
-		
-		ChatProtocol protocol = new ChatProtocol(this.client,chat);
-		chat.addChatListener(protocol);
-		aggregator.addProtocol(protocol);
-		
+		chatCreate(pa);		
 		powerCreate();
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
 		panel.setLayout(new GridLayout(1, 4));
 		panel.add(powerPanel);
-		//panel.add(chat);
-		frame.add(chat, BorderLayout.WEST);
-
-		thro = new JLabel(Integer.toString(throt));
-		
-		throttle = new JSlider(JSlider.VERTICAL, 0, 100, 0);
-		throttle.setMajorTickSpacing(10);
-		throttle.setMinorTickSpacing(5);
-		throttle.setPaintTicks(true);
-		throttle.setPaintLabels(true);
-		throttle.setVisible(true);
-		throttle.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent e)
-			{
-				JSlider source = (JSlider)e.getSource();
-				throt = source.getValue();
-				thro.setText(Integer.toString(throt));
-				Throt(throt);
-			}
-		});
-		panel.add(throttle);
+		panel.add(chat);
+		panel.setBackground(Color.WHITE);
+		frame.setBackground(Color.WHITE);
 		
 		panel.setVisible(true);
 		frame.setSize(size);
@@ -144,11 +120,19 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
+		
+		Reactor();
 	}
 	
-	public void chatCreate()
+	public void chatCreate(ProtocolAggregator pa)
 	{
+		chat = new ChatPanel(250, 250);
 		
+		aggregator = pa;
+		
+		ChatProtocol protocol = new ChatProtocol(this.client,chat);
+		chat.addChatListener(protocol);
+		aggregator.addProtocol(protocol);
 	}
 	
 	public void powerCreate()
@@ -211,7 +195,7 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-	/*	powerPanel.setLayout(null);
+		powerPanel.setLayout(null);
 		powerBG.setBackground(Color.GREEN);
 		powerBG.setVisible(true);
 		powerBG2.setBackground(Color.WHITE);
@@ -222,29 +206,29 @@ public class EngineerGUI extends Thread
 		powerBGL2.setVisible(true);
 		
 		fuel   = new JLabel("Fuel");
-		fuel.setBounds(35, 30, 25, 10);
+		fuel.setBounds(30, 30, 25, 10);
 		comms  = new JLabel("Comms");
-		comms.setBounds(87, 30, 50, 10);
+		comms.setBounds(82, 30, 50, 10);
 		shield = new JLabel("Shield");
-		shield.setBounds(150, 30, 50, 10);
+		shield.setBounds(145, 30, 50, 10);
 		guns   = new JLabel("Guns");
-		guns.setBounds(213, 30, 30, 10);
+		guns.setBounds(208, 30, 30, 10);
 		powerL  = new JLabel("Power");
-		powerL.setBounds(122, 10, 50, 10);
+		powerL.setBounds(117, 10, 50, 10);
 		
 		pFuel.setOpaque(false);
 		pComms.setOpaque(false);
 		pShield.setOpaque(false);
 		pGuns.setOpaque(false);
 		
-		pFuel.setBounds(25, 40, 60, 150);
-		pComms.setBounds(85, 40, 60, 150);
-		pShield.setBounds(145, 40, 60, 150);
-		pGuns.setBounds(205, 40, 60, 150);
-		powerBG.setBounds(15, 15, 260, 187);
-		powerBG2.setBounds(17, 17, 256, 183);
-		powerBGL.setBounds(120, 8, 42, 15);
-		powerBGL2.setBounds(118, 6, 46, 19);
+		pFuel.setBounds(20, 40, 60, 150);
+		pComms.setBounds(80, 40, 60, 150);
+		pShield.setBounds(140, 40, 60, 150);
+		pGuns.setBounds(200, 40, 60, 150);
+		powerBG.setBounds(10, 15, 260, 187);
+		powerBG2.setBounds(12, 17, 256, 183);
+		powerBGL.setBounds(115, 8, 42, 15);
+		powerBGL2.setBounds(113, 6, 46, 19);
 		
 		powerPanel.add(pFuel);
 		powerPanel.add(fuel);
@@ -258,7 +242,9 @@ public class EngineerGUI extends Thread
 		powerPanel.add(powerBGL);
 		powerPanel.add(powerBGL2);
 		powerPanel.add(powerBG2);
-		powerPanel.add(powerBG);*/
+		powerPanel.add(powerBG);
+		
+		powerPanel.setPreferredSize(new Dimension(275, 210));
 		
 		fuel   = new JLabel("Fuel");
 		comms  = new JLabel("Comms");
@@ -266,37 +252,25 @@ public class EngineerGUI extends Thread
 		guns   = new JLabel("Guns");
 		powerL  = new JLabel("Power");
 		
-		powerPanel.setLayout(new BorderLayout());
-		powerPanel.add(t1, BorderLayout.CENTER);
-		t1.setLayout(new GridLayout(2, 4));
-		t1.add(fuel);
-		t1.add(comms);
-		t1.add(shield);
-		t1.add(guns);
-		t1.add(pFuel);
-		t1.add(pComms);
-		t1.add(pShield);
-		t1.add(pGuns);
+		powerPanel.setLayout(null);
 	}
 	
 	public void Reactor()
 	{
-		reactor = new JPanel();
-		reactor.setBackground(Color.WHITE);
-		reactor.setSize(500, 500);
+		water = (Image)imgLoad.getImage("Water.png");
+		waterScale = water.getScaledInstance(1200, 500, Image.SCALE_SMOOTH);		
 		
-		water = imgLoad.getImage("Water.png");
-		r.drawImage(water, -100, -100, null);
-		reactor.paint(r);
-		
+		reactor = new JPanel()
+		{
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(waterScale, 0, 0, null);
+            }
+        };
+		reactor.setPreferredSize(new Dimension(150, 150));
 		panel.add(reactor);
-		frame.setContentPane(reactor);
 		reactor.setVisible(true);
-	}
-	
-	public void Throt(int thrott)
-	{
-		game.Throttle(thrott);
 	}
 	
 	public void run()
