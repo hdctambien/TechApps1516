@@ -1,5 +1,6 @@
 package spacegame.map.components;
 
+import spacegame.GlobalFlags;
 import spacegame.map.Entity;
 
 public class PhysicsComponent extends Component
@@ -36,6 +37,13 @@ public class PhysicsComponent extends Component
 		double heading = head.getDouble("heading");
 		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
 		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
+		if(GlobalFlags.DEBUG_PHYSICS){
+			System.out.println("heading:"+heading+" throttle:"+throttle+ " throttle/100="+throttle/100
+					+" MAX_ACC:"+MAX_ACCELERATION+" deg(heading)="+heading*Math.PI/180);
+			System.out.println("xAcc:"+xAcc+" Math.cos(deg(heading))="+Math.cos(heading*Math.PI/180));
+			System.out.println("xycc:"+yAcc+" Math.sin(deg(heading))="+Math.sin(heading*Math.PI/180));
+			GlobalFlags.DEBUG_PHYSICS = false;
+		}
 	}
 	
 	@Override
@@ -67,7 +75,6 @@ public class PhysicsComponent extends Component
 		{
 			case "velocityX":
 			case "velocityY":
-			case "heading":
 			case "xAcc":
 			case "yAcc":
 				return true;

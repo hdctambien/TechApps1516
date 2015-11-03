@@ -59,13 +59,13 @@ public class ClientUpdater extends Updater {
 		dirty = true;
 		{
 			if(!isRenderLocked()){//drawing is using the renderMap
-				setRenderLock(true);				
+				setRenderLock(true);
+				map.sync(renderMap);
+				dirty = false;
+				setDrawDirty(true);
+				setRenderLock(false);
 			}else{return;}
-		}
-		map.sync(renderMap);
-		dirty = false;
-		setDrawDirty(true);
-		setRenderLock(false);
+		}		
 		if(scheduleIOPush){
 			ioPush.sync(getMap());
 			ioPush = null;

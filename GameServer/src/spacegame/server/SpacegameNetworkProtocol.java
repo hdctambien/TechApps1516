@@ -1,5 +1,6 @@
 package spacegame.server;
 
+import spacegame.GlobalFlags;
 import spacegame.server.chat.ChatMessage;
 import spacegame.server.chat.Chats;
 import spacegame.map.*;
@@ -70,6 +71,10 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					//And maybe something here...
 					break;
 				case "noop": //NO OPERATION
+					break;
+				case "tdp"://Toggle Debug Physics
+					GlobalFlags.DEBUG_PHYSICS = true;
+					GlobalFlags.DEBUG_HEADING_GET_DOUBLE = true;
 					break;
 				default:
 					r.reply("UNK");
