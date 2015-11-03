@@ -4,8 +4,8 @@ import spacegame.client.*;
  * Created by Avery on 9/28/2010.;
  */
 import spacegame.map.GameMap;
-import spacegame.mapgui.MapComponent;
-import spacegame.mapgui.MapPanel;
+import src.mapgui.MapComponent;
+import src.mapgui.MapPanel;
 
 import java.io.IOException;
 import java.awt.Graphics;
