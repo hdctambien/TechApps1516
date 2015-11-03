@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
+import mapgui.MapViewPanel;
 import spacegame.client.Client;
 import spacegame.client.ClientUpdater;
 import spacegame.client.ProtocolAggregator;
@@ -51,7 +52,7 @@ class groundControlGraphics extends Thread
 	
 	private JSlider throttle;
 	
-	private mapgui.MapComponent mapPanel;
+	private MapViewPanel mapPanel;
 	
 	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	private JSlider pFuel;
@@ -95,7 +96,7 @@ class groundControlGraphics extends Thread
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
-		mapPanel = new mapgui.MapComponent();
+		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
 		this.c = c;
 
 		
@@ -263,9 +264,9 @@ class groundControlGraphics extends Thread
 			{
 				clientUpdater.setRenderLock(true); 
 				
-				mapPanel.setHeading(heading * 180 / Math.PI);
-				mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
-						(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+	//			mapPanel.setHeading(heading * 180 / Math.PI);
+	//			mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
+	//					(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
 				
 				throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
 				headingDial.setHeading(heading);
