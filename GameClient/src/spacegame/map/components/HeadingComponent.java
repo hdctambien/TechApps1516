@@ -5,7 +5,7 @@ import spacegame.map.Entity;
 
 public class HeadingComponent extends Component{
 
-	private double heading=0;
+	private double heading=3.14;
 
 	@Override
 	public String serialize() {
@@ -43,7 +43,7 @@ public class HeadingComponent extends Component{
 
 	@Override
 	public boolean setVariable(String varname, String value) {
-		System.out.println("HeadingComponent.setVariable("+varname+","+value+")");
+		//System.out.println("HeadingComponent.setVariable("+varname+","+value+")");
 		if(varname.equals("heading")){
 			heading = Double.parseDouble(value);
 			return true;

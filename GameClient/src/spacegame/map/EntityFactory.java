@@ -31,7 +31,7 @@ public class EntityFactory {
 		ship.addComponent(POWER, new PowerComponent());
 		ship.addComponent(FUEL, new FuelComponent());
 		ship.addComponent(UPDATE, new ShipUpdateComponent());
-		ship.addComponent(RENDER, new RenderComponent("MayMime.png"));
+		ship.addComponent(RENDER, new RenderComponent("Ship.png"));
 		return ship;
 	}
 	
