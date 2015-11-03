@@ -9,6 +9,7 @@ import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
 import spacegame.map.GameMap;
 import spacegame.map.MapEvent;
+import spacegame.test.ImageLoaderTest;
 
 /**
  * This class is a launcher for a basic, command line, client that can be used to debug the server and protocol
@@ -44,6 +45,10 @@ public class DebuggerClient {
 		System.out.println("Welcome to DebuggerClient!");
 		System.out.print("Please enter your name: ");
 		String name = in.nextLine();
+		if(name.equals("IMG")){
+			ImageLoaderTest.main(args);
+			return;
+		}
 		System.out.print("Please enter server IP address: ");
 		ipaddress = in.nextLine();
 		try{
