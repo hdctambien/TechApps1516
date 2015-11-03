@@ -41,7 +41,7 @@ public class EntityFactory {
 		asteroid.addComponent(HEADING, new HeadingComponent());
 		asteroid.addComponent(PHYSICS,new PhysicsComponent());
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
-		asteroid.addComponent(RENDER, new RenderComponent("MayMime.png"));
+		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
 		return asteroid;
 	}
 	
