@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -98,7 +99,6 @@ class groundControlGraphics extends Thread
 		powerPanel = new JPanel(null);
 		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
 		this.c = c;
-
 		
 		try
 		{
@@ -202,6 +202,40 @@ class groundControlGraphics extends Thread
 		windowPanel.add(dataPanel,BorderLayout.SOUTH);
 		
 		windowPanel.addKeyListener(new KeyControl());
+		
+		windowFrame.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				windowPanel.requestFocusInWindow();
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				windowPanel.requestFocusInWindow();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				windowPanel.requestFocusInWindow();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				windowPanel.requestFocusInWindow();
+			}
+			
+		});
 		
 		windowFrame.add(windowPanel);
 		windowFrame.setTitle("SpaceGame Ground Controller");

@@ -10,7 +10,7 @@ public class PhysicsComponent extends Component
 	private double xAcc;
 	private double yAcc;
 
-	public final double MAX_ACCELERATION = 10; //Pixels / second
+	public final double MAX_ACCELERATION = 10; //Pixels / second^2
 	public final double NANO = 1_000_000_000.0;
 	
 	public PhysicsComponent()
@@ -35,13 +35,13 @@ public class PhysicsComponent extends Component
 	{
 		Component head = getEntity().getComponent("Heading");
 		double heading = head.getDouble("heading");
-		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading*Math.PI/180);
-		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading*Math.PI/180);
+		xAcc = (throttle/100 * MAX_ACCELERATION) * Math.cos(heading);
+		yAcc = (throttle/100 * MAX_ACCELERATION) * Math.sin(heading);
 		if(GlobalFlags.DEBUG_PHYSICS){
 			System.out.println("heading:"+heading+" throttle:"+throttle+ " throttle/100="+throttle/100
-					+" MAX_ACC:"+MAX_ACCELERATION+" deg(heading)="+heading*Math.PI/180);
-			System.out.println("xAcc:"+xAcc+" Math.cos(deg(heading))="+Math.cos(heading*Math.PI/180));
-			System.out.println("xycc:"+yAcc+" Math.sin(deg(heading))="+Math.sin(heading*Math.PI/180));
+					+" MAX_ACC:"+MAX_ACCELERATION+" deg(heading)="+heading);
+			System.out.println("xAcc:"+xAcc+" Math.cos(deg(heading))="+Math.cos(heading));
+			System.out.println("xycc:"+yAcc+" Math.sin(deg(heading))="+Math.sin(heading));
 			GlobalFlags.DEBUG_PHYSICS = false;
 		}
 	}
