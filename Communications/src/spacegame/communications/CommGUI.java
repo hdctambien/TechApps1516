@@ -14,7 +14,8 @@ import java.awt.Graphics;
 import spacegame.client.*;
 import spacegame.gui.*;
 import spacegame.map.GameMap;
-import spacegame.mapgui.*;
+import src.mapgui.*;
+import src.mapgui.MapComponent;
 
 public class CommGUI extends JPanel implements Runnable {
 
@@ -22,7 +23,7 @@ public class CommGUI extends JPanel implements Runnable {
     protected JButton button;
     private static CommGame game;
     private static Client client;
-    private MouseListener m;
+   
     public JFrame windowFrame;
     private HeadingDial headingDial = new HeadingDial();
     public Container contentPane;

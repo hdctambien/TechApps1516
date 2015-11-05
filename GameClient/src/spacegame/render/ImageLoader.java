@@ -32,6 +32,7 @@ public class ImageLoader {
 		for(String imagePath: images){
 			String fullPath = GameConstants.RESOURCE_PATH+imagePath;
 			BufferedImage image = ImageIO.read(new File(fullPath));
+			System.out.println("Image Loaded: "+imagePath);
 			imageMap.put(imagePath, image);
 		}
 	}
