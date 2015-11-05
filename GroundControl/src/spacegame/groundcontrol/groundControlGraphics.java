@@ -258,11 +258,11 @@ class groundControlGraphics extends Thread
 		{
 			if(right)
 			{
-				heading += -0.03;
+				heading -= -0.05;
 			}
 			if(left)
 			{
-				heading += 0.03;
+				heading += 0.05;
 			}
 			
 			if(right || left)
