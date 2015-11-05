@@ -224,22 +224,26 @@ class groundControlGraphics extends Thread
 			if(right)
 			{
 				heading += -0.03;
-				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
 			}
 			if(left)
 			{
 				heading += 0.03;
+			}
+			
+			if(right || left)
+			{
+				System.out.println(heading);
 				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
 			}
 			
 			if(move)
 			{
-				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) == 0)
+				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) < 0.1)
 					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(100), c);
 			}
 			else
 			{
-				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) == 100)
+				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) > 99.9)
 					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(0), c);
 			}
 				
