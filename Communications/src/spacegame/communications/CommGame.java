@@ -4,10 +4,12 @@ import spacegame.client.*;
  * Created by Avery on 9/28/2010.;
  */
 import spacegame.map.GameMap;
-import src.mapgui.MapComponent;
-import src.mapgui.MapPanel;
 
 import java.io.IOException;
+
+import mapgui.MapComponent;
+import mapgui.MapPanel;
+
 import java.awt.Graphics;
 import spacegame.client.*;
 
@@ -15,45 +17,71 @@ import spacegame.client.*;
 public class CommGame implements Runnable
 {
     Client client;
-    CommProtocol protocol;
+    
+    String iaddress = "192.168.1.89";
+    int port = 8080;
 
-    String iaddress;// = "192.168.1.89";
-    int port;// = 8080;
-
-    //JButton exit;
-    //JButton get;
     private Thread protocolThread;
     private Thread clientThread;
-    private MapComponent map = new MapComponent();//import from client
+    private GameMap map = new GameMap();//import from client
     boolean running = false;
     CommGUI gui;
     private Client c;
-
+    String name;
+    static ProtocolAggregator aggregator;
+    private static ClientUpdater clientUpdater;
+    private static Thread updaterThread;
 
 
     public CommGame(String address, int p, String name)
     {
+    	this.name=name;
         iaddress=address;
         port=p;
-
+        try {
+			c = new Client(iaddress, port);
+			
+	        BasicProtocol basic = new BasicProtocol(c);
+			SerialProtocol serial = new SerialProtocol(c);
+			aggregator = new ProtocolAggregator(c);
+			aggregator.addProtocol(basic);
+			aggregator.addProtocol(serial);
+			
+			clientThread = new Thread(c);
+			clientThread.start();
+			protocolThread = new Thread(aggregator);
+			protocolThread.start();
+			
+			c.sendMessage("set name " + name);
+			c.sendMessage("set job GroundControl");
+			c.sendMessage("set ship " + name);
+			
+			c.sendMessage("get map");
+			System.out.println("Getting Map...");
+			while(!serial.hasSerial()){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Building Map...");
+			map = serial.getMapFromSerial();
+			System.out.println("Map obtained!");
+			
+			clientUpdater = new ClientUpdater(map);
+			updaterThread = new Thread(clientUpdater);
+			updaterThread.start();
+			MapUpdateProtocol update = new MapUpdateProtocol(c, clientUpdater, name, serial);
+			aggregator.addProtocol(update);
+		} 
+        catch (IOException e) {
+			e.printStackTrace();
+		}
+        run();
         
-        gui = new CommGUI(this, this.client, map);
-        Thread guiThread = new Thread(gui);
-        guiThread.start();
-       /* try{
-            client = new Client(iaddress,port);
-            clientThread = new Thread(client);
-            clientThread.start();
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }*/
-        protocol = new CommProtocol(client, this, gui);
-        //protocolThread = new Thread(protocol);
-        protocolThread.start();
-      
-        Thread gameThread = new Thread(this);
-        gameThread.start();
+        
         
 
     }
@@ -61,7 +89,25 @@ public class CommGame implements Runnable
     {
         running=true;
         
-        System.out.println("sdfs");
+        gui = new CommGUI(this, this.client, clientUpdater);
+        Thread guiThread = new Thread(gui);
+        guiThread.start();
+        gameLogic();
+
     }
+    private void gameLogic()
+	{
+		while(running)
+		{
+			try
+			{
+				Thread.sleep(50);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
 
 }
