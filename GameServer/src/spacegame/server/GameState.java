@@ -129,8 +129,11 @@ public class GameState {
 	private static GameMap createTestMap(){
 		GameMap map = new GameMap();
 		EntityFactory factory = new EntityFactory();
-		map.addEntity(factory.createAsteroid());
+		map.addEntity(factory.createAsteroid(300,300));
 		map.addEntity(factory.createShip());
+		map.addEntity(factory.createAsteroid(-300,-300));
+		map.addEntity(factory.createAsteroid(-300,300));
+		map.addEntity(factory.createAsteroid(300,-300));
 		return map;
 	} 
 }

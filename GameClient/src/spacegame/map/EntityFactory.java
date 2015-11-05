@@ -35,15 +35,23 @@ public class EntityFactory {
 		return ship;
 	}
 	
-	public Entity createAsteroid(){
+	public Entity createAsteroid(double x, double y){
 		Entity asteroid = createEntity("Asteroid");
-		asteroid.addComponent(POSITION, new PositionComponent());
+		PositionComponent pos = new PositionComponent();
+		pos.setDouble("posX", x);
+		pos.setDouble("posY", y);
+		asteroid.addComponent(POSITION, pos);
 		asteroid.addComponent(HEADING, new HeadingComponent());
 		asteroid.addComponent(PHYSICS,new PhysicsComponent());
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
 		return asteroid;
 	}
+	
+	public Entity createAsteroid(){
+		return createAsteroid(0,0);
+	}
+	
 	
 	public Entity[] createEntityReferenceSerialTest(){
 		Entity test = createEntity("SerialTest");

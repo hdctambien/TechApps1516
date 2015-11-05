@@ -7,7 +7,7 @@ public class ServerUpdater extends Updater {
 
 	private long lastNanoTime;
 	
-	public static final long MAP_PUSH_TIME = 5_000_000_000L; //5s = 5,000,000,000ns	
+	public static final long MAP_PUSH_TIME = 2_000_000_000L; //2s = 2,000,000,000ns	
 	
 	public ServerUpdater(GameMap map) {
 		super(map);
