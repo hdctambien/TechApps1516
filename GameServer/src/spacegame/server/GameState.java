@@ -21,7 +21,7 @@ public class GameState {
 	private MapUpdateBroadcaster broadcaster;
 	
 	public GameState(){
-		map = createTestMap();
+		map = createMap();
 		broadcaster = new MapUpdateBroadcaster(map);
 		updater = new ServerUpdater(map);
 		updaterThread = new Thread(updater);
@@ -126,11 +126,12 @@ public class GameState {
 		return success;
 	}
 	
-	private static GameMap createTestMap(){
+	private static GameMap createMap(){
 		GameMap map = new GameMap();
 		EntityFactory factory = new EntityFactory();
-		map.addEntity(factory.createAsteroid(300,300));
+		map.addEntity(factory.createOrb(200,200));
 		map.addEntity(factory.createShip());
+		map.addEntity(factory.createAsteroid(300,300));
 		map.addEntity(factory.createAsteroid(-300,-300));
 		map.addEntity(factory.createAsteroid(-300,300));
 		map.addEntity(factory.createAsteroid(300,-300));
