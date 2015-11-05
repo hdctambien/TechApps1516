@@ -8,9 +8,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 
+import mapgui.MapComponent;
+import mapgui.MapPanel;
 import spacegame.client.Client;
-import src.mapgui.MapComponent;
-import src.mapgui.MapPanel;
 
 public class GunnerFrame extends JFrame {//this is a frame
 	
