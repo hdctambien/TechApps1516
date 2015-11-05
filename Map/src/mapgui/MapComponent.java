@@ -17,7 +17,7 @@ public class MapComponent extends JComponent {
 	private double heading = 0;
 	private int width = 50;
 	private int x = 200, y = 200;
-	public BufferedImage image;
+	
 
 	public MapComponent(){
 		
@@ -31,7 +31,6 @@ public class MapComponent extends JComponent {
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		image = ImageIO.read(new File("H:\TechApps1516\image\cow_png_by_kasirun_hasibuan-d99f152.png"));
 		Shape shape = new Rectangle(x-width/2,y-width/2,width,width);
 		AffineTransform transform = new AffineTransform();
 		System.out.println("X,Y: "+x+ ", "+y);

@@ -55,8 +55,8 @@ public class MapPanel
 		
 		System.out.println(game.getEntities());
 		ship = game.getEntityByName(SHIP_NAME);
-		physComponent = ship.getComponent("Physics");
-		posComponent = ship.getComponent("Position");
+	//	physComponent = ship.getComponent("Physics");
+	//	posComponent = ship.getComponent("Position");
 		
 		
 		xCord = 100;
@@ -76,12 +76,14 @@ public class MapPanel
 				Thread.currentThread().interrupt();
 			}
 			
-			posComponent.setVariable("posX", Integer.toString(xCord + 10));
-			posComponent.setVariable("posY", Integer.toString(yCord + 10));
+	//		posComponent.setVariable("posX", Integer.toString(xCord + 10));
+	//		posComponent.setVariable("posY", Integer.toString(yCord + 10));
 			
-			xCord = Integer.parseInt(posComponent.getVariable("posX"));
-			yCord = Integer.parseInt(posComponent.getVariable("posY"));
-		
+	//		xCord = Integer.parseInt(posComponent.getVariable("posX"));
+	//		yCord = Integer.parseInt(posComponent.getVariable("posY"));
+			xCord+=1;
+			yCord+=1;
+			heading+=2;
 			
 			map.setPosition(xCord, yCord);
 			map.setHeading(heading);
