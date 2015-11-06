@@ -71,10 +71,10 @@ public class ImageLoaderTest extends JComponent {
 	private static GameMap createTestMap(){
 		GameMap map = new GameMap();
 		EntityFactory factory = new EntityFactory();
-		Entity asteroid = factory.createAsteroid();
-		asteroid.setVariable("posX", "100");
-		asteroid.setVariable("posY", "100");
+		Entity asteroid = factory.createAsteroid(100,100);
+		Entity orb = factory.createOrb(200, 200);
 		map.addEntity(asteroid);
+		map.addEntity(orb);
 		map.addEntity(factory.createShip());
 		return map;
 	}

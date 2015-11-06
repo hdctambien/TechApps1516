@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 
 import spacegame.client.chat.ChatPanel;
@@ -75,8 +76,13 @@ public class DebuggerClient {
 			aggregator.addProtocol(update);
 			updaterThread = new Thread(updater);
 			
-			if(name.equals("ChatTester")){//Test the chat panel
-				javax.swing.SwingUtilities.invokeLater(new ChatGUIRunner(client,aggregator));
+			switch(name){
+				case "ChatTester"://Test the chat panel
+					SwingUtilities.invokeLater(new GUIRunner(client,aggregator,ChatPanel.GUI_CHAT));
+					break;
+				case "PanelTester":
+					SwingUtilities.invokeLater(new GUIRunner(client,aggregator,ChatPanel.GUI_COMMAND));
+					break;
 			}
 			
 			enterProtocolLoop(in, client, aggregator);			
@@ -154,27 +160,27 @@ public class DebuggerClient {
 	}
 	
 }
-class ChatGUIRunner implements Runnable{
+class GUIRunner implements Runnable{
 	
 	private Client client;
 	private ProtocolAggregator aggregator;
+	private volatile int guiType;
 	
-	public ChatGUIRunner(Client c, ProtocolAggregator pa){
+	public GUIRunner(Client c, ProtocolAggregator pa, int type){
 		client = c;
 		aggregator = pa;
+		guiType = type;
 	}
 	
 	public void run(){
 		JFrame frame = new JFrame("ChatTest");
 		frame.setSize(700, 400);
-		ChatPanel chat = new ChatPanel(600,350);
+		ChatPanel chat = new ChatPanel(600,350,guiType);
 		frame.add(chat,BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		ChatProtocol protocol = new ChatProtocol(client,chat);
+		ChatProtocol protocol = new ChatProtocol(client,chat,guiType);
 		chat.addChatListener(protocol);
 		aggregator.addProtocol(protocol);
-		
-	}
-	
+	}	
 }
