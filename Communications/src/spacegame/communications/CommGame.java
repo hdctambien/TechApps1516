@@ -53,7 +53,7 @@ public class CommGame implements Runnable
 			protocolThread.start();
 			
 			c.sendMessage("set name " + name);
-			c.sendMessage("set job GroundControl");
+			c.sendMessage("set job Communications");
 			c.sendMessage("set ship " + name);
 			
 			c.sendMessage("get map");
@@ -91,7 +91,7 @@ public class CommGame implements Runnable
         
         gui = new CommGUI(this, this.client, clientUpdater);
         Thread guiThread = new Thread(gui);
-        guiThread.start();
+       guiThread.start();
         gameLogic();
 
     }

@@ -7,12 +7,6 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 import mapgui.MapComponent;
-
-import java.awt.Graphics;
-
-
-
-
 import spacegame.client.*;
 import spacegame.gui.*;
 import spacegame.map.GameMap;
@@ -30,8 +24,11 @@ public class CommGUI extends JPanel implements Runnable {
     private HeadingDial headingDial = new HeadingDial();
     public Container contentPane;
     
-    private JPanel windowPanel = new JPanel(new BorderLayout());
+   // private JPanel windowPanel = new JPanel(new BorderLayout());
     private JPanel dataPanel = new JPanel(new BorderLayout());
+    
+    private JPanel windowPanel = new JPanel(new BorderLayout());
+    
     
     GameMap map = new GameMap();
 	private GameMap renderMap;
@@ -47,25 +44,31 @@ public class CommGUI extends JPanel implements Runnable {
     	this.client=c;
 		mapPanel = new mapgui.MapViewPanel(renderMap, name);
 		windowFrame = new JFrame();
-    	
-    	windowFrame.setVisible(true);
-    	windowFrame.setSize(new Dimension(1600,900));
-        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+		
+		windowPanel.setVisible(true);
+
     	//chat panel stuff
        
         headingDial.setRadius(100);
-        dataPanel.add(headingDial, BorderLayout.CENTER);
+        dataPanel.add(headingDial, BorderLayout.CENTER);        
+       
+        windowPanel.add(mapPanel,BorderLayout.CENTER);
+        windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
-        contentPane = windowFrame.getContentPane();
-        
-        contentPane.add(mapPanel,BorderLayout.CENTER);
-        contentPane.add(windowPanel, BorderLayout.CENTER);
-        contentPane.add(dataPanel, BorderLayout.SOUTH);
-        contentPane.addMouseListener(mouse);
+// 		  contentPane = windowFrame.getContentPane();      
+//        contentPane.add(windowPanel, BorderLayout.CENTER);
+//        contentPane.add(dataPanel, BorderLayout.SOUTH);
+//        contentPane.addMouseListener(mouse);
         
         
-       // windowFrame.pack();
+        
+        
+        windowFrame.add(windowPanel, BorderLayout.CENTER);
+        windowFrame.addMouseListener(mouse);
+        windowFrame.setSize(new Dimension(1600,900));
+    	windowFrame.setVisible(true);
+        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        windowFrame.pack();
       
 }		
     private boolean mouseClick = false;
