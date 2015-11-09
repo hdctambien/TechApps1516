@@ -1,5 +1,7 @@
 package spacegame.map;
 
+import java.util.Random;
+
 import spacegame.map.components.*;
 
 public class EntityFactory {
@@ -18,9 +20,11 @@ public class EntityFactory {
 	public static final String LIST_REF_HEADER = "Listref"; //for MultipleReferenceComponent
 	
 	private int ufid = 0;
+	private Random rng;
 	
 	public EntityFactory(){
 		//Wow! What a capital investment! You now have a factory that creates entities!
+		rng = new Random();
 	}
 	
 	public Entity createShip(){
@@ -35,15 +39,36 @@ public class EntityFactory {
 		return ship;
 	}
 	
-	public Entity createAsteroid(){
+	public Entity createAsteroid(double x, double y){
 		Entity asteroid = createEntity("Asteroid");
-		asteroid.addComponent(POSITION, new PositionComponent());
+		PositionComponent pos = new PositionComponent();
+		pos.setDouble("posX", x);
+		pos.setDouble("posY", y);
+		asteroid.addComponent(POSITION, pos);
 		asteroid.addComponent(HEADING, new HeadingComponent());
-		asteroid.addComponent(PHYSICS,new PhysicsComponent());
+		PhysicsComponent physics = new PhysicsComponent();
+		physics.setDouble("veloctiyX", rng.nextInt(200)-100);
+		physics.setDouble("veloctiyY", rng.nextInt(200)-100);
+		asteroid.addComponent(PHYSICS,physics);
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
 		return asteroid;
 	}
+	
+	public Entity createAsteroid(){
+		return createAsteroid(0,0);
+	}
+	
+	public Entity createOrb(double x, double y){
+		Entity orb = createEntity("Orb");
+		PositionComponent pos = new PositionComponent();
+		pos.setDouble("posX", x);
+		pos.setDouble("posY", y);
+		orb.addComponent(POSITION, pos);
+		orb.addComponent(RENDER, new RenderComponent("Orb.png"));
+		return orb;
+	}
+	
 	
 	public Entity[] createEntityReferenceSerialTest(){
 		Entity test = createEntity("SerialTest");

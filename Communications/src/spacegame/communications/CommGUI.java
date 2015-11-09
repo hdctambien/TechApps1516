@@ -6,6 +6,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
+import mapgui.MapComponent;
+
 import java.awt.Graphics;
 
 
@@ -14,14 +16,14 @@ import java.awt.Graphics;
 import spacegame.client.*;
 import spacegame.gui.*;
 import spacegame.map.GameMap;
-import src.mapgui.*;
-import src.mapgui.MapComponent;
+import mapgui.*;
+
 
 public class CommGUI extends JPanel implements Runnable {
 
-
-    protected JButton button;
-    private static CommGame game;
+	
+	private String name = "Communications";
+    private static CommGame commGame;
     private static Client client;
    
     public JFrame windowFrame;
@@ -30,49 +32,42 @@ public class CommGUI extends JPanel implements Runnable {
     
     private JPanel windowPanel = new JPanel(new BorderLayout());
     private JPanel dataPanel = new JPanel(new BorderLayout());
+    
+    GameMap map = new GameMap();
+	private GameMap renderMap;
+	private MapViewPanel mapPanel;
+	
 
-    public CommGUI(CommGame game, Client c, MapComponent map){
-        
+    
+    public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater){
+        	
+    	map = clientUpdater.getMap();
+    	renderMap = clientUpdater.getRenderMap();
+    	this.commGame=game;
+    	this.client=c;
+		mapPanel = new mapgui.MapViewPanel(renderMap, name);
+		windowFrame = new JFrame();
+    	
     	windowFrame.setVisible(true);
     	windowFrame.setSize(new Dimension(1600,900));
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-    	
-    	this.game=game;
-        client=c;
-
-        windowFrame = new JFrame();
-        this.client = c;
-
-
-
+    	//chat panel stuff
        
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);
         
-       // windowPanel.setSize(map.size());
-        windowPanel.add(map,BorderLayout.CENTER);           
-
-        
         contentPane = windowFrame.getContentPane();
+        
+        contentPane.add(mapPanel,BorderLayout.CENTER);
         contentPane.add(windowPanel, BorderLayout.CENTER);
-        contentPane.add(dataPanel, BorderLayout.EAST);
-        
-        
-//        contentPane.add(buttonPane, BorderLayout.PAGE_END);
+        contentPane.add(dataPanel, BorderLayout.SOUTH);
         contentPane.addMouseListener(mouse);
         
         
-        
-        
-     
-        windowFrame.pack();
-     
-   
+       // windowFrame.pack();
       
 }		
-    
-    
     private boolean mouseClick = false;
 	private MouseAdapter mouse = new MouseAdapter()
     {
@@ -90,6 +85,7 @@ public class CommGUI extends JPanel implements Runnable {
     
     public void run()
     {
+    //	headingDial.setHeading(map.getHeading());
     	System.out.println("game running1");
     	for(double i=0;true;)
     	{
@@ -101,10 +97,9 @@ public class CommGUI extends JPanel implements Runnable {
     			System.out.println("test");
             	headingDial.setHeading(i);
             	windowFrame.repaint();
-            	
     		}
     		
-    	//	windowFrame.repaint();
+    	
     	}
     	
     }

@@ -76,7 +76,7 @@ public class HeadingDial extends JComponent {
 		g2.setColor(lineColor);
 		int offset = radius + padding;
 		int x = offset+(int)Math.round(radius * Math.cos(heading));
-		int y = offset-(int)Math.round(radius * Math.sin(heading));
+		int y = offset+(int)Math.round(radius * Math.sin(heading));
 		g2.drawLine(offset, radius+padding, x, y);
 	}
 }

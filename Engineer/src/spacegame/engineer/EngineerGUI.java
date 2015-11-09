@@ -37,19 +37,16 @@ public class EngineerGUI extends Thread
 	private Graphics r;
 	private Image water;
 	private Image waterScale;
+	private Image rod;
+	private Image rodScale;
 	
-	private JSlider throttle;
+	private JPanel rodPan;
+	private JSlider rodOne, rodTwo, rodThree, rodFour;
+	private int rodO = 100, rodTw = 100, rodTh = 100, rodF = 100;
 	
 	private int power = 100;
-	private int pC = 25;
-	private int pS = 25;
-	private int pF = 25;
-	private int pG = 25;
-	public JSlider pFuel;
-	public JSlider pComms;
-	public JSlider pShield;
-	public JSlider pGuns;
-	public JSlider pReserve;
+	private int pC = 25, pS = 25, pF = 25, pG = 25;
+	public JSlider pFuel, pComms, pShield, pGuns;
 	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
 	
 	private ProtocolAggregator aggregator;
@@ -95,8 +92,6 @@ public class EngineerGUI extends Thread
 		frame = new JFrame("Engineer");
 		panel = new JPanel();
 		powerPanel = new JPanel();
-		bag = new GridBagLayout();
-		bagC = new GridBagConstraints();
 		
 		chatCreate(pa);		
 		powerCreate();
@@ -120,7 +115,6 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
-		
 		Reactor();
 	}
 	
@@ -244,7 +238,7 @@ public class EngineerGUI extends Thread
 		powerPanel.add(powerBG2);
 		powerPanel.add(powerBG);
 		
-		powerPanel.setPreferredSize(new Dimension(275, 210));
+		powerPanel.setPreferredSize(new Dimension(250, 210));
 		
 		fuel   = new JLabel("Fuel");
 		comms  = new JLabel("Comms");
@@ -258,7 +252,53 @@ public class EngineerGUI extends Thread
 	public void Reactor()
 	{
 		water = (Image)imgLoad.getImage("Water.png");
-		waterScale = water.getScaledInstance(1200, 500, Image.SCALE_SMOOTH);		
+		waterScale = water.getScaledInstance(1200, 500, Image.SCALE_SMOOTH);
+		
+		rodPan = new JPanel(new GridLayout(1, 4));
+		rodPan.setPreferredSize(new Dimension(200, 150));
+		
+		rod = (Image)imgLoad.getImage("Rod.png");
+		rodScale = rod.getScaledInstance(15, 200, Image.SCALE_SMOOTH);
+		
+		rodOne = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodOne.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					rodO = ((JSlider) e.getSource()).getValue();
+					reactor.repaint();
+				}					
+			});
+		
+		rodTwo = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodTwo.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					rodTw = ((JSlider) e.getSource()).getValue();
+					reactor.repaint();
+				}					
+			});
+		
+		rodThree = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodThree.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					rodTh = ((JSlider) e.getSource()).getValue();
+					reactor.repaint();
+				}					
+			});
+		
+	/*	rodFour = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodFour.addChangeListener(new ChangeListener()
+			{
+				public void stateChanged(ChangeEvent e)
+				{
+					rodF = ((JSlider) e.getSource()).getValue();
+					reactor.repaint();
+				}					
+			});*/
 		
 		reactor = new JPanel()
 		{
@@ -266,9 +306,19 @@ public class EngineerGUI extends Thread
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(waterScale, 0, 0, null);
+                g.drawImage(rodScale, 25, -rodO, null);
+                g.drawImage(rodScale, 125, -rodTw, null);
+            //    g.drawImage(rodScale, 225, -rodTh, null);
+            //    g.drawImage(rodScale, 325, -rodF, null);
             }
         };
-		reactor.setPreferredSize(new Dimension(150, 150));
+		reactor.setPreferredSize(new Dimension(500, 150));
+		rodPan.add(rodOne);
+		rodPan.add(rodTwo);
+	//	rodPan.add(rodThree);
+	//	rodPan.add(rodFour);
+		
+		panel.add(rodPan);
 		panel.add(reactor);
 		reactor.setVisible(true);
 	}
