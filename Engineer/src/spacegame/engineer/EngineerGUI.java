@@ -9,7 +9,6 @@ import spacegame.client.Client;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
-import spacegame.gui.HeadingDial;
 import spacegame.map.GameMap;
 import spacegame.render.ImageLoader;
 

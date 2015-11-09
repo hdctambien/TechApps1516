@@ -35,6 +35,19 @@ public class Config {
 				throw new ConfigParseException("Config Header formatted incorrectly!");
 			}else if(!firstpieces[1].equals(VERSION)){
 				throw new ConfigParseException("Config file version ("+firstpieces[1]+") is unsupported! Current version:"+VERSION);
+			}else{
+				String line;
+				int lcount = 1;
+				while((line=reader.readLine())!=null){
+					String[] pieces = line.split(":",2);
+					if(pieces.length<2){throw new ConfigParseException("Error in file line:"+lcount
+							+ "seperator ':' missing!");}
+					//int
+					//double
+					//String
+					
+				}
+				reader.close();
 			}
 			
 		} catch (FileNotFoundException e) {
