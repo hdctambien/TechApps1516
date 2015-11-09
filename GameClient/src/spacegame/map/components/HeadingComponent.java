@@ -27,13 +27,13 @@ public class HeadingComponent extends Component{
 
 	@Override
 	public boolean hasVariable(String varname) {
-		System.out.println("HeadingComponent.hasVariable("+varname+")");
+		//System.out.println("HeadingComponent.hasVariable("+varname+")");
 		return varname.equals("heading");
 	}
 
 	@Override
 	public String getVariable(String varname) {
-		System.out.println("HeadingComponent.getVariable("+varname+")");
+		//System.out.println("HeadingComponent.getVariable("+varname+")");
 		if(varname.equals("heading")){
 			return Double.toString(heading);
 		}else{
@@ -53,7 +53,7 @@ public class HeadingComponent extends Component{
 	}
 	
 	public boolean hasDouble(String varname){
-		System.out.println("HeadingComponent.hasDouble("+varname+")");
+		//System.out.println("HeadingComponent.hasDouble("+varname+")");
 		return varname.equals("heading");
 	}
 	
@@ -70,7 +70,7 @@ public class HeadingComponent extends Component{
 	}
 	
 	public boolean setDouble(String varname, double value){
-		System.out.println("HeadingComponent.setDouble("+varname+","+value+")");
+		//System.out.println("HeadingComponent.setDouble("+varname+","+value+")");
 		if(varname.equals("heading")){
 			heading = value;
 			return true;

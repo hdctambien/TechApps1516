@@ -16,12 +16,14 @@ public class GameState {
 	private ServerUpdater updater;
 	private Thread updaterThread;
 	private ArrayList<GameStateListener> listeners;
+	private EntityFactory factory;
 
 	@SuppressWarnings("unused")
 	private MapUpdateBroadcaster broadcaster;
 	
 	public GameState(){
-		map = createTestMap();
+		factory = new EntityFactory();
+		map = createMap();
 		broadcaster = new MapUpdateBroadcaster(map);
 		updater = new ServerUpdater(map);
 		updaterThread = new Thread(updater);
@@ -49,6 +51,10 @@ public class GameState {
 	}
 	public boolean removeGameStateListener(GameStateListener listener){
 		return listeners.remove(listener);
+	}
+	
+	public EntityFactory getFactory(){
+		return factory;
 	}
 	
 	public GameMap getMap(){
@@ -126,11 +132,18 @@ public class GameState {
 		return success;
 	}
 	
-	private static GameMap createTestMap(){
+	public ServerUpdater getUpdater(){
+		return updater;
+	}
+	
+	private GameMap createMap(){
 		GameMap map = new GameMap();
-		EntityFactory factory = new EntityFactory();
-		map.addEntity(factory.createAsteroid());
+		map.addEntity(factory.createOrb(200,200));
 		map.addEntity(factory.createShip());
+		map.addEntity(factory.createAsteroid(300,300));
+		map.addEntity(factory.createAsteroid(-300,-300));
+		map.addEntity(factory.createAsteroid(-300,300));
+		map.addEntity(factory.createAsteroid(300,-300));
 		return map;
 	} 
 }

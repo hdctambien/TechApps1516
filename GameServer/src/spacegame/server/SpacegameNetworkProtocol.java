@@ -61,6 +61,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "testSerial":
 					testSerial(info);
 					break;
+				case "asteroid":
+					doAsteroid(msg,words,info,r);
+					break;
 				case "OK":
 					//maybe I will want something here in the future...
 					break;
@@ -83,6 +86,23 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}
 	}
 
+	public void doAsteroid(String msg, String[] words, ClientInfo info, Request r){
+		if(words.length<3){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			try{
+				double x = Double.parseDouble(words[1]);
+				double y = Double.parseDouble(words[2]);
+				EntityFactory factory = gameState.getFactory();
+				Entity asteroid = factory.createAsteroid(x,y);
+				gameState.getUpdater().addEntity(asteroid);
+				r.reply("OK");
+			}catch(NumberFormatException e){
+				r.reply("ERR "+ERR_PARSE_VAL);
+			}
+		}
+	}
+	
 	public void doGet(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
 			r.reply("ERR "+ERR_CMD_FORMAT);
