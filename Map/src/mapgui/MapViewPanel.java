@@ -62,7 +62,7 @@ public class MapViewPanel extends JPanel
 				PositionComponent pos = (PositionComponent)e.getComponent(EntityFactory.POSITION);
 				x = (int)Math.round(pos.getDouble("posX"))-sx+cx;
 				y = (int)Math.round(pos.getDouble("posY"))-sy+cy;
-				if(x>0&&y>0&&x<getWidth()&&y<getHeight())
+				if(x>(0-image.getWidth())&&y>(0-image.getHeight())&&x<getWidth()&&y<getHeight())
 				{
 					if(e.hasComponent(EntityFactory.HEADING))
 					{
