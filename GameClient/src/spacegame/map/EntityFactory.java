@@ -47,8 +47,8 @@ public class EntityFactory {
 		asteroid.addComponent(POSITION, pos);
 		asteroid.addComponent(HEADING, new HeadingComponent());
 		PhysicsComponent physics = new PhysicsComponent();
-		physics.setDouble("veloctiyX", rng.nextInt(200)-100);
-		physics.setDouble("veloctiyY", rng.nextInt(200)-100);
+		physics.setDouble("velocityX", rng.nextInt(200)-100);
+		physics.setDouble("velocityY", rng.nextInt(200)-100);
 		asteroid.addComponent(PHYSICS,physics);
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
