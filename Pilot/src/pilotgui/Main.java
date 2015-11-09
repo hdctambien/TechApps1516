@@ -6,6 +6,6 @@ public class Main {
 	public static void main(String[] args)
 	{
 		GameMap game = new GameMap();
-		new PilotFrame();
+		new PilotFrame(game);
 	}
 }

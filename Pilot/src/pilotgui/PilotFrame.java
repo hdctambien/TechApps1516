@@ -29,8 +29,9 @@ public class PilotFrame{
 	public Chats chat;
 	public GameMap game;
 	public ChatPanel chatp;
-	public PilotFrame()
+	public PilotFrame(GameMap g)
 	{
+		game = g;
 		final PilotGuiClient pilot = new PilotGuiClient();
 		pilot.setup();
 		
@@ -103,7 +104,7 @@ public class PilotFrame{
 		
 		
 		
-		game = new GameMap();
+		
 	//	Entity positionEntity = game.getEntityByName("Position");
 	//	positionEntity.getComponent("PositionComponent");
 		
