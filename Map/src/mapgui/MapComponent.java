@@ -17,7 +17,7 @@ public class MapComponent extends JComponent {
 	private double heading = 0;
 	private int width = 50;
 	private int x = 200, y = 200;
-	public BufferedImage image;
+	
 
 	public MapComponent(){
 		
