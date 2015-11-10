@@ -49,10 +49,13 @@ public class PhysicsComponent extends Component
 	@Override
 	public void sync(Component c) 
 	{
-		c.setVariable("xVel", Double.toString(xVel));
-		c.setVariable("yVel", Double.toString(yVel));
-		c.setVariable("xAcc", Double.toString(xAcc));
-		c.setVariable("yAcc", Double.toString(yAcc));
+		if(c instanceof PhysicsComponent){
+			PhysicsComponent physics = (PhysicsComponent)c;
+			physics.xVel = xVel;
+			physics.yVel = yVel;
+			physics.xAcc = xAcc;
+			physics.yAcc = yAcc;
+		}
 	}
 
 	@Override
@@ -110,6 +113,48 @@ public class PhysicsComponent extends Component
 		}
 	}
 
+	@Override
+	public boolean hasDouble(String varname) 
+	{
+		switch(varname)
+		{
+			case "velocityX":
+			case "velocityY":
+			case "xAcc":
+			case "yAcc":
+				return true;
+			default: return false;
+		}
+	}
+
+
+	@Override
+	public double getDouble(String varname) 
+	{
+		switch(varname)
+		{
+			case "velocityX": return xVel;
+			case "velocityY": return yVel;
+			case "xAcc": return xAcc;
+			case "yAcc": return yAcc;
+			default: return Double.NaN;
+		}
+	}
+
+
+	@Override
+	public boolean setDouble(String varname, double value) 
+	{
+		switch(varname)
+		{
+			case "velocityX": xVel = (value); return true;
+			case "velocityY": yVel = (value); return true;
+			case "xAcc": xAcc = (value); return true;
+			case "yAcc": yAcc = (value); return true;
+			default: return false;
+		}
+	}
+	
 	@Override
 	public String serialize() {
 		return "velocityX:"+xVel+" velocityY:"+yVel+" xAcc:"+xAcc+" yAcc:"+yAcc;
