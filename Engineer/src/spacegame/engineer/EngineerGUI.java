@@ -183,7 +183,6 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					pG = ((JSlider) e.getSource()).getValue();
-					System.out.println(pG);
 					game.powerGuns(pG);
 				}					
 			});
@@ -250,6 +249,10 @@ public class EngineerGUI extends Thread
 	
 	public void Reactor()
 	{
+		t1 = new JPanel();
+		t1.setPreferredSize(new Dimension(1200, 200));
+		frame.add(t1, BorderLayout.NORTH);
+		
 		water = (Image)imgLoad.getImage("Water.png");
 		waterScale = water.getScaledInstance(1200, 500, Image.SCALE_SMOOTH);
 		
@@ -265,6 +268,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodO = ((JSlider) e.getSource()).getValue();
+					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
 					reactor.repaint();
 				}					
 			});
@@ -275,6 +279,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTw = ((JSlider) e.getSource()).getValue();
+					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
 					reactor.repaint();
 				}					
 			});
@@ -285,6 +290,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTh = ((JSlider) e.getSource()).getValue();
+					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
 					reactor.repaint();
 				}					
 			});
@@ -295,6 +301,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodF = ((JSlider) e.getSource()).getValue();
+					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
 					reactor.repaint();
 				}					
 			});
@@ -304,11 +311,13 @@ public class EngineerGUI extends Thread
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                g.drawRect(0, 0, 1200, 800);
                 g.drawImage(waterScale, 0, 0, null);
-                g.drawImage(rodScale, 25, -rodO - 5, null);
-                g.drawImage(rodScale, 125, -rodTw - 5, null);
-                g.drawImage(rodScale, 225, -rodTh - 5, null);
-                g.drawImage(rodScale, 325, -rodF - 5, null);
+                g.drawImage(rodScale, 50, -rodO - 5, null);
+                g.drawImage(rodScale, 150, -rodTw - 5, null);
+                g.drawImage(rodScale, 250, -rodTh - 5, null);
+                g.drawImage(rodScale, 350, -rodF - 5, null);
+                g.drawString("Max Power = " + (200 - (Math.floor(rodO/4) + Math.floor(rodTw/4) + Math.floor(rodTh/4) + Math.floor(rodF/4))), 50, 50);
             }
         };
 		reactor.setPreferredSize(new Dimension(500, 150));
@@ -317,6 +326,7 @@ public class EngineerGUI extends Thread
 		rodPan.add(rodThree);
 		rodPan.add(rodFour);
 		
+		rodPan.setPreferredSize(new Dimension(300, 150));
 		frame.add(rodPan, BorderLayout.EAST);
 		panel.add(reactor);
 		reactor.setVisible(true);
