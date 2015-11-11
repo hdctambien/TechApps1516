@@ -289,7 +289,7 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-	/*	rodFour = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodFour = new JSlider(JSlider.VERTICAL, 0, 100, 100);
 		rodFour.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -297,7 +297,7 @@ public class EngineerGUI extends Thread
 					rodF = ((JSlider) e.getSource()).getValue();
 					reactor.repaint();
 				}					
-			});*/
+			});
 		
 		reactor = new JPanel()
 		{
@@ -305,19 +305,19 @@ public class EngineerGUI extends Thread
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(waterScale, 0, 0, null);
-                g.drawImage(rodScale, 25, -rodO, null);
-                g.drawImage(rodScale, 125, -rodTw, null);
-            //    g.drawImage(rodScale, 225, -rodTh, null);
-            //    g.drawImage(rodScale, 325, -rodF, null);
+                g.drawImage(rodScale, 25, -rodO - 5, null);
+                g.drawImage(rodScale, 125, -rodTw - 5, null);
+                g.drawImage(rodScale, 225, -rodTh - 5, null);
+                g.drawImage(rodScale, 325, -rodF - 5, null);
             }
         };
 		reactor.setPreferredSize(new Dimension(500, 150));
 		rodPan.add(rodOne);
 		rodPan.add(rodTwo);
-	//	rodPan.add(rodThree);
-	//	rodPan.add(rodFour);
+		rodPan.add(rodThree);
+		rodPan.add(rodFour);
 		
-		panel.add(rodPan);
+		frame.add(rodPan, BorderLayout.EAST);
 		panel.add(reactor);
 		reactor.setVisible(true);
 	}
