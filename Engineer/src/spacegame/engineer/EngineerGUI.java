@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import mapgui.MapViewPanel;
 import spacegame.client.Client;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
@@ -57,6 +58,9 @@ public class EngineerGUI extends Thread
 	private JLabel guns;
 	private JLabel powerL;
 	private JLabel reserve;
+	private JLabel rTempLabel;
+	
+	private MapViewPanel mVp;
 	
 	private JLabel thro;
 		
@@ -73,6 +77,10 @@ public class EngineerGUI extends Thread
 		this.map = m;
 		this.game = g;
 		this.client = eClient;
+		
+		rTempLabel = new JLabel("Temperature = " + this.game.getReacTemp());
+		
+		
 		
 		t1 = new JPanel();
 		t2 = new JPanel();
@@ -114,6 +122,11 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
+		
+		frame.add(rTempLabel, BorderLayout.CENTER);
+		//mVp = new MapViewPanel(m, "Ship.1");
+		//frame.add(mVp, BorderLayout.CENTER);
+		
 		Reactor();
 	}
 	
@@ -337,7 +350,7 @@ public class EngineerGUI extends Thread
 		running = true;
 		while(running)
 		{
-			
+			rTempLabel.setText("Temperature = " + this.game.getReacTemp());
 		}
 	}	
 }

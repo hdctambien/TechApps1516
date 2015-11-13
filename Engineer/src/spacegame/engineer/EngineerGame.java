@@ -11,12 +11,15 @@ public class EngineerGame implements Runnable
 	private boolean running = false;
 	Client eClient;
 	EngineerProtocol eProtocol;
-	String iaddress = "10.11.1.113";
+	String iaddress = "10.11.1.110";
 	int port = 8080;
 	private String SHIP_NAME = "Ship.1";
 	
 	private Thread protocolThread;
 	private Thread clientThread;
+	
+	private double rTemp = 0;
+	private double pTemp = 0;
 	
 	private ProtocolAggregator aggregator;
 	
@@ -73,6 +76,8 @@ public class EngineerGame implements Runnable
 		}
 		gui = new EngineerGUI(this, this.eClient, aggregator, map);
 		gui.start();
+		
+		run();
 	}
 	
 	public void Throttle(int throt)
@@ -211,8 +216,9 @@ public class EngineerGame implements Runnable
 	
 	public void power(int mP)
 	{
-		System.out.println(mP);
 		maxPower = 200 - mP;
+		reacTemp(mP);
+		powerDist(pSt, pFt, pCt, pGt, "mP", maxPower);
 		cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)maxPower), eClient);
 	}
 	
@@ -236,12 +242,29 @@ public class EngineerGame implements Runnable
 		powerDist(pSt, pFt, pCt, pGuns, "pG", maxPower);
 	}
 	
+	public void reacTemp(int mP)
+	{
+		pTemp = (double)mP;
+	}
+	
+	public double getReacTemp()
+	{
+		return rTemp;
+	}
+	
 	public void run()
 	{
 		running = true;
 		while(running)
 		{
-						
+			while(pTemp > 0)
+			{
+				if(rTemp >= 100)
+				{
+					this.gui.frame.setVisible(false);
+				}
+				rTemp += (.0000000001 * pTemp);
+			}	
 		}		
 	}
 }
