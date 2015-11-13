@@ -17,8 +17,8 @@ import spacegame.client.*;
 public class CommGame implements Runnable
 {
     Client client;
-    
-    String iaddress = "192.168.1.89";
+    String iaddress = "10.11.1.110";
+    //String iaddress = "192.168.1.89";
     int port = 8080;
 
     private Thread protocolThread;
