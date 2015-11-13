@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 import mapgui.MapComponent;
+import mapgui.MiniMapViewPanel;
 import spacegame.client.*;
 import spacegame.gui.*;
 import spacegame.map.GameMap;
@@ -34,7 +35,9 @@ public class CommGUI extends JPanel implements Runnable {
     GameMap map = new GameMap();
 	private GameMap renderMap;
 	private MapViewPanel mapPanel;
-	private MapViewPanel miniMap;
+	//private MiniMapViewPanel mapPanel;
+	
+	private MiniMapViewPanel miniMap;
 	
 
     
@@ -46,15 +49,17 @@ public class CommGUI extends JPanel implements Runnable {
     	renderMap = clientUpdater.getRenderMap();
     	this.commGame=game;
     	this.client=c;
-		mapPanel = new mapgui.MapViewPanel(renderMap, name);
-		miniMap = new mapgui.MapViewPanel(renderMap, name);
-		miniMap.setPreferredSize(new Dimension(50,50));
+    	//mapPanel = new mapgui.MiniMapViewPanel(renderMap, name);
+    	mapPanel = new mapgui.MapViewPanel(renderMap, name);
+	//	mapPanel.setSize(new Dimension(100,200));
+		miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
+	//	miniMap.setPreferredSize(new Dimension(10,10));
+		
+		
 		windowFrame = new JFrame();
 
-		miniMap.add(Box.createHorizontalGlue());
-		miniMap.add(Box.createVerticalGlue());
-		dataPanel.add(Box.createVerticalGlue());
-
+		
+		
 		
 	//	miniMap.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.X_AXIS));
@@ -63,7 +68,7 @@ public class CommGUI extends JPanel implements Runnable {
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
         dataPanel.add(miniMap, BorderLayout.EAST);//, BorderLayout.EAST);
-        
+        dataPanel.add(Box.createRigidArea(new Dimension(50,0)));
         
         windowPanel.add(mapPanel,BorderLayout.CENTER);
         windowPanel.add(dataPanel, BorderLayout.SOUTH);

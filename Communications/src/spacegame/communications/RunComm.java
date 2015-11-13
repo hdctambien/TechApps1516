@@ -14,7 +14,8 @@ public class RunComm
     private static CommGame game;
     public static void main(String[] args)
     {
-        String iAddress = "10.11.1.110";
+    	String iAddress = "192.168.1.65";
+    	//String iAddress = "10.11.1.110";
         int port = 8080;
         String name = "c1";
         boolean runGame = true;
