@@ -26,7 +26,7 @@ public class RunGroundControl
 		JFrame frame = new JFrame();
 		int option = 0;
 		
-		boolean testing = true;
+		boolean testing = false;
 		
 		
 		if(testing == false)
@@ -48,7 +48,7 @@ public class RunGroundControl
 				} catch (IOException e) {
 					temp = false;
 				}
-				good = temp;
+				good = temp; 
 				if(good = true)
 					JOptionPane.showMessageDialog(frame,"Connecting to "+iAddress + " on port " + port + " with name "+ name);
 				else

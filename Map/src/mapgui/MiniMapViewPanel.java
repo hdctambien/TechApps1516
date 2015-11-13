@@ -15,15 +15,16 @@ import spacegame.map.GameMap;
 import spacegame.map.components.PositionComponent;
 import spacegame.render.ImageLoader;
 
-public class MapViewPanel extends JPanel
+public class MiniMapViewPanel extends JPanel
 {
 	private GameMap map;
 	private BufferedImage shipIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
 	private ImageLoader loader;
+	private double scaleFactor = .5;
 	
-	public MapViewPanel(GameMap m, String shipname)
+	public MiniMapViewPanel(GameMap m, String shipname)
 	{
 		map = m;
 		SHIP_NAME = shipname;
@@ -40,10 +41,12 @@ public class MapViewPanel extends JPanel
 	public void paintComponent(Graphics G) 
 	{
 		Graphics2D g = (Graphics2D) G;
-		g.setBackground(Color.BLACK);
-		g.clearRect(0,0, getWidth(), getHeight());
+		g.setBackground(Color.BLUE);
+		g.clearRect(0,0, (int)(getWidth()*scaleFactor), (int)(getHeight()*scaleFactor));
 		at = new AffineTransform();
-		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
+		int cx = (int) ((int)(getWidth()/2 - shipIMG.getWidth() / 2)*scaleFactor), cy = (int) ((int) (getHeight()/2 - shipIMG.getHeight() / 2)*scaleFactor);
+		
+		at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
 		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
 		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
         at.rotate(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
@@ -62,11 +65,12 @@ public class MapViewPanel extends JPanel
 				PositionComponent pos = (PositionComponent)e.getComponent(EntityFactory.POSITION);
 				x = (int)Math.round(pos.getDouble("posX"))-sx+cx;
 				y = (int)Math.round(pos.getDouble("posY"))-sy+cy;
-				if(x>(0-image.getWidth())&&y>(0-image.getHeight())&&x<getWidth()&&y<getHeight())
+				if(x>0&&y>0&&x<getWidth()&&y<getHeight())
 				{
 					if(e.hasComponent(EntityFactory.HEADING))
 					{
 						AffineTransform transformer = new AffineTransform();
+					//	transformer=AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
 						transformer.translate(x,y);
 						transformer.translate(image.getWidth()/2, image.getHeight()/2);
 						transformer.rotate(e.getComponent("Heading").getDouble("heading"));
@@ -75,12 +79,17 @@ public class MapViewPanel extends JPanel
 					}
 					else
 					{
-						g.drawImage(image, x, y, null);
+						//g.drawImage(image, x, y, null);
+						g.drawImage(image, at, null);
+						
+
+					     
 					}
 				}
 				
 			}
 		}
+		
 		g.drawImage(shipIMG, at, null);
 	}
 	
