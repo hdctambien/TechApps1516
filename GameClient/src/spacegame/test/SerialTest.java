@@ -59,6 +59,17 @@ public class SerialTest {
 		assertTrue(map.equals(map));
 	}
 	
+	@Test
+	public void testNanoTimeEquals(){
+		GameMap map = createTestMap();
+		long nano = System.nanoTime();
+		map.setServerNano(nano);
+		GameMap map2 = new GameMap();
+		map2.unserialize(map.serialize());
+		assertTrue(map2.getServerNano()==map.getServerNano());
+		assertTrue(map2.getServerNano()==nano);		
+	}
+	
 	private GameMap createTestMap(){
 		GameMap map = new GameMap();
 		EntityFactory factory = new EntityFactory();

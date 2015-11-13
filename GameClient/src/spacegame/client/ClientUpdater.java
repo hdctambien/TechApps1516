@@ -7,6 +7,7 @@ import spacegame.map.Updater;
 public class ClientUpdater extends Updater {
 
 	private GameMap renderMap;
+	private ServerTime timekeeper;
 	private volatile boolean renderLock = false;
 	private volatile boolean dirty = false;
 	private volatile boolean drawDirty = true;
@@ -55,6 +56,11 @@ public class ClientUpdater extends Updater {
 	}	
 	
 	@Override
+	public void updateStarting(long initialNanoTime){//Set up Server-Client nanoTime conversion
+		timekeeper = new ServerTime(map.getServerNano(),initialNanoTime);
+	}
+	
+	@Override
 	public void afterUpdate() {//SYNC RENDER MAP
 		dirty = true;
 		{
@@ -67,6 +73,9 @@ public class ClientUpdater extends Updater {
 			}else{return;}
 		}		
 		if(scheduleIOPush){
+			//Fast-forward pushed IO map
+			ioPush.update(timekeeper.getTimeElapsed(ioPush.getServerNano()));
+			//Sync IO map to update map
 			ioPush.sync(getMap());
 			ioPush = null;
 			scheduleIOPush = false;

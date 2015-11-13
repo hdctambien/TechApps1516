@@ -13,6 +13,7 @@ public class GameMap implements ISerializable, EntityListener {
 	private volatile boolean locked = false;
 	private volatile boolean trackChanges = false;
 	private volatile boolean trackActions = false;
+	private volatile long serverNanoTime;
 	
 	public GameMap(){
 		entities = new ArrayList<Entity>();
@@ -102,6 +103,7 @@ public class GameMap implements ISerializable, EntityListener {
 	}
 	
 	public void sync(GameMap map){
+		map.serverNanoTime = serverNanoTime;
 		if(trackChanges){
 			while(!eventQueue.isEmpty()){
 				MapEvent event = eventQueue.poll();
@@ -140,6 +142,14 @@ public class GameMap implements ISerializable, EntityListener {
 		}
 	}
 	
+	public long getServerNano(){
+		return serverNanoTime;
+	}
+	
+	public void setServerNano(long nanoTime){
+		serverNanoTime = nanoTime;
+	}
+	
 	public GameMap clone(){
 		GameMap map = new GameMap();
 		for(Entity e: entities){
@@ -155,7 +165,9 @@ public class GameMap implements ISerializable, EntityListener {
 	public String serialize() {
 		StringBuilder serial = new StringBuilder();
 		serial.append("serial GameMap size=");
-		serial.append(entities.size());		
+		serial.append(entities.size());
+		serial.append(" nano=");
+		serial.append(serverNanoTime);
 		for(int i = 0; i < entities.size();i++){
 			serial.append("\n");
 			serial.append("$serial Entity ");
@@ -173,13 +185,23 @@ public class GameMap implements ISerializable, EntityListener {
 		try{
 			String[] entitiesSerial = serial.split("\n\\$");
 			String[] mapMeta = entitiesSerial[0].split(" ");
+			
 			//THIS IS A PRINTLN FOR MAP META USED IN DEBUGGING
-			//for(int i = 0; i < mapMeta.length;i++){System.out.println("mapMeta["+i+"]="+mapMeta[i]);}
+			//for(int i = 0; i < mapMeta.length;i++){System.out.println("mapMeta["+i+"] : "+mapMeta[i]);}
 			//mapMeta[0] : serial
 			//mapMeta[1] : GameMap
+			//mapMeta[2] : size={entities.size()}
+			//mapMeta[3] : nano={serverNanoTime}
+			//{variable/expression/method-invocation} = some number.
+			
+			//parse size
 			String[] sizeSerial = mapMeta[2].split("=");
 			int size = Integer.parseInt(sizeSerial[1]);
 			entities.ensureCapacity(size);
+			//parse serverNanoTime
+			String[] nanoSerial = mapMeta[3].split("=");
+			serverNanoTime = Long.parseLong(nanoSerial[1]);
+			
 			for(int i = 1; i<entitiesSerial.length;i++){
 				if(entitiesSerial[i].equals("serial END")){
 					break;

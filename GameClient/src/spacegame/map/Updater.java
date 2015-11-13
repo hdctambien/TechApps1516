@@ -34,12 +34,21 @@ public abstract class Updater implements Runnable {
 	public void run() {
 		done = false;
 		prevNanoTime = System.nanoTime();
+		updateStarting(prevNanoTime);
 		while(!done){
 			handleIO();
 			update();
 			afterUpdate();
 		}
 	}
+	
+	/**
+	 * This is an optional method for updaters that basically notifies subclasses it is starting the
+	 * update cycle and gives the initial 'nanoTime' that will be used to update. See ClientUpdater and
+	 * its implementation of updateStarting(long) for specific details of why this method is necessary	
+	 * @param initialNanoTime the initial nanoTime used as 'prevNanoTime' for the update cycle
+	 */
+	public void updateStarting(long initialNanoTime){}
 	
 	public abstract void afterUpdate();
 	
