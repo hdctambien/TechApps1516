@@ -10,7 +10,7 @@ public class ServerUpdater extends Updater {
 
 	private long lastNanoTime;
 	
-	public static final long MAP_PUSH_TIME = 30_000_000_000L; //30.000s = 30,000,000,000ns	
+	public static final long MAP_PUSH_TIME = 60_000_000_000L; //60.000s = 60,000,000,000ns	
 	
 	private LinkedBlockingQueue<Entity> additionQueue;
 	
@@ -33,6 +33,7 @@ public class ServerUpdater extends Updater {
 			lastNanoTime = nanoTime;
 			String message = "pushmap\n"+getMap().serialize()+"\nmappush";
 			broadcast(message);
+			forcePush = false;
 		}
 	}
 
