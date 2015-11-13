@@ -6,12 +6,14 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
 import spacegame.map.GameMap;
+import spacegame.map.components.PhysicsComponent;
 import spacegame.map.components.PositionComponent;
 import spacegame.render.ImageLoader;
 
@@ -22,9 +24,13 @@ public class MapViewPanel extends JPanel
 	private final String SHIP_NAME;
 	private AffineTransform at;
 	private ImageLoader loader;
+	private Random rand;
+	private Star[] starList;
 	
 	public MapViewPanel(GameMap m, String shipname)
 	{
+		starList = new Star[1000];
+		rand = new Random();
 		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
@@ -35,6 +41,11 @@ public class MapViewPanel extends JPanel
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
 		
+		for(int x = 0; x < starList.length; x++)
+		{
+			starList[x] = new Star(rand.nextInt(1600),rand.nextInt(900),2+rand.nextInt(5),new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255)));
+			System.out.println("Star " + (x+1));
+		}
 	}
 	
 	public void paintComponent(Graphics G) 
@@ -42,6 +53,16 @@ public class MapViewPanel extends JPanel
 		Graphics2D g = (Graphics2D) G;
 		g.setBackground(Color.BLACK);
 		g.clearRect(0,0, getWidth(), getHeight());
+		PhysicsComponent physShip = (PhysicsComponent)map.getEntityByName(SHIP_NAME).getComponent("Physics");
+		
+		int x, y;
+		for(Star s: starList)
+		{
+			g.setColor(s.color);
+			g.fillOval(s.x , s.y,s.rad,s.rad);
+			g.fillOval((int)Math.round(s.x + (physShip.getDouble("velocityX")/10)),(int)Math.round(s.y + (physShip.getDouble("velocityY")/10)), s.rad, s.rad);
+		}
+		
 		at = new AffineTransform();
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
 		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
@@ -51,11 +72,8 @@ public class MapViewPanel extends JPanel
         
         PositionComponent posShip = (PositionComponent)map.getEntityByName(SHIP_NAME).getComponent("Position");
         int sx = (int)Math.round(posShip.getDouble("posX")), sy = (int)Math.round(posShip.getDouble("posY"));
-        
-		
-		
 		BufferedImage image;
-		int x, y;
+		
 		for(Entity e: map.getEntities()){
 			if(e.hasComponent(EntityFactory.POSITION)&&e.hasComponent(EntityFactory.RENDER)&&!e.getName().equals(SHIP_NAME)){
 				image = loader.getImage(e.getComponent(EntityFactory.RENDER).getVariable("imagePath"));
@@ -77,11 +95,21 @@ public class MapViewPanel extends JPanel
 					{
 						g.drawImage(image, x, y, null);
 					}
-				}
-				
+				}				
 			}
 		}
 		g.drawImage(shipIMG, at, null);
+	}	
+}
+class Star
+{
+	public final int x,y,rad;
+	Color color;
+	public Star(int xPos, int yPos, int Radius, Color c)
+	{
+		x = xPos;
+		y = yPos;
+		rad = Radius;
+		color = c;
 	}
-	
 }

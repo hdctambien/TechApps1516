@@ -26,7 +26,7 @@ public class RunGroundControl
 		JFrame frame = new JFrame();
 		int option = 0;
 		
-		boolean testing = false;
+		boolean testing = true;
 		
 		
 		if(testing == false)
