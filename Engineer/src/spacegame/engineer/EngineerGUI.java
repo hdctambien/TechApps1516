@@ -42,7 +42,7 @@ public class EngineerGUI extends Thread
 	
 	private JPanel rodPan;
 	private JSlider rodOne, rodTwo, rodThree, rodFour;
-	private int rodO = 100, rodTw = 100, rodTh = 100, rodF = 100;
+	private int rodO = 0, rodTw = 0, rodTh = 0, rodF = 0;
 	
 	private int power = 100;
 	private int pC = 25, pS = 25, pF = 25, pG = 25;
@@ -61,6 +61,7 @@ public class EngineerGUI extends Thread
 	private JLabel rTempLabel;
 	
 	private MapViewPanel mVp;
+	private PowerPanelGUI pGui;
 	
 	private JLabel thro;
 		
@@ -100,16 +101,20 @@ public class EngineerGUI extends Thread
 		panel = new JPanel();
 		powerPanel = new JPanel();
 		
+		pGui = new PowerPanelGUI(this.map);
+		
 		chatCreate(pa);		
 		powerCreate();
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
 		panel.setLayout(new GridLayout(1, 4));
-		panel.add(powerPanel);
+		panel.add(pGui);
+		//panel.add(powerPanel);
 		panel.add(chat);
-		panel.setBackground(Color.WHITE);
 		frame.setBackground(Color.WHITE);
+		
+		pGui.setLayout(new GridLayout(1, 4));
 		
 		panel.setVisible(true);
 		frame.setSize(size);
@@ -124,8 +129,6 @@ public class EngineerGUI extends Thread
 		});
 		
 		frame.add(rTempLabel, BorderLayout.CENTER);
-		//mVp = new MapViewPanel(m, "Ship.1");
-		//frame.add(mVp, BorderLayout.CENTER);
 		
 		Reactor();
 	}
@@ -275,7 +278,7 @@ public class EngineerGUI extends Thread
 		rod = (Image)imgLoad.getImage("Rod.png");
 		rodScale = rod.getScaledInstance(15, 200, Image.SCALE_SMOOTH);
 		
-		rodOne = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodOne = new JSlider(JSlider.VERTICAL, 0, 100, 0);
 		rodOne.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -286,7 +289,7 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-		rodTwo = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodTwo = new JSlider(JSlider.VERTICAL, 0, 100, 0);
 		rodTwo.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -297,7 +300,7 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-		rodThree = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodThree = new JSlider(JSlider.VERTICAL, 0, 100, 0);
 		rodThree.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -308,7 +311,7 @@ public class EngineerGUI extends Thread
 				}					
 			});
 		
-		rodFour = new JSlider(JSlider.VERTICAL, 0, 100, 100);
+		rodFour = new JSlider(JSlider.VERTICAL, 0, 100, 0);
 		rodFour.addChangeListener(new ChangeListener()
 			{
 				public void stateChanged(ChangeEvent e)
@@ -330,7 +333,7 @@ public class EngineerGUI extends Thread
                 g.drawImage(rodScale, 150, -rodTw - 5, null);
                 g.drawImage(rodScale, 250, -rodTh - 5, null);
                 g.drawImage(rodScale, 350, -rodF - 5, null);
-                g.drawString("Max Power = " + (200 - (Math.floor(rodO/4) + Math.floor(rodTw/4) + Math.floor(rodTh/4) + Math.floor(rodF/4))), 50, 50);
+                g.drawString("Max Power = " + (100 + (Math.floor(rodO/4) + Math.floor(rodTw/4) + Math.floor(rodTh/4) + Math.floor(rodF/4))), 50, 50);
             }
         };
 		reactor.setPreferredSize(new Dimension(500, 150));

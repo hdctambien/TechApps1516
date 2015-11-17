@@ -216,7 +216,7 @@ public class EngineerGame implements Runnable
 	
 	public void power(int mP)
 	{
-		maxPower = 200 - mP;
+		maxPower = 100 + mP;
 		reacTemp(mP);
 		powerDist(pSt, pFt, pCt, pGt, "mP", maxPower);
 		cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)maxPower), eClient);
@@ -259,12 +259,20 @@ public class EngineerGame implements Runnable
 		{
 			while(pTemp > 0)
 			{
-				if(rTemp >= 100)
+				if(rTemp >= 150)
 				{
 					this.gui.frame.setVisible(false);
 				}
 				rTemp += (.0000000001 * pTemp);
-			}	
+			}
+			
+			while(pTemp == 0)
+			{
+				if(rTemp > 0)
+				{
+					rTemp -= rTemp*.00000001;
+				}				
+			}
 		}		
 	}
 }
