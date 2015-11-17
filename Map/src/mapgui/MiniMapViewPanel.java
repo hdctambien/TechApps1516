@@ -24,8 +24,8 @@ public class MiniMapViewPanel extends JPanel
 	private AffineTransform at;
 	private ImageLoader loader;
 	private double scaleFactor = .5;
-	int width;
-	int height;
+	//int width;
+	//int height;
 	
 	
 	public MiniMapViewPanel(GameMap m, String shipname)
@@ -41,38 +41,48 @@ public class MiniMapViewPanel extends JPanel
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
 	}
 	
-	
-	public void setSize(int size){
-		this.width=size;
-		this.height=size;
-		//setPreferredSize(new Dimension(width,height));
-		setSize(new Dimension(width, height));
-	}
+/*	@Override
+	public void setSize(Dimension d){
+		this.width=(int) d.getWidth();
+		this.height=(int) d.getHeight();
+		//setPreferredSize(d);
+		super.setSize(d);
+	}*/
 	
 	public void paintComponent(Graphics G) 
 	{
 		Graphics2D g = (Graphics2D) G;
-		
+		at = new AffineTransform();
 		at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
 		//g.setTransform(at);
-		g.setBackground(Color.BLUE);
-		g.clearRect(0,0, width, height);
+		g.setBackground(Color.BLACK);
+		//g.clearRect(0,0, width, height);
+		g.clearRect(0,0, getWidth(), getHeight());
+		g.setColor(new Color(30,138,49));//green XDD
+	
+		
+		for(int x=0;x<getWidth();x+=20)//gridlines
+			g.drawLine(x, 0, x, getHeight());
+		for(int y=0;y<getWidth();y+=20)
+			g.drawLine(0, y, getWidth(), y);
 		
 		
 		System.out.println("width: "+getWidth());
 		System.out.println("height: "+getHeight());
 		
 		
+		
+		
 		//g.clearRect(0,0, getWidth(), getHeight());
 		//g.clearRect(0,0, (int)(getWidth()*scaleFactor), (int)(getHeight()*scaleFactor));
 	
-		//
+
 		//int cx = (int) ((int)(getWidth()/2 - shipIMG.getWidth() / 2)*scaleFactor), cy = (int) ((int) (getHeight()/2 - shipIMG.getHeight() / 2)*scaleFactor);
-		int cx = width/2 - shipIMG.getWidth() / 2, cy = height/2 - shipIMG.getHeight() / 2;
+		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
 		
-		
-		at.translate(getWidth()/2 - shipIMG.getWidth() / 2 , getHeight()/2 - shipIMG.getHeight() / 2);
-		at.translate(shipIMG.getHeight() / 2 , shipIMG.getWidth() / 2);
+		//at.translate(cx , cy);
+		at.translate((getWidth()/2 - shipIMG.getWidth() / 2)/scaleFactor , (getHeight()/2 - shipIMG.getHeight() / 2)/scaleFactor);
+		at.translate((shipIMG.getHeight() / 2)/scaleFactor , (shipIMG.getWidth() / 2)/scaleFactor);
         at.rotate(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
         at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
         
@@ -80,7 +90,7 @@ public class MiniMapViewPanel extends JPanel
         int sx = (int)Math.round(posShip.getDouble("posX")), sy = (int)Math.round(posShip.getDouble("posY"));
         
 		
-      
+       
 		BufferedImage image;
 		int x, y;
 		for(Entity e: map.getEntities()){
@@ -89,7 +99,7 @@ public class MiniMapViewPanel extends JPanel
 				PositionComponent pos = (PositionComponent)e.getComponent(EntityFactory.POSITION);
 				x = (int)Math.round(pos.getDouble("posX"))-sx+cx;
 				y = (int)Math.round(pos.getDouble("posY"))-sy+cy;
-				if(x>0&&y>0&&x<getWidth()&&y<getHeight())
+				if(x>0 && y>0 && x<getWidth() && y<getHeight())
 				{
 					if(e.hasComponent(EntityFactory.HEADING))
 					{

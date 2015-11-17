@@ -60,12 +60,15 @@ public class MapViewPanel extends JPanel
 			rHeight = (int)Math.floor((4+rand.nextInt(10))/2);
 			backgroundStars[x] = new Star(rand.nextInt(1600),rand.nextInt(900),rHeight,rHeight,new Color(rInt,rInt,rand.nextInt(255),rand.nextInt(100)+154));
 		}
+		
 	}
 	
 	public void paintComponent(Graphics G) 
 	{
+		
 		Graphics2D g = (Graphics2D) G;
 		g.setBackground(Color.BLACK);
+		
 		g.clearRect(0,0, getWidth(), getHeight());
 		PhysicsComponent physShip = (PhysicsComponent)map.getEntityByName(SHIP_NAME).getComponent("Physics");
 		PositionComponent posShip = (PositionComponent)map.getEntityByName(SHIP_NAME).getComponent("Position");

@@ -53,10 +53,9 @@ public class CommGUI extends JPanel implements Runnable {
     	//mapPanel = new mapgui.MiniMapViewPanel(renderMap, name);
     	mapPanel = new mapgui.MapViewPanel(renderMap, name);
 	//	mapPanel.setSize(new Dimension(100,200));
-		miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
-		miniMap.setSize(300);//SQUARE
+	
 		
-		
+    	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
 		
 		windowFrame = new JFrame();
 
@@ -69,12 +68,15 @@ public class CommGUI extends JPanel implements Runnable {
        
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
-        dataPanel.add(miniMap, BorderLayout.EAST);//, BorderLayout.EAST);
-        dataPanel.add(Box.createRigidArea(new Dimension(50,0)));
+        dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
+        dataPanel.add(Box.createRigidArea(new Dimension(36,0)));
+        
+    
+		
         
       
-        
-        windowPanel.add(mapPanel,BorderLayout.CENTER);
+        dataPanel.setPreferredSize(new Dimension(1600,250));
+        windowPanel.add(miniMap,BorderLayout.CENTER);
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
