@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.IOException;
 import java.util.Random;
 
@@ -26,10 +29,12 @@ public class MapViewPanel extends JPanel
 	private ImageLoader loader;
 	private Random rand;
 	private Star[] starList;
+	private Star[] backgroundStars;
 	
 	public MapViewPanel(GameMap m, String shipname)
 	{
-		starList = new Star[1000];
+		starList = new Star[25];
+		backgroundStars = new Star[500];
 		rand = new Random();
 		map = m;
 		SHIP_NAME = shipname;
@@ -41,10 +46,19 @@ public class MapViewPanel extends JPanel
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
 		
+		int rInt = 0;
+		int rHeight = 0;
 		for(int x = 0; x < starList.length; x++)
 		{
-			starList[x] = new Star(rand.nextInt(1600),rand.nextInt(900),2+rand.nextInt(5),new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255)));
-			System.out.println("Star " + (x+1));
+			rInt = rand.nextInt(100)+154;
+			rHeight = (int)Math.floor((10+rand.nextInt(20))/2);
+			starList[x] = new Star(rand.nextInt(1600),rand.nextInt(900),rHeight*5,rHeight,new Color(rInt,rInt,rand.nextInt(255),rand.nextInt(100)+154));
+		}
+		for(int x = 0; x < backgroundStars.length; x++)
+		{
+			rInt = rand.nextInt(100)+154;
+			rHeight = (int)Math.floor((4+rand.nextInt(10))/2);
+			backgroundStars[x] = new Star(rand.nextInt(1600),rand.nextInt(900),rHeight,rHeight,new Color(rInt,rInt,rand.nextInt(255),rand.nextInt(100)+154));
 		}
 	}
 	
@@ -54,13 +68,18 @@ public class MapViewPanel extends JPanel
 		g.setBackground(Color.BLACK);
 		g.clearRect(0,0, getWidth(), getHeight());
 		PhysicsComponent physShip = (PhysicsComponent)map.getEntityByName(SHIP_NAME).getComponent("Physics");
+		PositionComponent posShip = (PositionComponent)map.getEntityByName(SHIP_NAME).getComponent("Position");
 		
 		int x, y;
+		double velocity = Math.sqrt(Math.abs(physShip.getDouble("velocityX")) + Math.abs(physShip.getDouble("velocityY")));
 		for(Star s: starList)
 		{
-			g.setColor(s.color);
-			g.fillOval(s.x , s.y,s.rad,s.rad);
-			g.fillOval((int)Math.round(s.x + (physShip.getDouble("velocityX")/10)),(int)Math.round(s.y + (physShip.getDouble("velocityY")/10)), s.rad, s.rad);
+			s.recalcStar(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")),velocity);
+			g.drawImage(s.image, s.at, null);
+		}
+		for(Star s: backgroundStars)
+		{
+			g.drawImage(s.image, s.x,s.y, null);
 		}
 		
 		at = new AffineTransform();
@@ -70,7 +89,7 @@ public class MapViewPanel extends JPanel
         at.rotate(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
         at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
         
-        PositionComponent posShip = (PositionComponent)map.getEntityByName(SHIP_NAME).getComponent("Position");
+
         int sx = (int)Math.round(posShip.getDouble("posX")), sy = (int)Math.round(posShip.getDouble("posY"));
 		BufferedImage image;
 		
@@ -103,13 +122,48 @@ public class MapViewPanel extends JPanel
 }
 class Star
 {
-	public final int x,y,rad;
+	public BufferedImage image;
+	public final int x,y,width,height;
 	Color color;
-	public Star(int xPos, int yPos, int Radius, Color c)
+	Graphics2D g;
+	AffineTransform at;
+	
+	private Kernel kernel = new Kernel(3, 3, new float[] { 1 / 9f, 1 / 9f, 1 / 9f,
+	        1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f });
+	private BufferedImageOp op = new ConvolveOp(kernel);
+	
+	public Star(int xPos, int yPos, int w, int h, Color c)
 	{
 		x = xPos;
 		y = yPos;
-		rad = Radius;
-		color = c;
+		width = w;
+		height = h;
+		color = c;;
+		recalcStar(0,0);
+	}
+	public void recalcStar(double heading, double velocity)
+	{
+		velocity = Math.abs(velocity);
+		image = new BufferedImage((int)(width/10*velocity)+height, height, BufferedImage.TYPE_4BYTE_ABGR_PRE);
+		g = image.createGraphics();
+		g.setColor(color);
+		g.fillOval(0, 0, height, height);		
+		if(velocity != 0)
+		{
+			g.fillPolygon(new int[]{Math.round(height/2),(int) (width*velocity),Math.round(height/2)}, new int[]{0,Math.round(height/2),height}, 3);
+		}
+		Kernel kernel = new Kernel(3, 3, new float[] { 1 / 9f, 1 / 9f, 1 / 9f,
+		        1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f });
+		BufferedImageOp op = new ConvolveOp(kernel);
+		image = op.filter(image, null);
+		if(heading != 0)
+		{
+			at = new AffineTransform();
+	        at.translate(x, y);
+			at.translate(height/2,height/2);
+	        at.rotate(heading);
+	        at.translate(-height/2,-height/2);
+		}
 	}
 }
+
