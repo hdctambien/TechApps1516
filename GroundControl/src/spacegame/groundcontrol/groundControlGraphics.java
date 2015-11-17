@@ -258,7 +258,7 @@ class groundControlGraphics extends Thread
 		{
 			if(right)
 			{
-				heading -= -0.05;
+				heading -= 0.05;
 			}
 			if(left)
 			{
@@ -297,11 +297,6 @@ class groundControlGraphics extends Thread
 			else
 			{
 				clientUpdater.setRenderLock(true); 
-				
-	//			mapPanel.setHeading(heading * 180 / Math.PI);
-	//			mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
-	//					(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
-				
 				throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
 				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));

@@ -16,9 +16,10 @@ import spacegame.map.GameMap;
 import mapgui.*;
 
 
+
 public class CommGUI extends JPanel implements Runnable {
 
-	
+	private double heading = 0;
 	private String name = "Ship.1";//has to be Ship.1
     private static CommGame commGame;
     private static Client client;
@@ -38,13 +39,13 @@ public class CommGUI extends JPanel implements Runnable {
 	//private MiniMapViewPanel mapPanel;
 	
 	private MiniMapViewPanel miniMap;
-	
+	ClientUpdater clientUpdater;
 
     
     public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater){
 
     	
-    	
+    	this.clientUpdater=clientUpdater;
     	map = clientUpdater.getMap();
     	renderMap = clientUpdater.getRenderMap();
     	this.commGame=game;
@@ -52,9 +53,9 @@ public class CommGUI extends JPanel implements Runnable {
     	//mapPanel = new mapgui.MiniMapViewPanel(renderMap, name);
     	mapPanel = new mapgui.MapViewPanel(renderMap, name);
 	//	mapPanel.setSize(new Dimension(100,200));
-		miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
-	//	miniMap.setPreferredSize(new Dimension(10,10));
+	
 		
+    	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
 		
 		windowFrame = new JFrame();
 
@@ -67,10 +68,15 @@ public class CommGUI extends JPanel implements Runnable {
        
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
-        dataPanel.add(miniMap, BorderLayout.EAST);//, BorderLayout.EAST);
-        dataPanel.add(Box.createRigidArea(new Dimension(50,0)));
+        dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
+        dataPanel.add(Box.createRigidArea(new Dimension(36,0)));
         
-        windowPanel.add(mapPanel,BorderLayout.CENTER);
+    
+		
+        
+      
+        dataPanel.setPreferredSize(new Dimension(1600,250));
+        windowPanel.add(miniMap,BorderLayout.CENTER);
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
@@ -106,23 +112,65 @@ public class CommGUI extends JPanel implements Runnable {
     };
     
     public void run()
-    {
-    //	headingDial.setHeading(map.getHeading());
-    	System.out.println("game running1");
-    	for(double i=0;true;)
-    	{
-    		System.out.println("game running2");
-    		if(mouseClick)
-    		{
-    		//	i+=.0001;
-    		//	headingDial.setRadius((int)i+1);
-    			System.out.println("test");
-            	headingDial.setHeading(i);
-            	windowFrame.repaint();
-    		}
-    		
-    	
-    	}
-    	
-    }
+	{
+		while(commGame.running)
+		{
+//			if(right)
+//			{
+//				heading -= -0.05;
+//			}
+//			if(left)
+//			{
+//				heading += 0.05;
+//			}
+//			
+//			if(right || left)
+//			{
+//				System.out.println(heading);
+//				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
+//			}
+//			
+//			if(move)
+//			{
+//				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) < 0.1)
+//					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(100), c);
+//			}
+//			else
+//			{
+//				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) > 99.9)
+//					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(0), c);
+//			}
+//				
+//			try
+//			{
+//				Thread.sleep(25);
+//			}
+//			catch(InterruptedException e)
+//			{
+//				e.printStackTrace();
+//			}
+			if(!(clientUpdater.isDirty() || clientUpdater.isRenderLocked()) && clientUpdater.isDrawDirty())
+			{
+				continue;
+			}
+			else
+			{
+				clientUpdater.setRenderLock(true); 
+				
+	//			mapPanel.setHeading(heading * 180 / Math.PI);
+	//			mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
+	//					(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+				
+		//		throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(name).getComponent("Fuel").getVariable("throttle")));
+				headingDial.setHeading(heading);
+//				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
+//				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
+//				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
+//				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
+				windowPanel.repaint();
+				clientUpdater.setRenderLock(false);
+				clientUpdater.setDrawDirty(false);
+			}
+		} 
+	}
 }
