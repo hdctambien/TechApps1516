@@ -79,6 +79,7 @@ public class ChatPanel extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	//	System.out.println("send message");
 		String text = chatField.getText();
 		if(guiType==GUI_COMMAND){
 			addChat("> "+text);
