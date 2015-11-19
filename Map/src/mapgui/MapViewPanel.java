@@ -133,6 +133,8 @@ class Star
 	Color color;
 	Graphics2D g;
 	AffineTransform at;
+	private double lastMillis;
+	private volatile double deltaMillis;
 	
 	private Kernel kernel = new Kernel(3, 3, new float[] { 1 / 9f, 1 / 9f, 1 / 9f,
 	        1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f });
@@ -147,6 +149,7 @@ class Star
 		moveCoef = 0;
 		color = c;;
 		redrawStar(0,0);
+		lastMillis = System.currentTimeMillis();
 	}
 	public void redrawStar(double xVel, double yVel)
 	{
@@ -171,8 +174,10 @@ class Star
         	y += 900;
         if(y > 900)
         	y -= 900;
-        x-=xVel/(height);
-		y-=yVel/(height);
+        deltaMillis = (System.currentTimeMillis() - lastMillis)/1000;
+        x-=(xVel*deltaMillis)/height;
+		y-=(yVel*deltaMillis)/height;
+		lastMillis = System.currentTimeMillis();
         at = new AffineTransform();
         at.translate(x, y);
 		at.translate(height/2,height/2);
@@ -189,8 +194,10 @@ class Star
         	y += 900;
         if(y > 900)
         	y -= 900;
-        x-=xVel/(height);
-		y-=yVel/(height);
+        deltaMillis = (System.currentTimeMillis() - lastMillis)/1000;
+        x-=(xVel*deltaMillis)/height;
+		y-=(yVel*deltaMillis)/height;
+		lastMillis = System.currentTimeMillis();
         at = new AffineTransform();
         at.translate(x, y);
 	}
