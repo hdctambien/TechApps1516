@@ -16,5 +16,11 @@ public class ConfigParseException extends IOException {
 	public ConfigParseException(String message){
 		super(message);
 	}
+	public ConfigParseException(Exception inner){
+		super(inner);
+	}
+	public ConfigParseException(String message, Exception inner){
+		super(message,inner);
+	}
 	
 }
