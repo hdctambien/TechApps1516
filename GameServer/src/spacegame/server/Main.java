@@ -60,5 +60,4 @@ public class Main {
 	public static Server getServer(){
 		return server;
 	}
-
 }

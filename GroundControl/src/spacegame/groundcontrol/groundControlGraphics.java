@@ -38,13 +38,13 @@ import spacegame.client.chat.*;
  * @author Justin Pierre
  */
 
-class groundControlGraphics extends Thread 
+class GroundControlGraphics extends Thread 
 {
 	private String SHIP_NAME;
 	JFrame windowFrame;    
     public JPanel windowPanel;
     private JPanel dataPanel;
-	private groundControlGame gcGame;
+	private GroundControlGame gcGame;
 	private GridBagLayout gridBag;
 	Client c;
 	private GameMap map;
@@ -83,7 +83,10 @@ class groundControlGraphics extends Thread
 	boolean left = false;
 	boolean move = false;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
+	private int frameCounter = 0;
+	private long lastNanoTime = 0;
+	
+	public GroundControlGraphics(GroundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
 	{		
 		headingDial = new HeadingDial();
 		SHIP_NAME = shipName;
@@ -254,6 +257,7 @@ class groundControlGraphics extends Thread
 	}
 	public void run()
 	{
+		lastNanoTime = System.nanoTime();
 		while(gcGame.running)
 		{
 			if(right)
@@ -270,7 +274,6 @@ class groundControlGraphics extends Thread
 				System.out.println(heading);
 				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
 			}
-			
 			if(move)
 			{
 				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) < 0.1)
@@ -281,12 +284,11 @@ class groundControlGraphics extends Thread
 				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) > 99.9)
 					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(0), c);
 			}
-				
 			try
 			{
-				Thread.sleep(25);
+				Thread.sleep(10);
 			}
-			catch(InterruptedException e)
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -306,6 +308,16 @@ class groundControlGraphics extends Thread
 				windowPanel.repaint();
 				clientUpdater.setRenderLock(false);
 				clientUpdater.setDrawDirty(false);
+			}
+			if((lastNanoTime + 1000000000) > System.nanoTime())
+			{
+				frameCounter++;
+			}
+			else
+			{
+				System.out.println("FPS: " + frameCounter);
+				lastNanoTime = System.nanoTime();
+				frameCounter = 0;
 			}
 		} 
 	}

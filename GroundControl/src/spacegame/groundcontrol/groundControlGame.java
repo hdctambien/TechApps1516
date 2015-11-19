@@ -21,14 +21,14 @@ import spacegame.map.GameMap;
  * 
  * @author Justin Pierre
  */
-public class groundControlGame implements Runnable
+public class GroundControlGame implements Runnable
 {
 	String iaddress = "192.168.1.21";//"10.11.1.110";
 	int port = 8080;
 	String name = "";
 	public final String SHIP_NAME = "Ship.1";
     boolean running = false;
-    private groundControlGraphics guiThread;
+    private GroundControlGraphics guiThread;
 	private boolean isRunning = false;
 	Client c;
 	private static Thread clientThread;
@@ -38,7 +38,7 @@ public class groundControlGame implements Runnable
 	private static GameMap map;
 	private static ClientUpdater clientUpdater;
 	
-	public groundControlGame(String iAddress, int port, String name)
+	public GroundControlGame(String iAddress, int port, String name)
 	{
 		this.name = name;
 		try {
@@ -86,7 +86,7 @@ public class groundControlGame implements Runnable
 	public void run() 
 	{
 		running = true;
-	    guiThread = new groundControlGraphics(this,c,SHIP_NAME,aggregator,clientUpdater);
+	    guiThread = new GroundControlGraphics(this,c,SHIP_NAME,aggregator,clientUpdater);
 	    guiThread.start();
 	    gameLogic();
 	}	
