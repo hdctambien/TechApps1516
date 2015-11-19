@@ -1,6 +1,7 @@
 package spacegame.client;
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.SwingUtilities;
@@ -11,6 +12,8 @@ import spacegame.client.chat.ChatProtocol;
 import spacegame.map.GameMap;
 import spacegame.map.MapEvent;
 import spacegame.test.ImageLoaderTest;
+import spacegame.util.Config;
+import spacegame.util.ConfigParseException;
 
 /**
  * This class is a launcher for a basic, command line, client that can be used to debug the server and protocol
@@ -24,9 +27,9 @@ public class DebuggerClient {
 	
 	public static final float VERSION = 1.2f;
 	
-	public static final String SHIP_NAME = "Ship.1";
+	public static String SHIP_NAME = "Ship.1";
 	
-	private static int PORT = 8080;//0xFACE;
+	private static int PORT;// = 8080;//0xFACE;
 	private static String ipaddress;
 	private static volatile boolean done;
 	private static Thread clientThread;
@@ -35,6 +38,14 @@ public class DebuggerClient {
 	private static ProtocolAggregator aggregator;
 	private static GameMap map;
 	private static ClientUpdater updater;
+	private static Config config;
+	private static String name;
+	
+	private static final String CONFIG_FILE_NAME = "client";//.config added by Config class
+	private static final String PROP_NAME = "name";
+	private static final String PROP_PORT = "port";
+	private static final String PROP_ADDRESS = "address";
+	//private static final String PROP_
 	
 	/**
 	 * This is the main method that launches the basic DebuggerClient. It creates a Client and a BasicProtocol,
@@ -44,14 +55,12 @@ public class DebuggerClient {
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Welcome to DebuggerClient!");
-		System.out.print("Please enter your name: ");
-		String name = in.nextLine();
+		loadConfig(in);
+
 		if(name.equals("IMG")){
 			ImageLoaderTest.main(args);
 			return;
 		}
-		System.out.print("Please enter server IP address: ");
-		ipaddress = in.nextLine();
 		try{
 			Client client = new Client(ipaddress, PORT);
 			BasicProtocol basic = new BasicProtocol(client);
@@ -91,6 +100,85 @@ public class DebuggerClient {
 		}
 		System.out.println("Now Exiting...");
 		in.nextLine();
+	}
+
+	private static void loadConfig(Scanner in) {
+		boolean defaulted=false;
+		System.out.println("Loading Config file 'client.config'...");
+		config = new Config(CONFIG_FILE_NAME);
+		try {
+			config.loadConfig();
+			printConfig();
+		} catch (ConfigParseException e1) {
+			//e1.printStackTrace();
+			System.out.println("An Error occured while reading the config file, the user will be"+
+			"prompted for all required input values");
+			defaulted = true;
+		}		
+		if(config.hasString(PROP_NAME)){
+			name = config.getString(PROP_NAME);
+		}else{
+			System.out.print("Please enter your name: ");
+			name = in.nextLine();
+			config.put(PROP_NAME,name);
+			defaulted = true;
+		}
+		if(config.hasString(PROP_ADDRESS)){
+			ipaddress = config.getString(PROP_ADDRESS);
+		}else{
+			System.out.print("Please enter server IP address: ");
+			ipaddress = in.nextLine();
+			config.put(PROP_ADDRESS,ipaddress);
+			defaulted = true;
+		}
+		if(config.hasInt(PROP_PORT)){
+			PORT = config.getInt(PROP_PORT);
+		}else{
+			System.out.print("Please enter server port (probably 8080): ");
+			PORT = in.nextInt();
+			in.nextLine();//push cursor down
+			config.put(PROP_PORT,PORT);
+			defaulted = true;
+		}
+		if(defaulted){
+			System.out.println("Thank you for your user input! These values will be saved into a"+
+		"config file called 'client.config' and loaded upon future startups of this client.");
+			try {
+				config.saveConfig();
+			} catch (IOException e) {
+				System.out.println("An Error occurred while trying to save the config file:");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void printConfig(){
+		System.out.println("ALL properties:");
+		for(Map.Entry<String, String> entry: config.getAll().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+	}
+	public static void printConfigStratified(){
+		System.out.println("STRING properties:");
+		for(Map.Entry<String, String> entry: config.getStrings().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("INT properties:");
+		for(Map.Entry<String, Integer> entry: config.getInts().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("DOUBLE properties:");
+		for(Map.Entry<String, Double> entry: config.getDoubles().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("BOOL properties:");
+		for(Map.Entry<String, Boolean> entry: config.getBools().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+	}
+	public static void printConfigDetailed(){
+		printConfig();
+		printConfigStratified();
 	}
 	
 	public static void constructMap(SerialProtocol serial, Client client){
@@ -157,6 +245,9 @@ public class DebuggerClient {
 			MapEvent event = new MapEvent(pieces[1],map.getIndexByName(pieces[1]),pieces[2],pieces[3]);
 			updater.addIOAction(event);
 		}
+	}
+	public static Config getConfig(){
+		return config;
 	}
 	
 }

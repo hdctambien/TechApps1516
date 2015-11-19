@@ -7,7 +7,8 @@ public class Config {
 
 	public static final String DEFAULT_PATH = "spacegame";
 	public static final String FILE_EXTENSION = ".config";
-	public static final String VERSION = "0.1";	
+	public static final String VERSION = "0.2";	
+	public static final String DELIMINATOR = "=";
 	
 	private Hashtable<String, String> stringVars;
 	private Hashtable<String, Integer> intVars;
@@ -59,9 +60,9 @@ public class Config {
 				String line;
 				int lcount = 1;
 				while((line=reader.readLine())!=null){
-					String[] pieces = line.split(":",2);
+					String[] pieces = line.split(DELIMINATOR,2);
 					if(pieces.length<2){throw new ConfigParseException("Error in file line:"+lcount
-							+ "seperator ':' missing!");}
+							+ "deliminator "+DELIMINATOR+" missing!");}
 					//Relying on some side effects of short-circuit evaluation
 					//Order of parse precedence: int, double, boolean, String
 					if(tryInt(pieces[0],pieces[1])||tryDouble(pieces[0],pieces[1])||tryBool(pieces[0],pieces[1])){}
@@ -77,6 +78,16 @@ public class Config {
 		} catch (IOException e) {
 			throw new ConfigParseException( "IO Error occured while reading!",e);
 		}
+	}
+	
+	public void saveConfig() throws IOException{
+		FileOutputStream out = new FileOutputStream(path);
+		PrintWriter writer = new PrintWriter(out);
+		writer.println("Config "+VERSION);
+		for(Map.Entry<String, String> entry: getAll().entrySet()){
+			writer.println(entry.getKey()+DELIMINATOR+entry.getValue());
+		}
+		writer.close();
 	}
 	
 	public String getString(String key){
