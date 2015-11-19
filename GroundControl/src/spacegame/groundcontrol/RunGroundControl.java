@@ -18,7 +18,7 @@ public class RunGroundControl
 	private static groundControlGame game;
 	public static void main(String[] args)
 	{
-		String iAddress = "192.168.0.2";
+		String iAddress = "10.11.1.110";
 		int port = 8080;
 		String name = "gc1";
 		boolean runGame = true;

@@ -23,7 +23,7 @@ import spacegame.map.GameMap;
  */
 public class groundControlGame implements Runnable
 {
-	String iaddress = "192.168.0.2";
+	String iaddress = "10.11.1.110";
 	int port = 8080;
 	String name = "";
 	public final String SHIP_NAME = "Ship.1";
