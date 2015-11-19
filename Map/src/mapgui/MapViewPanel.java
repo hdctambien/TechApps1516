@@ -31,9 +31,11 @@ public class MapViewPanel extends JPanel
 	private Star[] starList;
 	private Star[] backgroundStars;
 	
+	private final boolean DYNAMIC_STARS_ENABLED = false;
+	
 	public MapViewPanel(GameMap m, String shipname)
 	{
-		starList = new Star[0];
+		starList = new Star[250];
 		backgroundStars = new Star[5000];
 		rand = new Random();
 		map = m;
@@ -44,19 +46,23 @@ public class MapViewPanel extends JPanel
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));		
+		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
+		if(DYNAMIC_STARS_ENABLED)
+			starList = new Star[250];
+		
 		initStars();
 	}
 	public void initStars()
 	{
 		int rInt = 0;
 		int rHeight = 0;
-		for(int x = 0; x < starList.length; x++)
-		{
-			rInt = rand.nextInt(100)+154;
-			rHeight = (int)Math.floor((2+rand.nextInt(20))/2);
-			starList[x] = new Star(rand.nextInt(1600), rand.nextInt(900),rHeight*5,rHeight,new Color(rInt,rInt,rand.nextInt(255),rand.nextInt(100)));
-		}
+		if(DYNAMIC_STARS_ENABLED)
+			for(int x = 0; x < starList.length; x++)
+			{
+				rInt = rand.nextInt(100)+154;
+				rHeight = (int)Math.floor((2+rand.nextInt(20))/2);
+				starList[x] = new Star(rand.nextInt(1600), rand.nextInt(900),rHeight*5,rHeight,new Color(rInt,rInt,rand.nextInt(255),rand.nextInt(100)));
+			}
 		for(int x = 0; x < backgroundStars.length; x++)
 		{
 			rInt = rand.nextInt(100)+154;
@@ -74,11 +80,12 @@ public class MapViewPanel extends JPanel
 		PositionComponent posShip = (PositionComponent)map.getEntityByName(SHIP_NAME).getComponent("Position");
 		
 		int x, y;
-		for(Star s: starList)
-		{
-			s.redrawStar(physShip.getDouble("velocityX"),physShip.getDouble("velocityY"));
-			g.drawImage(s.image, s.at, null);
-		}
+		if(DYNAMIC_STARS_ENABLED)
+			for(Star s: starList)
+			{
+				s.redrawStar(physShip.getDouble("velocityX"),physShip.getDouble("velocityY"));
+				g.drawImage(s.image, s.at, null);
+			}
 		for(Star s: backgroundStars)
 		{
 			s.moveStar(physShip.getDouble("velocityX"),physShip.getDouble("velocityY"));
@@ -166,32 +173,19 @@ class Star
 	}
 	public void rotateStar(double xVel, double yVel)
 	{
-		if(x < 0)
-        	x += 1600;
-        if(x > 1600)
-        	x -= 1600;
-        if(y < 0)
-        	y += 900;
-        if(y > 900)
-        	y -= 900;
-        deltaMillis = (System.currentTimeMillis() - lastMillis)/1000;
-        x-=(xVel*deltaMillis)/height;
-		y-=(yVel*deltaMillis)/height;
-		lastMillis = System.currentTimeMillis();
-        at = new AffineTransform();
-        at.translate(x, y);
+		moveStar(xVel,yVel);
 		at.translate(height/2,height/2);
         at.rotate(Math.atan2(yVel,xVel)-Math.PI);
         at.translate(-height/2,-height/2);
 	}
 	public void moveStar(double xVel, double yVel)
 	{
-        if(x < 0)
-        	x += 1600;
+        if(x < -15)
+        	x += 1615;
         if(x > 1600)
         	x -= 1600;
-        if(y < 0)
-        	y += 900;
+        if(y < -15)
+        	y += 915;
         if(y > 900)
         	y -= 900;
         deltaMillis = (System.currentTimeMillis() - lastMillis)/1000;

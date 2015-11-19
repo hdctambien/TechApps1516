@@ -24,6 +24,7 @@ public class Config {
 		stringVars = new Hashtable<String, String>();
 		intVars = new Hashtable<String, Integer>();
 		doubleVars = new Hashtable<String, Double>();
+		boolVars = new Hashtable<String, Boolean>();
 	}
 	public Config(Hashtable<String, String> strings, Hashtable<String, Integer> ints,
 			Hashtable<String, Double> doubles, Hashtable<String, Boolean> bools){
@@ -44,7 +45,7 @@ public class Config {
 		boolVars = (Hashtable<String, Boolean>) bools.clone();		
 	}
 	
-	public void loadConfig(){
+	public void loadConfig() throws ConfigParseException{
 		try {
 			FileInputStream in = new FileInputStream(path);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -72,9 +73,9 @@ public class Config {
 			}
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw new ConfigParseException("File could not be opened!",e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new ConfigParseException( "IO Error occured while reading!",e);
 		}
 	}
 	
@@ -183,6 +184,32 @@ public class Config {
 			return false;
 		}
 		return true;
+	}
+	
+	public Hashtable<String,String> getStrings(){
+		return (Hashtable<String, String>) stringVars.clone();
+	}
+	public Hashtable<String, Integer> getInts(){
+		return (Hashtable<String, Integer>) intVars.clone();
+	}
+	public Hashtable<String, Double> getDoubles(){
+		return (Hashtable<String, Double>) doubleVars.clone();
+	}
+	public Hashtable<String, Boolean> getBools(){
+		return (Hashtable<String, Boolean>) boolVars.clone();
+	}
+	public Hashtable<String,String> getAll(){
+		Hashtable<String,String> allVars = (Hashtable<String, String>) stringVars.clone();
+		for(Map.Entry<String, Integer> entry: intVars.entrySet()){
+			allVars.put(entry.getKey(), entry.getValue().toString());
+		}
+		for(Map.Entry<String, Double> entry: doubleVars.entrySet()){
+			allVars.put(entry.getKey(), entry.getValue().toString());
+		}
+		for(Map.Entry<String, Boolean> entry: boolVars.entrySet()){
+			allVars.put(entry.getKey(), entry.getValue().toString());
+		}
+		return allVars;
 	}
 	
 }
