@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class RunGroundControl
 {
-	private static groundControlGame game;
+	private static GroundControlGame game;
 	public static void main(String[] args)
 	{
 		String iAddress = "10.11.1.110";
@@ -60,13 +60,13 @@ public class RunGroundControl
 			while(!good && option != 2);
 			if(runGame)
 			{
-				game = new groundControlGame(iAddress, port, name);
+				game = new GroundControlGame(iAddress, port, name);
 				game.run();
 			}
 		}
 		else
 		{ 
-			game = new groundControlGame(iAddress, port, name);
+			game = new GroundControlGame(iAddress, port, name);
 			game.run();
 		}
 	}

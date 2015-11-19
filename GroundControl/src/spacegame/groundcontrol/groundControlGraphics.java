@@ -38,13 +38,13 @@ import spacegame.client.chat.*;
  * @author Justin Pierre
  */
 
-class groundControlGraphics extends Thread 
+class GroundControlGraphics extends Thread 
 {
 	private String SHIP_NAME;
 	JFrame windowFrame;    
     public JPanel windowPanel;
     private JPanel dataPanel;
-	private groundControlGame gcGame;
+	private GroundControlGame gcGame;
 	private GridBagLayout gridBag;
 	Client c;
 	private GameMap map;
@@ -86,7 +86,7 @@ class groundControlGraphics extends Thread
 	private int frameCounter = 0;
 	private long lastNanoTime = 0;
 	
-	public groundControlGraphics(groundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
+	public GroundControlGraphics(GroundControlGame groundControlGame, final Client c, String shipName, ProtocolAggregator aggregator, ClientUpdater cU) 
 	{		
 		headingDial = new HeadingDial();
 		SHIP_NAME = shipName;
