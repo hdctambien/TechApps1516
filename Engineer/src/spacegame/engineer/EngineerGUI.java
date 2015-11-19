@@ -109,7 +109,8 @@ public class EngineerGUI extends Thread
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
 		panel.setLayout(new GridLayout(1, 4));
-		panel.add(pGui);
+		frame.add(pGui, BorderLayout.WEST);
+		//panel.add(pGui);
 		//panel.add(powerPanel);
 		panel.add(chat);
 		frame.setBackground(Color.WHITE);
@@ -128,7 +129,7 @@ public class EngineerGUI extends Thread
 			}
 		});
 		
-		frame.add(rTempLabel, BorderLayout.CENTER);
+		//frame.add(rTempLabel, BorderLayout.CENTER);
 		
 		Reactor();
 	}
