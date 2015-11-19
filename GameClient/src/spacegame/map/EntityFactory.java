@@ -15,6 +15,8 @@ public class EntityFactory {
 	public static final String SHIP_UPDATE = "ShipUpdate";
 	public static final String RENDER = "Render";
 	public static final String HEADING = "Heading";
+	public static final String MARK = "Mark";
+	
 	
 	public static final String REF_HEADER = "Ref"; //for EntityReferenceComponent
 	public static final String LIST_REF_HEADER = "Listref"; //for MultipleReferenceComponent
@@ -52,6 +54,7 @@ public class EntityFactory {
 		asteroid.addComponent(PHYSICS,physics);
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
+		asteroid.addComponent(MARK, new MarkerComponent());
 		return asteroid;
 	}
 	
