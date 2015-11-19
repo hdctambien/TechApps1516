@@ -67,6 +67,7 @@ public class PilotGuiClient {
 	
 	public static Client getClient()
 	{
+		System.out.println("Added Client");
 		return client;
 	}
 	public ProtocolAggregator getAggregator()
@@ -79,6 +80,7 @@ public class PilotGuiClient {
 	}
 	public void addProtocol(ChatProtocol p)
 	{
+		System.out.println("Added Chat Protocol");
 		aggregator.addProtocol(p);
 	}
 	public ProtocolAggregator getAgg()

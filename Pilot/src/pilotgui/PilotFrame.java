@@ -59,8 +59,9 @@ public class PilotFrame{
 		
 		obj1 = new JLabel();
 		
-		chat = new Chats();
+		
 		buttons = new JPanel();
+		
 		chatp = new ChatPanel(250,250);
 		ChatProtocol cProtocol = new ChatProtocol(pilot.getClient(),chatp);
 		chatp.addChatListener(cProtocol);
@@ -136,7 +137,6 @@ public class PilotFrame{
 		hd = new HeadingDial();
 		hd.setRadius(100);
 		mapView = new MapViewPanel(game,SHIP_NAME);
-		map = new MapComponent();
 		frame = new JFrame("Pilot");
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -147,11 +147,11 @@ public class PilotFrame{
 		JPanel utilities = new JPanel();
 		utilities.setLayout(new BoxLayout(utilities, BoxLayout.Y_AXIS));
 		utilities.add(hd);
-		utilities.add(chatp);
+	//	utilities.add(chatp);
 		utilities.add(fuel);
 		
 		frame.add(utilities,BorderLayout.EAST);
-	//	frame.add(chatp,BorderLayout.WEST);
+		frame.add(chatp,BorderLayout.WEST);
 	//	frame.add(hd,BorderLayout.EAST);
 		
 		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("LEFT"),ROTATE_LEFT);
@@ -167,6 +167,7 @@ public class PilotFrame{
 		obj1.getActionMap().put(THROTTLE_BACKWARD, new ThrottleAction("backward"));
 		
 		frame.add(obj1,BorderLayout.NORTH);
+		mapView.initStars();
 		run();
 		
 	}
@@ -174,6 +175,13 @@ public class PilotFrame{
 	{
 		while(true)
 		{
+		/*	try{
+				Thread.sleep(10);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}*/
 			hd.setHeading(-Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
 			mapRepaint();
 			frame.revalidate();
