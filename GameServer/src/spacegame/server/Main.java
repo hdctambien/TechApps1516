@@ -3,6 +3,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import spacegame.util.Config;
+
 /**
  * This is the Main class of the server in charge of running and setup. This class is the class that runs in the
  * GameServer.jar file. It also contains a version field for the version of the server's protocol.
@@ -59,5 +61,8 @@ public class Main {
 	
 	public static Server getServer(){
 		return server;
+	}
+	public static Config getConfig(){
+		return server.getConfig();
 	}
 }

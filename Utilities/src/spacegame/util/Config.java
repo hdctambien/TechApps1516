@@ -167,6 +167,13 @@ public class Config {
 				||stringVars.containsKey(key);
 	}
 	
+	public void parsePut(String key, String value){
+		if(tryInt(key,value)||tryDouble(key, value)||tryBool(key,value)){}
+		else{
+			stringVars.put(key, value);
+		}
+	}
+	
 	public boolean tryInt(String key, String value){
 		try{
 			int i = Integer.parseInt(value);
@@ -221,6 +228,45 @@ public class Config {
 			allVars.put(entry.getKey(), entry.getValue().toString());
 		}
 		return allVars;
+	}
+	
+	/**
+	 * Prints out all properties stored in this Config object
+	 */
+	public void printAll(){
+		System.out.println("ALL properties:");
+		for(Map.Entry<String, String> entry: getAll().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}		
+	}
+	/**
+	 * Prints out all properties stored in this Config object stratified (grouped) by their
+	 * type in the order: String, int, double, and then boolean.
+	 */
+	public void printStratified(){
+		System.out.println("STRING properties:");
+		for(Map.Entry<String, String> entry: getStrings().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("INT properties:");
+		for(Map.Entry<String, Integer> entry: getInts().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("DOUBLE properties:");
+		for(Map.Entry<String, Double> entry: getDoubles().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("BOOL properties:");
+		for(Map.Entry<String, Boolean> entry: getBools().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+	}
+	/**
+	 * A convenience method that calls printAll() and then printStratified()
+	 */
+	public void printDetailed(){
+		printAll();
+		printStratified();
 	}
 	
 }
