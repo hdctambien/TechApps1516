@@ -42,6 +42,10 @@ public class EntityFactory {
 	}
 	
 	public Entity createAsteroid(double x, double y){
+		return createAsteroid(x,y,rng.nextInt(200)-100,rng.nextInt(200)-100);
+	}
+	
+	public Entity createAsteroid(double x, double y, double vx, double vy){
 		Entity asteroid = createEntity("Asteroid");
 		PositionComponent pos = new PositionComponent();
 		pos.setDouble("posX", x);
@@ -49,17 +53,17 @@ public class EntityFactory {
 		asteroid.addComponent(POSITION, pos);
 		asteroid.addComponent(HEADING, new HeadingComponent());
 		PhysicsComponent physics = new PhysicsComponent();
-		physics.setDouble("velocityX", rng.nextInt(200)-100);
-		physics.setDouble("velocityY", rng.nextInt(200)-100);
+		physics.setDouble("velocityX", vx);
+		physics.setDouble("velocityY", vy);
 		asteroid.addComponent(PHYSICS,physics);
 		asteroid.addComponent(UPDATE, new AsteroidUpdateComponent());
 		asteroid.addComponent(RENDER, new RenderComponent("Asteroid.png"));
-		asteroid.addComponent(MARK, new MarkerComponent());
+		//asteroid.addComponent(MARK, new MarkerComponent());
 		return asteroid;
 	}
 	
 	public Entity createAsteroid(){
-		return createAsteroid(0,0);
+		return createAsteroid(rng.nextInt(20000)-10000,rng.nextInt(20000)-10000);
 	}
 	
 	public Entity createOrb(double x, double y){
