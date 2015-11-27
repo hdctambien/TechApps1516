@@ -7,8 +7,9 @@ public class Config {
 
 	public static final String DEFAULT_PATH = "spacegame";
 	public static final String FILE_EXTENSION = ".config";
-	public static final String VERSION = "0.2";	
+	public static final String VERSION = "0.3";	
 	public static final String DELIMINATOR = "=";
+	public static final String COMMENT = "#";
 	
 	private Hashtable<String, String> stringVars;
 	private Hashtable<String, Integer> intVars;
@@ -60,6 +61,10 @@ public class Config {
 				String line;
 				int lcount = 1;
 				while((line=reader.readLine())!=null){
+					if(line.startsWith(COMMENT)){
+						//its a comment, ignore this line
+						continue;
+					}
 					String[] pieces = line.split(DELIMINATOR,2);
 					if(pieces.length<2){throw new ConfigParseException("Error in file line:"+lcount
 							+ "deliminator "+DELIMINATOR+" missing!");}
@@ -68,7 +73,7 @@ public class Config {
 					if(tryInt(pieces[0],pieces[1])||tryDouble(pieces[0],pieces[1])||tryBool(pieces[0],pieces[1])){}
 					else{
 						stringVars.put(pieces[0],pieces[1]);
-					}					
+					}
 				}
 				reader.close();
 			}
