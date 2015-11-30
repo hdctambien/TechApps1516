@@ -16,6 +16,8 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.map.GameMap;
 
 public class PowerPanelGUI extends JPanel
@@ -25,6 +27,18 @@ public class PowerPanelGUI extends JPanel
 	EngineerGame game;
 	
 	int height, width, labelW;
+	
+	private double maxPower;
+	private double pSt = 25;
+	private double pGt = 25;
+	private double pFt = 25;
+	private double pCt = 25;
+	
+	ClientUpdater cUpdater;
+	
+	Client eClient;
+	
+	private final String SHIP_NAME;
 	
 	int pF, pC, pS, pG;
 	
@@ -36,11 +50,15 @@ public class PowerPanelGUI extends JPanel
 	
 	Border border;
 
-	public PowerPanelGUI(GameMap m, EngineerGame ga)
+	public PowerPanelGUI(GameMap m, ClientUpdater c, Client eC, String n)
 	{
-		map = m;
+		SHIP_NAME = n;
+				
+		map = m;		
 		
-		game = ga;
+		cUpdater = c;
+		
+		eClient = eC;
 		
 		labelW = (int) Math.floor(getWidth()/4);
 		
@@ -69,7 +87,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pC = ((JSlider) e.getSource()).getValue();
-					game.powerComms(pC);
+					powerComms(pC);
 				}					
 			});
 		
@@ -88,7 +106,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pS = ((JSlider) e.getSource()).getValue();
-					game.powerShield(pS);
+					powerShield(pS);
 				}					
 			});
 		
@@ -107,7 +125,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pF = ((JSlider) e.getSource()).getValue();
-					game.powerFuel(pF);
+					powerFuel(pF);
 				}					
 			});
 		
@@ -126,7 +144,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pG = ((JSlider) e.getSource()).getValue();
-					game.powerGuns(pG);
+					powerGuns(pG);
 				}					
 			});
 		
@@ -158,6 +176,162 @@ public class PowerPanelGUI extends JPanel
 		fue.setEnabled(set);
 		shi.setEnabled(set);
 		gun.setEnabled(set);
+	}
+	
+	public void powerDist(double pS, double pF, double pC, double pG, String change, double mP)
+	{
+		maxPower = mP;
+		switch(change)
+		{
+			case "pS":
+				if(pS + pG + pF + pC > maxPower)
+				{
+					if(pFt > 0)
+						pFt--;
+					if(pCt > 0)
+						pCt--;
+					if(pGt > 0)
+						pGt--;
+				}
+				pSt = pS;				
+
+				com.setValue((int)pCt);
+				fue.setValue((int)pFt);
+				shi.setValue((int)pSt);
+				gun.setValue((int)pGt);
+				
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
+				
+			case "pF": 
+				if(pS + pG + pF + pC > maxPower)
+				{					
+					if(pCt > 0)
+						pCt--;
+					if(pGt > 0)
+						pGt--;
+					if(pSt > 0)
+						pSt--;
+				}				
+				pFt = pF;
+				
+				com.setValue((int)pCt);
+				fue.setValue((int)pFt);
+				shi.setValue((int)pSt);
+				gun.setValue((int)pGt);
+				
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
+				
+			case "pC": 
+				if(pS + pG + pF + pC > maxPower)
+				{
+					if(pFt > 0)
+						pFt--;
+					if(pGt > 0)
+						pGt--;
+					if(pSt > 0)
+						pSt--;
+				}
+				pCt = pC;
+				
+				com.setValue((int)pCt);
+				fue.setValue((int)pFt);
+				shi.setValue((int)pSt);
+				gun.setValue((int)pGt);
+				
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
+				
+			case "pG": 
+				if(pS + pG + pF + pC > maxPower)
+				{					
+					if(pFt > 0)
+						pFt--;
+					if(pCt > 0)
+						pCt--;
+					if(pSt > 0)
+						pSt--;
+				}				
+				pGt = pG;
+				
+				com.setValue((int)pCt);
+				fue.setValue((int)pFt);
+				shi.setValue((int)pSt);
+				gun.setValue((int)pGt);
+				
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
+				
+			case "mP":
+				if(pS + pG + pF + pC > maxPower)
+				{	
+					int dif = (int)(maxPower - (pS + pG + pF + pC));
+					int temp = (int)Math.max(Math.max(pS, pG), Math.max(pC, pF));
+					if(temp == pS)
+						pS -= dif;
+					else
+						if(temp == pF)
+							pF -= dif;
+						else
+							if(temp == pG)
+								pG -= dif;
+							else
+								if(temp == pC)
+									pC -= dif;
+				}				
+				
+				com.setValue((int)pC);
+				fue.setValue((int)pF);
+				shi.setValue((int)pS);
+				gun.setValue((int)pG);
+				
+				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
+				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
+				
+			default:
+				pCt = 25;
+				pSt = 25;
+				pFt = 25;
+				pGt = 25;break;
+		}
+	}
+	
+	public void power(int mP)
+	{
+		maxPower = 100 + mP;
+		powerDist(pSt, pFt, pCt, pGt, "mP", maxPower);
+		cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)maxPower), eClient);
+	}
+	
+	public void powerShield(int pShield)
+	{
+		powerDist(pShield, pFt, pCt, pGt, "pS", maxPower);
+	}
+	
+	public void powerFuel(int pFuel)
+	{
+		powerDist(pSt, pFuel, pCt, pGt, "pF", maxPower);
+	}
+	
+	public void powerComms(int pComms)
+	{
+		powerDist(pSt, pFt, pComms, pGt, "pC", maxPower);
+	}
+	
+	public void powerGuns(int pGuns)
+	{
+		powerDist(pSt, pFt, pCt, pGuns, "pG", maxPower);
 	}
 	
 	public void paintComponent(Graphics g)

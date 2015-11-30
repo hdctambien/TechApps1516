@@ -7,6 +7,7 @@ import javax.swing.event.ChangeListener;
 
 import mapgui.MapViewPanel;
 import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
@@ -26,10 +27,13 @@ public class EngineerGUI extends Thread
 	private boolean running = false;
 	EngineerGame game;
 	Client client;
+	ClientUpdater cUpdater;
 	GameMap map;
 	JFrame frame;
 	JPanel panel;
 	JPanel t1, t2;
+	
+	private final String SHIP_NAME;
 	
 	ImageLoader imgLoad;
 	
@@ -73,11 +77,14 @@ public class EngineerGUI extends Thread
 	private int throt = 0;
 	private Dimension size;	
 	
-	public EngineerGUI(EngineerGame g, Client eClient, ProtocolAggregator pa, GameMap m)
+	public EngineerGUI(EngineerGame g, Client eClient, ProtocolAggregator pa, GameMap m, String n, ClientUpdater c)
 	{
 		this.map = m;
 		this.game = g;
 		this.client = eClient;
+		this.cUpdater = c;
+		
+		SHIP_NAME = n;
 		
 		rTempLabel = new JLabel("Temperature = " + this.game.getReacTemp());
 		
@@ -101,7 +108,7 @@ public class EngineerGUI extends Thread
 		panel = new JPanel();
 		powerPanel = new JPanel();
 		
-		pGui = new PowerPanelGUI(this.map, this.game);
+		pGui = new PowerPanelGUI(this.map, this.cUpdater, this.client, SHIP_NAME);
 		
 		chatCreate(pa);		
 		powerCreate();
@@ -126,9 +133,7 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
-		
-		//frame.add(rTempLabel, BorderLayout.CENTER);
-		
+			
 		Reactor();
 	}
 	
@@ -283,7 +288,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodO = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -294,7 +299,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTw = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -305,7 +310,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTh = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -316,7 +321,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodF = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});

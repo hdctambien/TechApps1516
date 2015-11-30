@@ -11,7 +11,7 @@ public class EngineerGame implements Runnable
 	private boolean running = false;
 	Client eClient;
 	EngineerProtocol eProtocol;
-	String iaddress = "10.11.1.61";
+	String iaddress = "10.11.1.92";
 	int port = 8080;
 	private String SHIP_NAME = "Ship.1";
 	
@@ -74,7 +74,7 @@ public class EngineerGame implements Runnable
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gui = new EngineerGUI(this, this.eClient, aggregator, map);
+		gui = new EngineerGUI(this, this.eClient, aggregator, map, SHIP_NAME, cUpdater);
 		gui.start();
 		
 		run();
@@ -264,6 +264,7 @@ public class EngineerGame implements Runnable
 					this.gui.frame.setVisible(false);
 				}
 				rTemp += (.0000000001 * pTemp);
+				pTemp = map.getEntityByName(SHIP_NAME).getComponent("Power").getDouble("maxPower");
 			}
 			
 			while(pTemp == 0)
@@ -271,7 +272,8 @@ public class EngineerGame implements Runnable
 				if(rTemp > 0)
 				{
 					rTemp -= rTemp*.00000001;
-				}				
+				}
+				pTemp = map.getEntityByName(SHIP_NAME).getComponent("Power").getDouble("maxPower");
 			}
 		}		
 	}

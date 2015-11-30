@@ -1,6 +1,9 @@
 package spacegame.gunner;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
+
+import javax.swing.JFrame;
 
 import spacegame.client.BasicProtocol;
 import spacegame.client.Client;
@@ -20,6 +23,8 @@ public class GunnerGraphics
 	static ProtocolAggregator aggregator;
 	private static GameMap map;
 	private static ClientUpdater clientUpdater;
+	
+	private JFrame gunFrame;
 
 	public GunnerGraphics(String iAddress, int port, String name)
 	{
@@ -63,7 +68,18 @@ public class GunnerGraphics
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		GunnerWindow();
+		
 		run();
+	}
+	
+	public void GunnerWindow()
+	{
+		gunFrame = new JFrame("Gunner");
+		gunFrame.setLayout(new BorderLayout());
+		
+		
 	}
 	
 	private void run()
