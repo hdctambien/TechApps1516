@@ -100,7 +100,7 @@ class GroundControlGraphics extends Thread
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
 		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
-		infoPanel = new InfoPanel(renderMap);
+		infoPanel = new InfoPanel(renderMap, SHIP_NAME);
 		this.c = c;
 		
 		try
@@ -296,8 +296,10 @@ class GroundControlGraphics extends Thread
 				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
 				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
+				
+				
+				
 				windowPanel.repaint();
-				infoPanel.updateInfo();
 				clientUpdater.setRenderLock(false);
 				clientUpdater.setDrawDirty(false);
 			}

@@ -20,7 +20,7 @@ public class RunGroundControl
 	{
 		String iAddress = "10.11.1.92";
 		int port = 8080;
-		String name = "gc1";
+		String name = "Ship.1";
 		boolean runGame = true;
 		boolean good = false;
 		JFrame frame = new JFrame();
