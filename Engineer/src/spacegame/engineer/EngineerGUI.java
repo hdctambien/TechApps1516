@@ -61,7 +61,7 @@ public class EngineerGUI extends Thread
 	private JLabel rTempLabel;
 	
 	private MapViewPanel mVp;
-	private PowerPanelGUI pGui;
+	public PowerPanelGUI pGui;
 	
 	private JLabel thro;
 		
@@ -101,7 +101,7 @@ public class EngineerGUI extends Thread
 		panel = new JPanel();
 		powerPanel = new JPanel();
 		
-		pGui = new PowerPanelGUI(this.map);
+		pGui = new PowerPanelGUI(this.map, this.game);
 		
 		chatCreate(pa);		
 		powerCreate();
@@ -109,9 +109,7 @@ public class EngineerGUI extends Thread
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
 		panel.setLayout(new GridLayout(1, 4));
-		frame.add(pGui, BorderLayout.WEST);
-		//panel.add(pGui);
-		//panel.add(powerPanel);
+		panel.add(pGui);
 		panel.add(chat);
 		frame.setBackground(Color.WHITE);
 		
