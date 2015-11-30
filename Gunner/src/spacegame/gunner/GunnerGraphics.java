@@ -1,32 +1,18 @@
-package spacegame.groundcontrol;
+package spacegame.gunner;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
-
-
-
-
-
-
-
-import java.util.Random;
-
-import spacegame.client.*;
+import spacegame.client.BasicProtocol;
+import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
+import spacegame.client.MapUpdateProtocol;
+import spacegame.client.ProtocolAggregator;
+import spacegame.client.SerialProtocol;
 import spacegame.map.GameMap;
 
-/**
- * Starts up client and runs the game loop, initializes game logic and graphics threads.
- * 
- * @author Justin Pierre
- */
-public class GroundControlGame implements Runnable
+public class GunnerGraphics
 {
 	public final String SHIP_NAME;
-    boolean running = false;
-    private GroundControlGraphics guiThread;
-	private boolean isRunning = false;
 	Client c;
 	private static Thread clientThread;
 	private static Thread protocolThread;
@@ -34,8 +20,8 @@ public class GroundControlGame implements Runnable
 	static ProtocolAggregator aggregator;
 	private static GameMap map;
 	private static ClientUpdater clientUpdater;
-	
-	public GroundControlGame(String iAddress, int port, String name)
+
+	public GunnerGraphics(String iAddress, int port, String name)
 	{
 		SHIP_NAME = name;
 		try {
@@ -80,27 +66,8 @@ public class GroundControlGame implements Runnable
 		run();
 	}
 	
-	public void run() 
+	private void run()
 	{
-		running = true;
-	    guiThread = new GroundControlGraphics(this,c,SHIP_NAME,aggregator,clientUpdater);
-	    guiThread.start();
-	    gameLogic();
-	}	
-	
-	private void gameLogic()
-	{
-		while(running)
-		{
-			try
-			{
-				Thread.sleep(50);
-			}
-			catch(InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		System.out.println("this actually worked");
 	}
 }
-
