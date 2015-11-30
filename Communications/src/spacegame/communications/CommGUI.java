@@ -82,9 +82,6 @@ public class CommGUI extends JPanel implements Runnable {
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
-
-        
-        
         windowFrame.add(windowPanel);
        // windowFrame.addMouseListener(mouse);
         windowFrame.setPreferredSize(new Dimension(1600,900));
@@ -151,7 +148,7 @@ public class CommGUI extends JPanel implements Runnable {
 //			if(right || left)
 //			{
 //				System.out.println(heading);
-//				clientUpdater.addUserAction(SHIP_NAME, "heading", Double.toString(heading), c);
+	//			clientUpdater.addUserAction(name, "heading", Double.toString(heading), client);
 //			}
 //			
 //			if(move)
