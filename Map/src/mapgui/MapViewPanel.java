@@ -35,7 +35,7 @@ public class MapViewPanel extends JPanel
 	
 	public MapViewPanel(GameMap m, String shipname)
 	{
-		starList = new Star[250];
+		starList = new Star[1];
 		backgroundStars = new Star[5000];
 		rand = new Random();
 		map = m;
