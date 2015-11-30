@@ -1,6 +1,5 @@
-package spacegame.groundcontrol;
+package spacegame.gunner;
 
-import java.awt.Canvas;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -8,14 +7,9 @@ import java.net.UnknownHostException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- * Starts ground control client, has a testing mode that ignores the smart server connection dialogs (testing = true)
- * 
- * @author Justin Pierre
- */
-public class RunGroundControl
+public class RunGunner 
 {
-	private static GroundControlGame game;
+	private static GunnerGraphics game;
 	public static void main(String[] args)
 	{
 		String iAddress = "10.11.1.92";
@@ -60,14 +54,12 @@ public class RunGroundControl
 			while(!good && option != 2);
 			if(runGame)
 			{
-				game = new GroundControlGame(iAddress, port, name);
-				game.run();
+				game = new GunnerGraphics(iAddress, port, name);
 			}
 		}
 		else
 		{ 
-			game = new GroundControlGame(iAddress, port, name);
-			game.run();
+			game = new GunnerGraphics(iAddress, port, name);
 		}
 	}
 }
