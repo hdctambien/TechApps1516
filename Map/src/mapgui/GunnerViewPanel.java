@@ -49,6 +49,7 @@ public class GunnerViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
+		shipIMG = loader.getImage("gun.png");
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
 		
@@ -128,10 +129,16 @@ public class GunnerViewPanel extends JPanel
 				}				
 			}
 		}
-		mousePos = this.getMousePosition();
-		g.setColor(Color.RED);
-		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
 		g.drawImage(shipIMG, at, null);
+		if(this.getMousePosition() != null)
+			mousePos = this.getMousePosition();
+		g.setColor(new Color(255,0,0,100));
+		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
+		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
+		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
+        at.rotate(Math.atan2(mousePos.getY() - getHeight()/2, mousePos.getX() - getWidth()/2));
+        at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
+        g.drawImage(img, xform, obs)
 	}	
 }
 
