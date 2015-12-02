@@ -3,6 +3,7 @@ package mapgui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -30,6 +31,7 @@ public class GunnerViewPanel extends JPanel
 	private Random rand;
 	private Star[] starList;
 	private Star[] backgroundStars;
+	private Point mousePos;
 	
 	private final boolean DYNAMIC_STARS_ENABLED = false;
 	
@@ -126,6 +128,9 @@ public class GunnerViewPanel extends JPanel
 				}				
 			}
 		}
+		mousePos = this.getMousePosition();
+		g.setColor(Color.RED);
+		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
 		g.drawImage(shipIMG, at, null);
 	}	
 }

@@ -99,7 +99,7 @@ class GroundControlGraphics extends Thread
 		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
-		powerPanel = new PowerPanelGUI(cU.getRenderMap(), clientUpdater, c, SHIP_NAME);
+		powerPanel = new PowerPanelGUI(renderMap, clientUpdater, c, SHIP_NAME);
 		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
 		infoPanel = new InfoPanel(renderMap, SHIP_NAME);
 		this.c = c;
@@ -176,6 +176,8 @@ class GroundControlGraphics extends Thread
 		windowFrame.pack();
 		windowFrame.setVisible(true);
 		windowPanel.requestFocus();
+		
+		((PowerPanelGUI) powerPanel).disableEnable(false);
 	}
 	public void run()
 	{
@@ -222,14 +224,8 @@ class GroundControlGraphics extends Thread
 			{
 				clientUpdater.setRenderLock(true); 
 				headingDial.setHeading(heading);
-				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
-				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
-				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
-				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
-				
-				
-				
 				windowPanel.repaint();
+				infoPanel.updateInfo();
 				clientUpdater.setRenderLock(false);
 				clientUpdater.setDrawDirty(false);
 			}
