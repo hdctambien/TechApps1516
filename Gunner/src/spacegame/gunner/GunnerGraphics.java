@@ -1,10 +1,15 @@
 package spacegame.gunner;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import mapgui.GunnerViewPanel;
 import spacegame.client.BasicProtocol;
 import spacegame.client.Client;
 import spacegame.client.ClientUpdater;
@@ -25,6 +30,8 @@ public class GunnerGraphics
 	private static ClientUpdater clientUpdater;
 	
 	private JFrame gunFrame;
+	private JPanel panel, gunPanel;
+	private GunnerViewPanel gunnerView;
 
 	public GunnerGraphics(String iAddress, int port, String name)
 	{
@@ -78,12 +85,49 @@ public class GunnerGraphics
 	{
 		gunFrame = new JFrame("Gunner");
 		gunFrame.setLayout(new BorderLayout());
+		gunFrame.addWindowListener(new WindowAdapter() 
+		{
+			public void windowClosing(WindowEvent e) 
+			{
+			    c.sendMessage("exit");
+			}
+		});		
+		
+		panel = new JPanel();		
+		gunFrame.add(panel, BorderLayout.CENTER);
+		
+		gunnerView = new GunnerViewPanel(map, SHIP_NAME);
+		panel.setLayout(new BorderLayout());
+		panel.add(gunnerView, BorderLayout.CENTER);
+		panel.setVisible(true);
+		
+		gunPanel = new JPanel();
+		panel.add(gunPanel, BorderLayout.SOUTH);
+		gunPanel.setLayout(new GridLayout(2, 2));
 		
 		
+		
+		gunFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		gunFrame.setUndecorated(true);
+		gunFrame.pack();
+		gunFrame.setVisible(true);
 	}
 	
 	private void run()
 	{
-		System.out.println("this actually worked");
+		while(true)
+		{
+			if(!(clientUpdater.isDirty() || clientUpdater.isRenderLocked()) && clientUpdater.isDrawDirty())
+			{
+				continue;
+			}
+			else
+			{
+				clientUpdater.setRenderLock(true); 
+				panel.repaint();
+				clientUpdater.setRenderLock(false);
+				clientUpdater.setDrawDirty(false);
+			}
+		}
 	}
 }

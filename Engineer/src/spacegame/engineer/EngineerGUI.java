@@ -115,8 +115,8 @@ public class EngineerGUI extends Thread
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
+		frame.add(pGui, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(1, 4));
-		panel.add(pGui);
 		panel.add(chat);
 		frame.setBackground(Color.WHITE);
 		
