@@ -47,6 +47,31 @@ public class Vector2 {
 	public boolean isntRectangular(){
 		return (flag&FLAG_RECT)==0;
 	}
+	public boolean isVertical(){
+		if(isntRectangular()){
+			convertRectangular();
+		}
+		return (y!=0)&&(x==0);
+	}
+	public static boolean isVertical(double x, double y){
+		return (y!=0)&&(x==0);
+	}
+	public boolean isHorizontal(){
+		if(isntRectangular()){
+			convertRectangular();
+		}
+		return (x!=0)&&(y==0);
+	}
+	public static boolean isHorizontal(double x, double y){
+		return (x!=0)&&(y==0);
+	}
+	public double getSlope(){
+		if(isntRectangular()){
+			return Math.tan(t);
+		}else{
+			return y/x;
+		}
+	}
 	public void convertRectangular(){
 		x = r*Math.cos(t);
 		y = r*Math.sin(t);
@@ -93,6 +118,8 @@ public class Vector2 {
 			return new Vector2(s*x,s*y, FLAG_RECT);
 		}
 	}
-	
+	public Vector2 invert(){
+		return multiply(-1);
+	}
 	
 }

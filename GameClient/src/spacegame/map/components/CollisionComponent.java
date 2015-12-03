@@ -29,7 +29,7 @@ public abstract class CollisionComponent extends Component {
 	 */
 	public abstract boolean intersectsLine(double sx, double sy, double vx, double vy);
 	public abstract boolean intersectsLine(Vector2 s, Vector2 v);
-	public abstract boolean intersectsArc(double cx, double cy, double r, double sa, double ea);
-	public abstract boolean intersectsArc(Vector2 c, double r, double sa, double ea);
+	public abstract boolean intersectsCircle(double cx, double cy, double r);
+	public abstract boolean intersectsCircle(Vector2 c, double r);
 	public abstract boolean collision(CollisionComponent other);
 }

@@ -1,6 +1,7 @@
 package spacegame.map.components;
 
 import spacegame.map.Entity;
+import spacegame.map.Intersect;
 import spacegame.map.Vector2;
 
 public class CircleCollisionComponent extends CollisionComponent {
@@ -21,38 +22,60 @@ public class CircleCollisionComponent extends CollisionComponent {
 	
 	@Override
 	public boolean containsPoint(double x, double y) {
+		PositionComponent pos = getPos();
+		x-=pos.getDouble("posX");
+		y-=pos.getDouble("posY");
 		return (radius*radius > x*x+y*y);
 	}
 
 	@Override
 	public boolean containsPoint(Vector2 s) {
-		
-		return false;
+		return containsPoint(s.getX(),s.getY());
+	}
+	
+	public Vector2 getCenter(){
+		PositionComponent pos = getPos();
+		return new Vector2(pos.getDouble("posX"),pos.getDouble("posY"),Vector2.FLAG_RECT);
 	}
 
 	@Override
 	public boolean intersectsLine(double sx, double sy, double vx, double vy) {
-		// TODO Auto-generated method stub
-		return false;
+		PositionComponent pos = getPos();
+		double cx = pos.getDouble("posX");
+		double cy = pos.getDouble("posY");
+		return Intersect.lineCircleIntersect(sx, sy, vx, vy,cx,cy, radius);
 	}
 
 	@Override
 	public boolean intersectsLine(Vector2 s, Vector2 v) {
-		// TODO Auto-generated method stub
-		return false;
+		Vector2 c = getCenter();
+		return Intersect.lineCircleIntersect(s, v, c, radius);
 	}
 
 	@Override
-	public boolean intersectsArc(double cx, double cy, double r, double sa,
-			double ea) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean intersectsCircle(double cx, double cy, double r) {
+		PositionComponent pos = getPos();
+		double c2x = pos.getDouble("posX");
+		double c2y = pos.getDouble("posY");
+		//distances between circle centers
+		double x = c2x-cx;
+		double y = c2y-cy;
+		double d2 = x*x+y*y;//d squared (b/c sqrts are expensive)
+		double r2 = (r+radius)*(r+radius);//total radii squared
+		return d2<=r2;
 	}
 
 	@Override
-	public boolean intersectsArc(Vector2 c, double r, double sa, double ea) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean intersectsCircle(Vector2 c, double r) {
+		PositionComponent pos = getPos();
+		double cx = pos.getDouble("posX");
+		double cy = pos.getDouble("posY");
+		//distances between circle centers
+		double x = cx-c.getX();
+		double y = cy-c.getY();
+		double d2 = x*x+y*y;//d squared (b/c sqrts are expensive)
+		double r2 = (r+radius)*(r+radius);//total radii squared
+		return d2<=r2;
 	}
 
 	@Override
@@ -108,7 +131,6 @@ public class CircleCollisionComponent extends CollisionComponent {
 	}
 	@Override
 	public boolean collision(CollisionComponent other) {
-		// TODO Auto-generated method stub
-		return false;
+		return other.intersectsCircle(getCenter(), radius);
 	}
 }
