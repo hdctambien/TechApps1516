@@ -59,6 +59,9 @@ public class Intersect {
 		Vector2 u2i = u2.invert();
 		if(u1.equals(u2)||u1.equals(u2i)){
 			//test same line (only case where parallel lines intersect (and intersect at all points)
+			if(s1.equals(s2)){//unit vector will be zero, other code won't work
+				return true;
+			}
 			Vector2 u1to2 = s2.subtract(s1).getUnitVector();
 			if(u1to2.equals(u2)||u1to2.equals(u2i)){
 				return true;
