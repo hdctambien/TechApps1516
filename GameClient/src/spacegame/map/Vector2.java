@@ -197,4 +197,13 @@ public class Vector2 {
 		return Math.abs(d1-d2)<ERROR_TOLERANCE;
 	}
 	
+	public Vector2 clone(){
+		if(isBoth()){
+			return new Vector2(x,y,r,t);
+		}else if(isRectangular()){
+			return new Vector2(x,y,FLAG_RECT);
+		}else{//Polar
+			return new Vector2(r,t,FLAG_POLAR);
+		}
+	}
 }
