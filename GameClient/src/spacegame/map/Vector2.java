@@ -49,6 +49,13 @@ public class Vector2 {
 	public static double getErrorTolerance(){
 		return ERROR_TOLERANCE;
 	}
+	
+	public static Vector2 rect(double x, double y){
+		return new Vector2(x,y,FLAG_RECT);
+	}
+	public static Vector2 polar(double r, double t){
+		return new Vector2(r,t,FLAG_POLAR);
+	}	
 	public static void setErrorTolerance(double tolerance){
 		if(Math.abs(tolerance)<=MAX_ERROR_TOLERANCE){
 			ERROR_TOLERANCE=tolerance;
@@ -146,6 +153,42 @@ public class Vector2 {
 	public double getT(){
 		//if(isntPolar()){convertPolar();}
 		return t;
+	}
+	public Vector2 addX(double dx){
+		if(isntPolar()){//isRectangular
+			return new Vector2(x+dx,y,FLAG_RECT);
+		}
+		if(isntRectangular()){//isPolar
+			convertRectangular();
+		}
+		return new Vector2(x+dx,y,r,t);
+	}
+	public Vector2 addY(double dy){
+		if(isntPolar()){//isRectangular
+			return new Vector2(x,y+dy,FLAG_RECT);
+		}
+		if(isntRectangular()){//isPolar
+			convertRectangular();
+		}
+		return new Vector2(x,y+dy,r,t);
+	}
+	public Vector2 addR(double dr){
+		if(isntRectangular()){//isPolar
+			return new Vector2(r+dr,t,FLAG_POLAR);
+		}
+		if(isntPolar()){//isRectangular
+			convertPolar();
+		}
+		return new Vector2(x,y,r+dr,t);
+	}
+	public Vector2 addT(double dt){
+		if(isntRectangular()){//isPolar
+			return new Vector2(r,t+dt,FLAG_POLAR);
+		}
+		if(isntPolar()){//isRectangular
+			convertPolar();
+		}
+		return new Vector2(x,y,r,t+dt);
 	}
 	public Vector2 subtract(Vector2 other){
 		if(other.isntRectangular()){

@@ -27,8 +27,7 @@ public class CircleCollisionComponent extends CollisionComponent {
 	public void setRadius(double r){
 		radius = r;
 	}
-	
-	@Override
+
 	public boolean containsPoint(double x, double y) {
 		PositionComponent pos = getPos();
 		x-=pos.getDouble("posX");
@@ -36,7 +35,6 @@ public class CircleCollisionComponent extends CollisionComponent {
 		return (radius*radius > x*x+y*y);
 	}
 
-	@Override
 	public boolean containsPoint(Vector2 s) {
 		return containsPoint(s.getX(),s.getY());
 	}
