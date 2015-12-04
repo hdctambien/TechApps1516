@@ -55,7 +55,13 @@ public class GunComponent extends Component{
 		if(varname.equals("gunHeading")){
 			gunHeading = Double.parseDouble(value);
 			return true;
-		}else{
+		}
+		else if(varname.equals("imagePath"))
+		{
+			imagePath = value;
+			return true;
+		}
+		else{
 			return false;
 		}
 	}

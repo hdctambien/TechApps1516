@@ -30,6 +30,7 @@ public class GunnerViewPanel extends JPanel
 	private BufferedImage gunIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
+	private AffineTransform at2;
 	private ImageLoader loader;
 	private Random rand;
 	private Star[] starList;
@@ -56,9 +57,11 @@ public class GunnerViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
-		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("gunComponent").getVariable("imagePath"));
+		System.out.println(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
+		mousePos = new Point(0,0);
 		
 		initStars();
 	}
@@ -103,6 +106,7 @@ public class GunnerViewPanel extends JPanel
 		}
 		
 		at = new AffineTransform();
+		at2 = new AffineTransform();
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
 		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
 		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
@@ -139,15 +143,16 @@ public class GunnerViewPanel extends JPanel
 		g.drawImage(shipIMG, at, null);
 		if(this.getMousePosition() != null)
 		{
-			cU.addUserAction(SHIP_NAME, "gunHeading", Double.toString(Math.atan2(this.getMousePosition().y - (this.getHeight()/2), this.getMousePosition().x - (this.getWidth()/2))), c);
+			cU.addUserAction(SHIP_NAME, "gunHeading", Double.toString(Math.atan2(this.getMousePosition().y - (this.getHeight()/2), this.getMousePosition().x - (this.getWidth()/2)) + Math.PI/2), c);
+			mousePos = this.getMousePosition();
 		}
 		g.setColor(new Color(255,0,0,100));
 		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
-		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
-		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
-        at.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
-        at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
-        g.drawImage(gunIMG, at, null);
+		at2.translate(getWidth()/2 - gunIMG.getWidth()/2,getHeight()/2 - gunIMG.getHeight()/2);
+		at2.translate(gunIMG.getHeight() / 2-1,gunIMG.getWidth() / 2-1);
+        at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
+        at2.translate(-gunIMG.getHeight() / 2+1,-gunIMG.getWidth() / 2+1);
+        g.drawImage(gunIMG, at2, null);
 	}	
 }
 
