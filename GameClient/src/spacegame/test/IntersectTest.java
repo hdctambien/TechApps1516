@@ -47,7 +47,48 @@ public class IntersectTest {
 		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
 		Vector2 s2 = new Vector2(0,100,Vector2.FLAG_RECT);
 		Vector2 v2 = new Vector2(100,-100,Vector2.FLAG_RECT);
+		
 		assertTrue(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testLineSegs2(){
+		Vector2 s1 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
+		Vector2 s2 = new Vector2(0,100,Vector2.FLAG_RECT);
+		Vector2 v2 = new Vector2(-100,-100,Vector2.FLAG_RECT);
+		assertFalse(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testSameLineSegs(){
+		Vector2 s1 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
+		Vector2 s2 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v2 = new Vector2(100,100,Vector2.FLAG_RECT);
+		assertTrue(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testOverlapLineSegs(){
+		Vector2 s1 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
+		Vector2 s2 = new Vector2(50,50,Vector2.FLAG_RECT);
+		Vector2 v2 = new Vector2(100,100,Vector2.FLAG_RECT);
+		assertTrue(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testParallelLineSegs(){
+		Vector2 s1 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
+		Vector2 s2 = new Vector2(200,0,Vector2.FLAG_RECT);
+		Vector2 v2 = new Vector2(100,100,Vector2.FLAG_RECT);
+		assertFalse(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testParallel2LineSegs(){
+		Vector2 s1 = new Vector2(0,0,Vector2.FLAG_RECT);
+		Vector2 v1 = new Vector2(100,100,Vector2.FLAG_RECT);
+		Vector2 s2 = new Vector2(200,200,Vector2.FLAG_RECT);
+		Vector2 v2 = new Vector2(100,100,Vector2.FLAG_RECT);
+		assertFalse(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
 	}
 	
 }

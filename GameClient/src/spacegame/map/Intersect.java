@@ -90,6 +90,9 @@ public class Intersect {
 		Vector2 u2i = u2.invert();
 		if(u1.equals(u2)||u1.equals(u2i)){
 			//test same line (only case where parallel lines intersect (and intersect at all points)
+			if(s1.equals(s2)){//unit vector will be zero, other code won't work
+				return true;
+			}
 			Vector2 u1to2 = s2.subtract(s1).getUnitVector();
 			if(u1to2.equals(u2)||u1to2.equals(u2i)){
 				boolean compare = e1x>s1x;
@@ -138,8 +141,8 @@ public class Intersect {
 	 */
 	public static boolean pointBetween(double d1, double d2, double d3){
 		boolean compare = d1>d2;
-		double low = compare?d1:d2;//lower bound
-		double high = compare?d2:d1;//higher bound
+		double low = compare?d2:d1;//lower bound
+		double high = compare?d1:d2;//higher bound
 		return (d3>=low)&&(d3<=high);
 	}
 	/**
