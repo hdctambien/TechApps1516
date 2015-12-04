@@ -38,7 +38,7 @@ public class CommGUI extends JPanel implements Runnable {
     
     GameMap map = new GameMap();
 	private GameMap renderMap;
-	private MapViewPanel mapPanel;
+	//private MapViewPanel mapPanel;
 	//private MiniMapViewPanel mapPanel;
 	
 	private MiniMapViewPanel miniMap;
@@ -54,7 +54,7 @@ public class CommGUI extends JPanel implements Runnable {
     	this.commGame=game;
     	this.client=c;
     	
-    	mapPanel = new mapgui.MapViewPanel(renderMap, name);
+    //	mapPanel = new mapgui.MapViewPanel(renderMap, name);
 
 		
     	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
@@ -69,7 +69,7 @@ public class CommGUI extends JPanel implements Runnable {
        
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
-        dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
+   //     dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
         dataPanel.add(Box.createRigidArea(new Dimension(36,0)));
         
     
@@ -77,13 +77,12 @@ public class CommGUI extends JPanel implements Runnable {
         
       
         dataPanel.setPreferredSize(new Dimension(1600,250));
-        miniMap.addMouseListener(mouse);
+     
         windowPanel.add(miniMap,BorderLayout.CENTER);
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
         windowFrame.add(windowPanel);
-       // windowFrame.addMouseListener(mouse);
         windowFrame.setPreferredSize(new Dimension(1600,900));
     	windowFrame.setVisible(true);
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,42 +92,32 @@ public class CommGUI extends JPanel implements Runnable {
 }		
     
     
-    private boolean marked=false;
-	MouseEvent event;
-	private MouseAdapter mouse = new MouseAdapter()
-    {
-        public void mousePressed(MouseEvent e)
-        {
-        	event=e;
-        	/*for(Entity ent: map.getEntities()){
-        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
-				int x = (int)Math.round(pos.getDouble("posX"));
-				int y = (int)Math.round(pos.getDouble("posY"));
-				if(e.getX()==x&&e.getY()==y)
-				{
-					marked=true;
-				}
-				
-        	}		*/
-        	marked=true;
-        	System.out.println("click");
-    	}
-        public void mouseReleased(MouseEvent e)
-        {
-        	//marked=false;
-        }
-    };
-    //addMouseListener(mouse);
-	/*public void paintComponent(Graphics G) 
-	{
-		Graphics2D g = (Graphics2D) G;
-		
+//    private boolean marked=false;
+//	MouseEvent event;
+//	private MouseAdapter mouse = new MouseAdapter()
+//    {
+//        public void mousePressed(MouseEvent e)
+//        {
+//        	event=e;
+//        	/*for(Entity ent: map.getEntities()){
+//        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
+//				int x = (int)Math.round(pos.getDouble("posX"));
+//				int y = (int)Math.round(pos.getDouble("posY"));
+//				if(e.getX()==x&&e.getY()==y)
+//				{
+//					marked=true;
+//				}
+//				
+//        	}		*/
+//        	marked=true;
+//        	System.out.println("click");
+//    	}
+//        public void mouseReleased(MouseEvent e)
+//        {
+//        	//marked=false;
+//        }
+//    };
 	
-		if(marked)
-		{
-			g.setColor(Color.BLUE);
-			g.fillOval(event.getX(), event.getY(), 10, 10);
-		}*/
 	
 
     
@@ -136,6 +125,7 @@ public class CommGUI extends JPanel implements Runnable {
 	{
 		while(commGame.running)
 		{
+			
 //			if(right)
 //			{
 //				heading -= -0.05;
@@ -177,17 +167,20 @@ public class CommGUI extends JPanel implements Runnable {
 			else
 			{
 				clientUpdater.setRenderLock(true); 
-				
+			
 	//			mapPanel.setHeading(heading * 180 / Math.PI);
 	//			mapPanel.setPosition((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posX")), 
-	//					(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+	//			(int)Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Position").getVariable("posY")));
+	//			throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(name).getComponent("Fuel").getVariable("throttle")));
+		
+		//		headingDial.setHeading(Integer.parseInt(renderMap.getEntityByName(name).getComponent("Heading").getVariable("Heading")));
+
 				
-		//		throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(name).getComponent("Fuel").getVariable("throttle")));
-				headingDial.setHeading(heading);
 //				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
 //				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 //				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
 //				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
+				
 				windowPanel.repaint();
 				clientUpdater.setRenderLock(false);
 				clientUpdater.setDrawDirty(false);
