@@ -5,12 +5,12 @@ import spacegame.map.Vector2;
 import spacegame.map.components.Component;
 import spacegame.map.components.PositionComponent;
 
-public class CircleCollisionComponent extends CollisionComponent {
+public class CircleCollider extends Collider {
 
 	private double radius;
 	
-	public CircleCollisionComponent() {}
-	public CircleCollisionComponent(Entity e) {super(e);}
+	public CircleCollider() {}
+	public CircleCollider(Entity e) {super(e);}
 
 	@Override
 	public String serialize() {
@@ -87,15 +87,15 @@ public class CircleCollisionComponent extends CollisionComponent {
 
 	@Override
 	public void sync(Component c) {
-		if(c instanceof CircleCollisionComponent){
-			CircleCollisionComponent ccc = (CircleCollisionComponent)c;
+		if(c instanceof CircleCollider){
+			CircleCollider ccc = (CircleCollider)c;
 			ccc.radius = radius;
 		}
 	}
 
 	@Override
 	public Component clone(Entity entity) {
-		CircleCollisionComponent ccc = new CircleCollisionComponent(entity);
+		CircleCollider ccc = new CircleCollider(entity);
 		ccc.radius = radius;
 		return ccc;
 	}
@@ -137,7 +137,7 @@ public class CircleCollisionComponent extends CollisionComponent {
 		return false;
 	}
 	@Override
-	public boolean collision(CollisionComponent other) {
+	public boolean collision(Collider other) {
 		return other.intersectsCircle(getCenter(), radius);
 	}
 }

@@ -4,12 +4,12 @@ import spacegame.map.Entity;
 import spacegame.map.Vector2;
 import spacegame.map.components.Component;
 
-public abstract class CollisionComponent extends Component {
+public abstract class Collider extends Component {
 
-	public CollisionComponent() {
+	public Collider() {
 		
 	}
-	public CollisionComponent(Entity e){
+	public Collider(Entity e){
 		super(e);
 	}
 	/*//*
@@ -33,5 +33,5 @@ public abstract class CollisionComponent extends Component {
 	public abstract boolean intersectsLine(Vector2 s, Vector2 v);
 	public abstract boolean intersectsCircle(double cx, double cy, double r);
 	public abstract boolean intersectsCircle(Vector2 c, double r);
-	public abstract boolean collision(CollisionComponent other);
+	public abstract boolean collision(Collider other);
 }

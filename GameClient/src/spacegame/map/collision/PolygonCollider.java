@@ -9,25 +9,25 @@ import spacegame.map.components.Component;
 import spacegame.map.components.HeadingComponent;
 import spacegame.map.components.PositionComponent;
 
-public class PolygonCollisionComponent extends CollisionComponent {
+public class PolygonCollider extends Collider {
 
 	private ArrayList<Vector2> absolutePoints;
 	private ArrayList<Vector2> relativePoints;
 	
-	public PolygonCollisionComponent(){
+	public PolygonCollider(){
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = new ArrayList<Vector2>();
 	}
-	public PolygonCollisionComponent(Entity e){
+	public PolygonCollider(Entity e){
 		super(e);
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = new ArrayList<Vector2>();
 	}
-	public PolygonCollisionComponent(ArrayList<Vector2> points){
+	public PolygonCollider(ArrayList<Vector2> points){
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = (ArrayList<Vector2>) points.clone();
 	}
-	public PolygonCollisionComponent(ArrayList<Vector2> points,Entity e){
+	public PolygonCollider(ArrayList<Vector2> points,Entity e){
 		super(e);
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = (ArrayList<Vector2>) points.clone();
@@ -97,7 +97,7 @@ public class PolygonCollisionComponent extends CollisionComponent {
 	}
 
 	@Override
-	public boolean collision(CollisionComponent other) {
+	public boolean collision(Collider other) {
 		for(int i = 0; i < absolutePoints.size(); i++){
 			Vector2 p = absolutePoints.get(i);
 			Vector2 vl;
@@ -115,7 +115,7 @@ public class PolygonCollisionComponent extends CollisionComponent {
 
 	@Override
 	public void sync(Component c) {
-		PolygonCollisionComponent pcc = (PolygonCollisionComponent)c;
+		PolygonCollider pcc = (PolygonCollider)c;
 		if(!pcc.relativePoints.equals(relativePoints)){
 			pcc.relativePoints = (ArrayList<Vector2>) relativePoints.clone();
 		}
@@ -123,7 +123,7 @@ public class PolygonCollisionComponent extends CollisionComponent {
 
 	@Override
 	public Component clone(Entity entity) {
-		return new PolygonCollisionComponent(relativePoints,entity);
+		return new PolygonCollider(relativePoints,entity);
 	}
 
 	@Override

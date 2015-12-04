@@ -5,7 +5,7 @@ import spacegame.map.*;
 
 import org.junit.Test;
 
-import spacegame.map.collision.CircleCollisionComponent;
+import spacegame.map.collision.CircleCollider;
 import spacegame.map.collision.Intersect;
 
 public class IntersectTest {
@@ -129,9 +129,9 @@ public class IntersectTest {
 		EntityFactory factory = new EntityFactory();
 		Entity a1 = factory.createAsteroid(0,0);
 		Entity a2 = factory.createAsteroid(100,0);
-		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		CircleCollider c1 = new CircleCollider(a1);
 		c1.setRadius(60);
-		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		CircleCollider c2 = new CircleCollider(a2);
 		c2.setRadius(50);
 		assertTrue(c1.collision(c2));
 	}
@@ -140,9 +140,9 @@ public class IntersectTest {
 		EntityFactory factory = new EntityFactory();
 		Entity a1 = factory.createAsteroid(0,0);
 		Entity a2 = factory.createAsteroid(100,0);
-		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		CircleCollider c1 = new CircleCollider(a1);
 		c1.setRadius(50);
-		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		CircleCollider c2 = new CircleCollider(a2);
 		c2.setRadius(50);
 		assertTrue(c1.collision(c2));
 	}
@@ -151,9 +151,9 @@ public class IntersectTest {
 		EntityFactory factory = new EntityFactory();
 		Entity a1 = factory.createAsteroid(0,0);
 		Entity a2 = factory.createAsteroid(100,0);
-		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		CircleCollider c1 = new CircleCollider(a1);
 		c1.setRadius(49);
-		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		CircleCollider c2 = new CircleCollider(a2);
 		c2.setRadius(49);
 		assertFalse(c1.collision(c2));
 	}
