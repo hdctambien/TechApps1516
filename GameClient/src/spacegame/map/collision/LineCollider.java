@@ -1,18 +1,46 @@
 package spacegame.map.collision;
 
 import spacegame.map.Entity;
+import spacegame.map.EntityFactory;
 import spacegame.map.Vector2;
 import spacegame.map.components.Component;
+import spacegame.map.components.PositionComponent;
 
 public class LineCollider extends Collider {
 
+	private Vector2 s;
+	private Vector2 v;
+	
 	public LineCollider() {
+		
 	}
 
 	public LineCollider(Entity e) {
 		super(e);
 	}
+	
+	public LineCollider(Vector2 v){
+		this.v = v;
+	}
+	
+	public LineCollider(Vector2 v, Entity e){
+		this.v = v;
+	}
+	
+	public void recalculate(){
+		//TODO: figure out if line like enities' position will be their middle (assumed)
+		//TODO: or end
+		//if middle,
+		s = getPosition().subtract(v.multiply(-0.5));
+		//if end, 
+		//s = getPosition()
+	}
 
+	private Vector2 getPosition(){
+		PositionComponent pos = (PositionComponent)getEntity().getComponent(EntityFactory.POSITION);
+		return pos.getVector();
+	}
+	
 	@Override
 	public String serialize() {
 		// TODO Auto-generated method stub
@@ -21,14 +49,12 @@ public class LineCollider extends Collider {
 
 	@Override
 	public boolean intersectsLine(double sx, double sy, double vx, double vy) {
-		// TODO Auto-generated method stub
-		return false;
+		return Intersect.lineSegmentsIntersect(s,v,Vector2.rect(sx,sy),Vector2.rect(vx, vy));
 	}
 
 	@Override
-	public boolean intersectsLine(Vector2 s, Vector2 v) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean intersectsLine(Vector2 s2, Vector2 v2) {
+		return Intersect.lineSegmentsIntersect(s, v, s2, v2);
 	}
 
 	@Override
