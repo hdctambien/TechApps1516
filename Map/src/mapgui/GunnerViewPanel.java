@@ -138,7 +138,6 @@ public class GunnerViewPanel extends JPanel
 		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
         at.rotate(Math.atan2(mousePos.getY() - getHeight()/2, mousePos.getX() - getWidth()/2));
         at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
-        g.drawImage(img, xform, obs)
 	}	
 }
 
