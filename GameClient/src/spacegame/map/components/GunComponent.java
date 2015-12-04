@@ -10,7 +10,7 @@ public class GunComponent extends Component{
 
 	@Override
 	public String serialize() {
-		return "gunHeading:"+gunHeading;
+		return "gunHeading:"+gunHeading+" imagePath:"+imagePath;
 	}
 
 	@Override
