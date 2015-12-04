@@ -1,11 +1,12 @@
 package spacegame.test;
 
 import static org.junit.Assert.*;
-
 import spacegame.map.*;
+
 import org.junit.Test;
 
 import spacegame.map.Intersect;
+import spacegame.map.components.CircleCollisionComponent;
 
 public class IntersectTest {
 
@@ -89,6 +90,72 @@ public class IntersectTest {
 		Vector2 s2 = new Vector2(200,200,Vector2.FLAG_RECT);
 		Vector2 v2 = new Vector2(100,100,Vector2.FLAG_RECT);
 		assertFalse(Intersect.lineSegmentsIntersect(s1,v1,s2,v2));
+	}
+	@Test
+	public void testLineCircle(){
+		Vector2 s = new Vector2(-10,-20,Vector2.FLAG_RECT);
+		Vector2 v = new Vector2(100,200,Vector2.FLAG_RECT);
+		Vector2 c = new Vector2(10,10,Vector2.FLAG_RECT);
+		double r = 10;
+		assertTrue(Intersect.lineCircleIntersect(s,v,c,r));
+	}
+	@Test
+	public void testLineCircleInfinite(){
+		Vector2 s = new Vector2(-10,-20,Vector2.FLAG_RECT);
+		Vector2 v = new Vector2(10,20,Vector2.FLAG_RECT);
+		Vector2 c = new Vector2(10,10,Vector2.FLAG_RECT);
+		double r = 10;
+		assertTrue(Intersect.lineCircleIntersect(s,v,c,r,true));
+	}
+	@Test
+	public void testLineCircle2(){
+		Vector2 s = new Vector2(-20,-20,Vector2.FLAG_RECT);
+		Vector2 v = new Vector2(-100,-200,Vector2.FLAG_RECT);
+		Vector2 c = new Vector2(10,10,Vector2.FLAG_RECT);
+		double r = 10;
+		assertFalse(Intersect.lineCircleIntersect(s,v,c,r));
+	}
+	@Test
+	public void testLineCircleInfinite2(){
+		Vector2 s = new Vector2(-10,-20,Vector2.FLAG_RECT);
+		Vector2 v = new Vector2(0,10,Vector2.FLAG_RECT);
+		Vector2 c = new Vector2(10,10,Vector2.FLAG_RECT);
+		double r = 10;
+		assertFalse(Intersect.lineCircleIntersect(s,v,c,r,true));
+	}
+	
+	@Test
+	public void testCircleComponentIntersection(){
+		EntityFactory factory = new EntityFactory();
+		Entity a1 = factory.createAsteroid(0,0);
+		Entity a2 = factory.createAsteroid(100,0);
+		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		c1.setRadius(60);
+		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		c2.setRadius(50);
+		assertTrue(c1.collision(c2));
+	}
+	@Test
+	public void testCircleComponentIntersection2(){
+		EntityFactory factory = new EntityFactory();
+		Entity a1 = factory.createAsteroid(0,0);
+		Entity a2 = factory.createAsteroid(100,0);
+		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		c1.setRadius(50);
+		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		c2.setRadius(50);
+		assertTrue(c1.collision(c2));
+	}
+	@Test
+	public void testCircleComponentNoIntersection(){
+		EntityFactory factory = new EntityFactory();
+		Entity a1 = factory.createAsteroid(0,0);
+		Entity a2 = factory.createAsteroid(100,0);
+		CircleCollisionComponent c1 = new CircleCollisionComponent(a1);
+		c1.setRadius(49);
+		CircleCollisionComponent c2 = new CircleCollisionComponent(a2);
+		c2.setRadius(49);
+		assertFalse(c1.collision(c2));
 	}
 	
 }

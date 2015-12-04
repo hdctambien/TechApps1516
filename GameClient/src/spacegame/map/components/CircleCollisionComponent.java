@@ -20,6 +20,14 @@ public class CircleCollisionComponent extends CollisionComponent {
 		return (PositionComponent) getEntity().getComponent("Position");
 	}
 	
+	public double getRadius(){
+		return radius;
+	}
+	
+	public void setRadius(double r){
+		radius = r;
+	}
+	
 	@Override
 	public boolean containsPoint(double x, double y) {
 		PositionComponent pos = getPos();
