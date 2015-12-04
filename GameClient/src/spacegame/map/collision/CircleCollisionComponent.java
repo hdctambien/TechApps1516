@@ -1,8 +1,9 @@
-package spacegame.map.components;
+package spacegame.map.collision;
 
 import spacegame.map.Entity;
-import spacegame.map.Intersect;
 import spacegame.map.Vector2;
+import spacegame.map.components.Component;
+import spacegame.map.components.PositionComponent;
 
 public class CircleCollisionComponent extends CollisionComponent {
 

@@ -1,7 +1,8 @@
-package spacegame.map.components;
+package spacegame.map.collision;
 
 import spacegame.map.Entity;
 import spacegame.map.Vector2;
+import spacegame.map.components.Component;
 
 public abstract class CollisionComponent extends Component {
 

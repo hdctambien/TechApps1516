@@ -1,4 +1,6 @@
-package spacegame.map;
+package spacegame.map.collision;
+
+import spacegame.map.Vector2;
 
 public class Intersect {
 

@@ -1,11 +1,13 @@
-package spacegame.map.components;
+package spacegame.map.collision;
 
 import java.util.ArrayList;
 
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
-import spacegame.map.Intersect;
 import spacegame.map.Vector2;
+import spacegame.map.components.Component;
+import spacegame.map.components.HeadingComponent;
+import spacegame.map.components.PositionComponent;
 
 public class PolygonCollisionComponent extends CollisionComponent {
 

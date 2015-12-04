@@ -5,8 +5,8 @@ import spacegame.map.*;
 
 import org.junit.Test;
 
-import spacegame.map.Intersect;
-import spacegame.map.components.CircleCollisionComponent;
+import spacegame.map.collision.CircleCollisionComponent;
+import spacegame.map.collision.Intersect;
 
 public class IntersectTest {
 
