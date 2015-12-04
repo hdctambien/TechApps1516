@@ -24,6 +24,7 @@ public class MapViewPanel extends JPanel
 {
 	private GameMap map;
 	private BufferedImage shipIMG;
+	private BufferedImage gunIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
 	private ImageLoader loader;
@@ -47,6 +48,7 @@ public class MapViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
+		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("gunComponent").getVariable("imagePath"));
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
 		
@@ -126,7 +128,13 @@ public class MapViewPanel extends JPanel
 				}				
 			}
 		}
+
 		g.drawImage(shipIMG, at, null);
+		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
+		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
+        at.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
+        at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
+        g.drawImage(gunIMG, at, null);
 	}	
 }
 class Star
