@@ -37,8 +37,9 @@ public class PolygonCollider extends Collider {
 	@Override
 	public String serialize() {
 		StringBuilder builder = new StringBuilder();
+		builder.append(super.serial());
 		for(int i = 0; i<relativePoints.size();i++){
-			builder.append("px");
+			builder.append(" px");
 			builder.append(i);
 			builder.append(':');
 			builder.append(relativePoints.get(i).getX());
@@ -46,9 +47,8 @@ public class PolygonCollider extends Collider {
 			builder.append(i);
 			builder.append(':');
 			builder.append(relativePoints.get(i).getX());
-			builder.append(' ');
 		}
-		return builder.toString().trim();
+		return builder.toString();
 	}
 
 	@Override
@@ -116,6 +116,7 @@ public class PolygonCollider extends Collider {
 
 	@Override
 	public void sync(Component c) {
+		super.syncTranslate(c);
 		PolygonCollider pcc = (PolygonCollider)c;
 		if(!pcc.relativePoints.equals(relativePoints)){
 			pcc.relativePoints = (ArrayList<Vector2>) relativePoints.clone();
@@ -136,7 +137,7 @@ public class PolygonCollider extends Collider {
 			String raw=varname.substring(2);
 			return Integer.parseInt(raw)<relativePoints.size();
 		}else{
-			return false;
+			return super.hasVar(varname);
 		}
 	}
 
@@ -155,7 +156,7 @@ public class PolygonCollider extends Collider {
 				return Double.toString(relativePoints.get(index).getY());
 			}
 		}
-		return null;
+		return super.getVar(varname);
 	}
 
 	@Override
@@ -173,7 +174,7 @@ public class PolygonCollider extends Collider {
 			double y = Double.parseDouble(value);
 			relativePoints.set(index, Vector2.rect(x,y));
 		}
-		return false;
+		return super.setVar(varname,value);
 	}
 	public void recalculatePoints(){
 		Vector2 c = getCenter();

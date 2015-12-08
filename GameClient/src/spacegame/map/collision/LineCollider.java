@@ -19,11 +19,13 @@ public class LineCollider extends Collider {
 		super(e);
 	}
 	
-	public LineCollider(Vector2 v){
+	public LineCollider(Vector2 trans, Vector2 v){
+		super(trans);
 		this.v = v;
 	}
 	
-	public LineCollider(Vector2 v, Entity e){
+	public LineCollider(Vector2 trans, Vector2 v, Entity e){
+		super(trans);
 		this.v = v;
 	}
 	
@@ -33,7 +35,7 @@ public class LineCollider extends Collider {
 	
 	@Override
 	public String serialize() {
-		return "sx:"+s.getX()+" sy:"+s.getY()+" vx: "+v.getX()+" vy: "+v.getY();
+		return super.serial()+" sx:"+s.getX()+" sy:"+s.getY()+" vx: "+v.getX()+" vy: "+v.getY();
 	}
 
 	@Override
@@ -63,6 +65,7 @@ public class LineCollider extends Collider {
 
 	@Override
 	public void sync(Component c) {
+		super.syncTranslate(c);
 		if(c instanceof LineCollider){
 			LineCollider lc = (LineCollider)c;
 			if(!lc.v.equals(v)){
@@ -73,7 +76,7 @@ public class LineCollider extends Collider {
 
 	@Override
 	public Component clone(Entity entity) {
-		return new LineCollider(v, entity);
+		return new LineCollider(getTranslation(),v, entity);
 	}
 
 	@Override
@@ -82,7 +85,7 @@ public class LineCollider extends Collider {
 			case "sx": case "sy": case "vx": case "vy":
 				return true;
 			default:
-				return false;
+				return super.hasVar(varname);
 		}
 	}
 
@@ -98,7 +101,7 @@ public class LineCollider extends Collider {
 			case "vy":
 				return Double.toString(v.getY());
 			default:
-				return null;
+				return super.getVar(varname);
 		}
 	}
 
@@ -118,7 +121,7 @@ public class LineCollider extends Collider {
 				v = Vector2.rect(v.getX(),Double.parseDouble(value));
 				break;
 			default:
-				return false;
+				return super.setVar(varname, value);
 		}
 		return true;
 	}

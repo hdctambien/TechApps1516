@@ -55,7 +55,7 @@ public class Vector2 {
 	}
 	public static Vector2 polar(double r, double t){
 		return new Vector2(r,t,FLAG_POLAR);
-	}	
+	}
 	public static void setErrorTolerance(double tolerance){
 		if(Math.abs(tolerance)<=MAX_ERROR_TOLERANCE){
 			ERROR_TOLERANCE=tolerance;

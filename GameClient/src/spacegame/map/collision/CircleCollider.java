@@ -11,14 +11,12 @@ public class CircleCollider extends Collider {
 	
 	public CircleCollider() {}
 	public CircleCollider(Entity e) {super(e);}
+	public CircleCollider(Vector2 trans){super(trans);}
+	public CircleCollider(Vector2 trans,Entity e){super(trans,e);}
 
 	@Override
 	public String serialize() {
-		return "radius:"+radius;
-	}
-
-	private PositionComponent getPos(){
-		return (PositionComponent) getEntity().getComponent("Position");
+		return super.serial()+" radius:"+radius;
 	}
 	
 	public double getRadius(){
@@ -30,26 +28,23 @@ public class CircleCollider extends Collider {
 	}
 
 	public boolean containsPoint(double x, double y) {
-		PositionComponent pos = getPos();
-		x-=pos.getDouble("posX");
-		y-=pos.getDouble("posY");
+		Vector2 center = getCenter();
+		double cx = center.getX();
+		double cy = center.getY();
+		x-=cx;
+		y-=cy;
 		return (radius*radius > x*x+y*y);
 	}
 
 	public boolean containsPoint(Vector2 s) {
 		return containsPoint(s.getX(),s.getY());
 	}
-	
-	public Vector2 getCenter(){
-		PositionComponent pos = getPos();
-		return new Vector2(pos.getDouble("posX"),pos.getDouble("posY"),Vector2.FLAG_RECT);
-	}
 
 	@Override
 	public boolean intersectsLine(double sx, double sy, double vx, double vy) {
-		PositionComponent pos = getPos();
-		double cx = pos.getDouble("posX");
-		double cy = pos.getDouble("posY");
+		Vector2 center = getCenter();
+		double cx = center.getX();
+		double cy = center.getY();
 		return Intersect.lineCircleIntersect(sx, sy, vx, vy,cx,cy, radius);
 	}
 
@@ -61,9 +56,9 @@ public class CircleCollider extends Collider {
 
 	@Override
 	public boolean intersectsCircle(double cx, double cy, double r) {
-		PositionComponent pos = getPos();
-		double c2x = pos.getDouble("posX");
-		double c2y = pos.getDouble("posY");
+		Vector2 center = getCenter();
+		double c2x = center.getX();
+		double c2y = center.getY();
 		//distances between circle centers
 		double x = c2x-cx;
 		double y = c2y-cy;
@@ -74,9 +69,9 @@ public class CircleCollider extends Collider {
 
 	@Override
 	public boolean intersectsCircle(Vector2 c, double r) {
-		PositionComponent pos = getPos();
-		double cx = pos.getDouble("posX");
-		double cy = pos.getDouble("posY");
+		Vector2 center = getCenter();
+		double cx = center.getX();
+		double cy = center.getY();
 		//distances between circle centers
 		double x = cx-c.getX();
 		double y = cy-c.getY();
@@ -87,6 +82,7 @@ public class CircleCollider extends Collider {
 
 	@Override
 	public void sync(Component c) {
+		syncTranslate(c);
 		if(c instanceof CircleCollider){
 			CircleCollider ccc = (CircleCollider)c;
 			ccc.radius = radius;
@@ -95,14 +91,14 @@ public class CircleCollider extends Collider {
 
 	@Override
 	public Component clone(Entity entity) {
-		CircleCollider ccc = new CircleCollider(entity);
+		CircleCollider ccc = new CircleCollider(getTranslation(),entity);
 		ccc.radius = radius;
 		return ccc;
 	}
 
 	@Override
 	public boolean hasVariable(String varname) {
-		return varname.equals("radius");
+		return varname.equals("radius")?true:super.hasVar(varname);
 	}
 
 	@Override
@@ -110,7 +106,7 @@ public class CircleCollider extends Collider {
 		if(varname.equals("radius")){
 			return Double.toString(radius);
 		}else{
-			return null;
+			return super.getVar(varname);
 		}
 	}
 
@@ -120,7 +116,7 @@ public class CircleCollider extends Collider {
 			radius = Double.parseDouble(value);
 			return true;
 		}
-		return false;
+		return super.setVar(varname, value);
 	}
 
 	public double getDouble(String varname){

@@ -12,10 +12,11 @@ public abstract class Collider extends Component {
 	private Vector2 translator;
 	
 	public Collider() {
-		
+		translator = new Vector2();
 	}
 	public Collider(Entity e){
 		super(e);
+		translator = new Vector2();
 	}
 	public Collider(Vector2 trans){
 		translator = trans;
@@ -36,15 +37,6 @@ public abstract class Collider extends Component {
 	public void setTransY(double y){
 		translator = Vector2.rect(translator.getX(),y);
 	}
-	/*//*
-	 * NOTE: default implementation throws a RuntimeException that says it isn't implemented, make sure
-	 * that the subclass actually does implement it
-	 * @param x X location of point
-	 * @param y Y location of point
-	 * @return whether the CollisionComponent contains that point
-	 */
-	/*public boolean containsPoint(double x, double y);
-	public boolean containsPoint(Vector2 s);*/
 	/**
 	 * 
 	 * @param sx X start location of line
@@ -58,6 +50,41 @@ public abstract class Collider extends Component {
 	public abstract boolean intersectsCircle(double cx, double cy, double r);
 	public abstract boolean intersectsCircle(Vector2 c, double r);
 	public abstract boolean collision(Collider other);
+	
+	public boolean hasVar(String varname){
+		switch(varname){
+			case "tx": case "ty": return true;
+			default: return false;
+		}
+	}
+	public String getVar(String varname){
+		switch(varname){
+			case "tx": return Double.toString(translator.getX());
+			case "ty": return Double.toString(translator.getY());
+			default: return null;
+		}	
+	}
+	public boolean setVar(String varname, String value){
+		switch(varname){
+			case "tx": 
+				translator = Vector2.rect(Double.parseDouble(value),translator.getY());
+				break;
+			case "ty": 
+				translator = Vector2.rect(Double.parseDouble(value),translator.getY());
+				break;
+			default: return false;
+		}
+		return true;
+	}
+	public String serial(){
+		return "tx:"+translator.getX()+" ty:"+translator.getY();
+	}
+	public void syncTranslate(Component other){
+		if(other instanceof Collider){
+			Collider c = (Collider)other;
+			c.translator = translator.clone();
+		}
+	}
 	
 	Vector2 getCenter(){
 		return getPosition().add(translator);
