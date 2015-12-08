@@ -26,6 +26,17 @@ public class GameMap implements ISerializable, EntityListener {
 		this.trackChanges = trackChanges; 
 	}
 	
+	public ArrayList<Entity> select(String key){
+		ArrayList<Entity> selected = new ArrayList<Entity>();
+		selected.ensureCapacity(entities.size());
+		for(Entity entity: entities){
+			if(entity.hasComponent(key)){
+				selected.add(entity);
+			}
+		}
+		return selected;
+	}
+	
 	public boolean isUpdating(){
 		return updating;
 	}
