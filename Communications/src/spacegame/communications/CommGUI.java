@@ -12,7 +12,10 @@ import mapgui.MapComponent;
 import mapgui.MiniMapViewPanel;
 import spacegame.client.*;
 import spacegame.gui.*;
+import spacegame.map.Entity;
+import spacegame.map.EntityFactory;
 import spacegame.map.GameMap;
+import spacegame.map.components.PositionComponent;
 import mapgui.*;
 
 
@@ -50,10 +53,9 @@ public class CommGUI extends JPanel implements Runnable {
     	renderMap = clientUpdater.getRenderMap();
     	this.commGame=game;
     	this.client=c;
-    	//mapPanel = new mapgui.MiniMapViewPanel(renderMap, name);
+    	
     	mapPanel = new mapgui.MapViewPanel(renderMap, name);
-	//	mapPanel.setSize(new Dimension(100,200));
-	
+
 		
     	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
 		
@@ -62,7 +64,6 @@ public class CommGUI extends JPanel implements Runnable {
 		
 		
 		
-	//	miniMap.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.X_AXIS));
     	//chat panel stuff
        
@@ -76,19 +77,16 @@ public class CommGUI extends JPanel implements Runnable {
         
       
         dataPanel.setPreferredSize(new Dimension(1600,250));
+        miniMap.addMouseListener(mouse);
         windowPanel.add(miniMap,BorderLayout.CENTER);
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
-// 		  contentPane = windowFrame.getContentPane();      
-//        contentPane.add(windowPanel, BorderLayout.CENTER);
-//        contentPane.add(dataPanel, BorderLayout.SOUTH);
-//        contentPane.addMouseListener(mouse);
-        
+
         
         
         windowFrame.add(windowPanel);
-        windowFrame.addMouseListener(mouse);
+       // windowFrame.addMouseListener(mouse);
         windowFrame.setPreferredSize(new Dimension(1600,900));
     	windowFrame.setVisible(true);
         windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,20 +94,46 @@ public class CommGUI extends JPanel implements Runnable {
         windowFrame.pack();
         windowFrame.setVisible(true);
 }		
-    private boolean mouseClick = false;
+    
+    
+    private boolean marked=false;
+	MouseEvent event;
 	private MouseAdapter mouse = new MouseAdapter()
     {
         public void mousePressed(MouseEvent e)
         {
+        	event=e;
+        	/*for(Entity ent: map.getEntities()){
+        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
+				int x = (int)Math.round(pos.getDouble("posX"));
+				int y = (int)Math.round(pos.getDouble("posY"));
+				if(e.getX()==x&&e.getY()==y)
+				{
+					marked=true;
+				}
+				
+        	}		*/
+        	marked=true;
         	System.out.println("click");
-        	mouseClick = true;
-        }
+    	}
         public void mouseReleased(MouseEvent e)
         {
-        	System.out.println("unclick");
-        	mouseClick = false;
+        	//marked=false;
         }
     };
+    //addMouseListener(mouse);
+	/*public void paintComponent(Graphics G) 
+	{
+		Graphics2D g = (Graphics2D) G;
+		
+	
+		if(marked)
+		{
+			g.setColor(Color.BLUE);
+			g.fillOval(event.getX(), event.getY(), 10, 10);
+		}*/
+	
+
     
     public void run()
 	{

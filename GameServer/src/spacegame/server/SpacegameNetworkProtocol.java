@@ -1,8 +1,12 @@
 package spacegame.server;
 
+import java.io.IOException;
+
 import spacegame.GlobalFlags;
 import spacegame.server.chat.ChatMessage;
 import spacegame.server.chat.Chats;
+import spacegame.util.Config;
+import spacegame.util.ConfigParseException;
 import spacegame.map.*;
 
 public class SpacegameNetworkProtocol implements ProtocolHandler {
@@ -10,6 +14,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	public static final int ERR_CMD_FORMAT = 1;
 	public static final int ERR_PARSE_VAL = 2;
 	public static final int ERR_NOT_SUBSCRIBED = 3;
+	public static final int ERR_IN_OPERATION = 4;
 	
 	private Chats chats;
 	private GameState gameState;
@@ -64,6 +69,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "asteroid":
 					doAsteroid(msg,words,info,r);
 					break;
+				case "config":
+					doConfig(msg,words,info,r);
+					break;
 				case "OK":
 					//maybe I will want something here in the future...
 					break;
@@ -86,6 +94,42 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}
 	}
 
+	public void doConfig(String msg, String[] words, ClientInfo info, Request r){
+		Config config = Main.getConfig();
+		if(words.length<2){
+			r.reply("ERR "+ERR_CMD_FORMAT);
+		}else{
+			if(words[1].equals("save")){
+				try {
+					config.saveConfig();
+					r.reply("OK");
+				} catch (IOException e) {
+					e.printStackTrace();
+					r.reply("ERR "+ERR_IN_OPERATION);
+				}
+			}else if(words[1].equals("load")){
+				try{
+					config.loadConfig();
+					r.reply("OK");
+				}catch(ConfigParseException ce){
+					ce.printStackTrace();
+					r.reply("ERR "+ERR_IN_OPERATION);
+				}
+			}else if(words[1].equals("version")){
+				info.sendMessage("config version="+Config.VERSION);
+			}else if(words.length<3){
+				r.reply("ERR "+ERR_CMD_FORMAT);
+			}else if(words[1].equals("get")&&config.hasAny(words[2])){
+				info.sendMessage("config ret "+words[2]+" "+config.getString(words[2],true));
+			}else if(words.length<4){
+				r.reply("ERR "+ERR_CMD_FORMAT);
+			}else if(words[1].equals("put")||words[1].equals("set")){
+				config.parsePut(words[2], words[3]);
+				r.reply("OK");
+			}
+		}		
+	}
+	
 	public void doAsteroid(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<3){
 			r.reply("ERR "+ERR_CMD_FORMAT);

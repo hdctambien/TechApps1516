@@ -7,7 +7,9 @@ public class Config {
 
 	public static final String DEFAULT_PATH = "spacegame";
 	public static final String FILE_EXTENSION = ".config";
-	public static final String VERSION = "0.1";	
+	public static final String VERSION = "0.3";	
+	public static final String DELIMINATOR = "=";
+	public static final String COMMENT = "#";
 	
 	private Hashtable<String, String> stringVars;
 	private Hashtable<String, Integer> intVars;
@@ -59,15 +61,19 @@ public class Config {
 				String line;
 				int lcount = 1;
 				while((line=reader.readLine())!=null){
-					String[] pieces = line.split(":",2);
+					if(line.startsWith(COMMENT)){
+						//its a comment, ignore this line
+						continue;
+					}
+					String[] pieces = line.split(DELIMINATOR,2);
 					if(pieces.length<2){throw new ConfigParseException("Error in file line:"+lcount
-							+ "seperator ':' missing!");}
+							+ "deliminator "+DELIMINATOR+" missing!");}
 					//Relying on some side effects of short-circuit evaluation
 					//Order of parse precedence: int, double, boolean, String
 					if(tryInt(pieces[0],pieces[1])||tryDouble(pieces[0],pieces[1])||tryBool(pieces[0],pieces[1])){}
 					else{
 						stringVars.put(pieces[0],pieces[1]);
-					}					
+					}
 				}
 				reader.close();
 			}
@@ -77,6 +83,16 @@ public class Config {
 		} catch (IOException e) {
 			throw new ConfigParseException( "IO Error occured while reading!",e);
 		}
+	}
+	
+	public void saveConfig() throws IOException{
+		FileOutputStream out = new FileOutputStream(path);
+		PrintWriter writer = new PrintWriter(out);
+		writer.println("Config "+VERSION);
+		for(Map.Entry<String, String> entry: getAll().entrySet()){
+			writer.println(entry.getKey()+DELIMINATOR+entry.getValue());
+		}
+		writer.close();
 	}
 	
 	public String getString(String key){
@@ -156,6 +172,13 @@ public class Config {
 				||stringVars.containsKey(key);
 	}
 	
+	public void parsePut(String key, String value){
+		if(tryInt(key,value)||tryDouble(key, value)||tryBool(key,value)){}
+		else{
+			stringVars.put(key, value);
+		}
+	}
+	
 	public boolean tryInt(String key, String value){
 		try{
 			int i = Integer.parseInt(value);
@@ -210,6 +233,45 @@ public class Config {
 			allVars.put(entry.getKey(), entry.getValue().toString());
 		}
 		return allVars;
+	}
+	
+	/**
+	 * Prints out all properties stored in this Config object
+	 */
+	public void printAll(){
+		System.out.println("ALL properties:");
+		for(Map.Entry<String, String> entry: getAll().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}		
+	}
+	/**
+	 * Prints out all properties stored in this Config object stratified (grouped) by their
+	 * type in the order: String, int, double, and then boolean.
+	 */
+	public void printStratified(){
+		System.out.println("STRING properties:");
+		for(Map.Entry<String, String> entry: getStrings().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("INT properties:");
+		for(Map.Entry<String, Integer> entry: getInts().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("DOUBLE properties:");
+		for(Map.Entry<String, Double> entry: getDoubles().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+		System.out.println("BOOL properties:");
+		for(Map.Entry<String, Boolean> entry: getBools().entrySet()){
+			System.out.println("   "+entry.getKey()+"=="+entry.getValue());
+		}
+	}
+	/**
+	 * A convenience method that calls printAll() and then printStratified()
+	 */
+	public void printDetailed(){
+		printAll();
+		printStratified();
 	}
 	
 }

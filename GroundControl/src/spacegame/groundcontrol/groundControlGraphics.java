@@ -51,8 +51,6 @@ class GroundControlGraphics extends Thread
 	private GameMap renderMap;
 	private ClientUpdater clientUpdater;
 	
-	private JSlider throttle;
-	
 	private MapViewPanel mapPanel;
 	
 	private JPanel powerPanel, powerBG, powerBG2, powerBGL, powerBGL2;
@@ -77,6 +75,7 @@ class GroundControlGraphics extends Thread
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
 	
+	private InfoPanel infoPanel;
 	private HeadingDial headingDial;
 	private ChatPanel chatPanel;
 	boolean right = false;
@@ -101,6 +100,7 @@ class GroundControlGraphics extends Thread
 		dataPanel = new JPanel(new GridLayout());
 		powerPanel = new JPanel(null);
 		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
+		infoPanel = new InfoPanel(renderMap);
 		this.c = c;
 		
 		try
@@ -146,15 +146,7 @@ class GroundControlGraphics extends Thread
 		pGuns.setMinorTickSpacing(5);
 		pGuns.setMajorTickSpacing(10);
 		pGuns.setEnabled(false);
-		
-		throttle = new JSlider();
-		throttle.setMaximum(100);
-		throttle.setMinimum(0);
-		throttle.setMajorTickSpacing(10);
-		throttle.setOrientation(JSlider.VERTICAL);
-		throttle.setName("Throttle Position");
-		throttle.setEnabled(false);		
-		
+				
 		fuel   = new JLabel("Fuel");
 		fuel.setBounds(35, 30, 25, 10);
 		comms  = new JLabel("Comms");
@@ -196,7 +188,7 @@ class GroundControlGraphics extends Thread
 		
 		headingDial.setRadius(100);
 		
-		dataPanel.add(throttle);
+		dataPanel.add(infoPanel);
 		dataPanel.add(headingDial);
 		dataPanel.add(powerPanel);
 		dataPanel.add(chatPanel);
@@ -299,13 +291,13 @@ class GroundControlGraphics extends Thread
 			else
 			{
 				clientUpdater.setRenderLock(true); 
-				throttle.setValue((int) Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
 				headingDial.setHeading(heading);
 				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
 				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
 				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 				windowPanel.repaint();
+				infoPanel.updateInfo();
 				clientUpdater.setRenderLock(false);
 				clientUpdater.setDrawDirty(false);
 			}

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -41,22 +43,61 @@ public class MiniMapViewPanel extends JPanel
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
 	}
 	
-/*	@Override
-	public void setSize(Dimension d){
-		this.width=(int) d.getWidth();
-		this.height=(int) d.getHeight();
-		//setPreferredSize(d);
-		super.setSize(d);
-	}*/
-	
+
+
+	private boolean marked=false;
+	MouseEvent event;
+	private MouseAdapter mouse = new MouseAdapter()
+    {
+        public void mousePressed(MouseEvent e)
+        {
+        	event=e;
+        	/*for(Entity ent: map.getEntities()){
+        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
+				int x = (int)Math.round(pos.getDouble("posX"));
+				int y = (int)Math.round(pos.getDouble("posY"));
+				if(e.getX()==x&&e.getY()==y)
+				{
+					marked=true;
+				}
+				
+        	}		*/
+        	marked=true;
+        	System.out.println("click");
+    	}
+        public void mouseReleased(MouseEvent e)
+        {
+        	//marked=false;
+        }
+    };
+    //addMouseListener(mouse);
 	public void paintComponent(Graphics G) 
 	{
 		Graphics2D g = (Graphics2D) G;
+		
+	
+		if(marked)
+		{
+			g.setColor(Color.BLUE);
+			g.fillOval(event.getX(), event.getY(), 10, 10);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		at = new AffineTransform();
 		at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
 		//g.setTransform(at);
 		g.setBackground(Color.BLACK);
-		//g.clearRect(0,0, width, height);
+		
 		g.clearRect(0,0, getWidth(), getHeight());
 		g.setColor(new Color(30,138,49));//green XDD
 	
@@ -67,8 +108,8 @@ public class MiniMapViewPanel extends JPanel
 			g.drawLine(0, y, getWidth(), y);
 		
 		
-		System.out.println("width: "+getWidth());
-		System.out.println("height: "+getHeight());
+	//	System.out.println("width: "+getWidth());
+	//	System.out.println("height: "+getHeight());
 		
 		
 		
@@ -99,6 +140,7 @@ public class MiniMapViewPanel extends JPanel
 				PositionComponent pos = (PositionComponent)e.getComponent(EntityFactory.POSITION);
 				x = (int)Math.round(pos.getDouble("posX"))-sx+cx;
 				y = (int)Math.round(pos.getDouble("posY"))-sy+cy;
+				
 				if(x>0 && y>0 && x<getWidth() && y<getHeight())
 				{
 					if(e.hasComponent(EntityFactory.HEADING))
@@ -110,6 +152,7 @@ public class MiniMapViewPanel extends JPanel
 						transformer.rotate(e.getComponent("Heading").getDouble("heading"));
 						transformer.translate(-image.getWidth()/2, -image.getHeight()/2);
 						g.drawImage(image,transformer,null);
+						//if()
 					}
 					else
 					{
