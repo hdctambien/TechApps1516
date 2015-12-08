@@ -1,13 +1,19 @@
 package spacegame.gunner;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 import mapgui.GunnerViewPanel;
 import spacegame.client.BasicProtocol;
@@ -32,6 +38,8 @@ public class GunnerGraphics
 	private JFrame gunFrame;
 	private JPanel panel, gunPanel;
 	private GunnerViewPanel gunnerView;
+	private JSlider gunPow;
+	private Border border;
 
 	public GunnerGraphics(String iAddress, int port, String name)
 	{
@@ -81,8 +89,10 @@ public class GunnerGraphics
 		run();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void GunnerWindow()
 	{
+		border = BorderFactory.createEmptyBorder(10, 10, 0, 10);
 		gunFrame = new JFrame("Gunner");
 		gunFrame.setLayout(new BorderLayout());
 		gunFrame.addWindowListener(new WindowAdapter() 
@@ -91,8 +101,8 @@ public class GunnerGraphics
 			{
 			    c.sendMessage("exit");
 			}
-		});		
-		
+		});				
+		gunFrame.setCursor(Cursor.CROSSHAIR_CURSOR);
 		panel = new JPanel();		
 		gunFrame.add(panel, BorderLayout.CENTER);
 		
@@ -105,7 +115,10 @@ public class GunnerGraphics
 		panel.add(gunPanel, BorderLayout.SOUTH);
 		gunPanel.setLayout(new GridLayout(2, 2));
 		
-		
+		gunPow = new JSlider();
+		gunPow.setVisible(true);
+		gunPanel.add(gunPow);
+		gunPanel.setBorder(border);	
 		
 		gunFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		gunFrame.setUndecorated(true);
@@ -117,6 +130,7 @@ public class GunnerGraphics
 	{
 		while(true)
 		{
+			gunPow.setValue(Integer.parseInt(map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
 			if(!(clientUpdater.isDirty() || clientUpdater.isRenderLocked()) && clientUpdater.isDrawDirty())
 			{
 				continue;

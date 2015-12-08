@@ -148,10 +148,10 @@ public class GunnerViewPanel extends JPanel
 		}
 		g.setColor(new Color(255,0,0,100));
 		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
-		at2.translate(getWidth()/2 - gunIMG.getWidth()/2,getHeight()/2 - gunIMG.getHeight()/2);
-		at2.translate(gunIMG.getHeight() / 2-1,gunIMG.getWidth() / 2-1);
+		at2.translate(getWidth()/2 - gunIMG.getWidth()/ 2,getHeight()/2 - gunIMG.getHeight() / 2);
+		at2.translate(gunIMG.getHeight() / 2,gunIMG.getWidth() / 2);
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
-        at2.translate(-gunIMG.getHeight() / 2+1,-gunIMG.getWidth() / 2+1);
+        at2.translate(-gunIMG.getHeight() / 2,-gunIMG.getWidth() / 2);
         g.drawImage(gunIMG, at2, null);
 	}	
 }

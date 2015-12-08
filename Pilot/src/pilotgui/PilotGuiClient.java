@@ -67,7 +67,6 @@ public class PilotGuiClient {
 	
 	public static Client getClient()
 	{
-		System.out.println("Added Client");
 		return client;
 	}
 	public ProtocolAggregator getAggregator()
