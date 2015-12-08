@@ -28,6 +28,11 @@ public class PolygonCollider extends Collider {
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = (ArrayList<Vector2>) points.clone();
 	}
+	public PolygonCollider(ArrayList<Vector2> points, Vector2 trans, Entity e){
+		super(trans,e);
+		absolutePoints = new ArrayList<Vector2>();
+		relativePoints = (ArrayList<Vector2>) points.clone();
+	}
 	
 	@Override
 	public String serialize() {
@@ -119,7 +124,7 @@ public class PolygonCollider extends Collider {
 
 	@Override
 	public Component clone(Entity entity) {
-		return new PolygonCollider(relativePoints,entity);
+		return new PolygonCollider(relativePoints,getTranslation(),entity);
 	}
 
 	@Override
@@ -171,7 +176,7 @@ public class PolygonCollider extends Collider {
 		return false;
 	}
 	public void recalculatePoints(){
-		Vector2 c = getPosition();
+		Vector2 c = getCenter();
 		double h = getHeading();
 		for(int i = 0; i<relativePoints.size();i++){
 			Vector2 p = relativePoints.get(i);

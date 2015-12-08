@@ -28,12 +28,7 @@ public class LineCollider extends Collider {
 	}
 	
 	public void recalculate(){
-		//TODO: figure out if line like enities' position will be their middle (assumed)
-		//TODO: or end
-		//if middle,
-		s = getPosition().subtract(v.multiply(-0.5));
-		//if end, 
-		//s = getPosition()
+		s = getCenter().subtract(v.multiply(-0.5));
 	}
 	
 	@Override

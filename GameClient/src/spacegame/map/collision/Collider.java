@@ -20,6 +20,13 @@ public abstract class Collider extends Component {
 	public Collider(Vector2 trans){
 		translator = trans;
 	}
+	public Collider(Vector2 trans, Entity e){
+		super(e);
+		translator = trans;
+	}
+	public Vector2 getTranslation(){
+		return translator;
+	}
 	public void setTranslation(Vector2 trans){
 		translator = trans;
 	}

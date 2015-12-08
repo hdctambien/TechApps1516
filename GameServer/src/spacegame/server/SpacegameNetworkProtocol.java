@@ -66,6 +66,9 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				case "testSerial":
 					testSerial(info);
 					break;
+				case "shoot":
+					doShoot(msg,words,info,r);
+					break;
 				case "asteroid":
 					doAsteroid(msg,words,info,r);
 					break;
@@ -94,10 +97,31 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 		}
 	}
 
+	public void doShoot(String msg, String[] words, ClientInfo info, Request r){
+		if(words.length<4){
+			r.error(ERR_CMD_FORMAT);
+		}else{
+			String ship = words[1];
+			if(gameState.getMap().hasEntityWithName(ship)){
+				try{
+					double x = Double.parseDouble(words[2]);
+					double y = Double.parseDouble(words[3]);
+					Vector2 v = Vector2.rect(x,y);
+					//TODO: put position and vector info to check collision
+					broadcast(info, msg);
+				}catch(NumberFormatException e){
+					r.error(ERR_PARSE_VAL);
+				}
+			}else{
+				r.error(ERR_IN_OPERATION);
+			}
+		}
+	}
+	
 	public void doConfig(String msg, String[] words, ClientInfo info, Request r){
 		Config config = Main.getConfig();
 		if(words.length<2){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			if(words[1].equals("save")){
 				try {
@@ -105,24 +129,25 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 					r.reply("OK");
 				} catch (IOException e) {
 					e.printStackTrace();
-					r.reply("ERR "+ERR_IN_OPERATION);
+					r.error(ERR_IN_OPERATION);
 				}
 			}else if(words[1].equals("load")){
 				try{
 					config.loadConfig();
 					r.reply("OK");
+					//TODO: reload config values into where they are used!
 				}catch(ConfigParseException ce){
 					ce.printStackTrace();
-					r.reply("ERR "+ERR_IN_OPERATION);
+					r.error(ERR_IN_OPERATION);
 				}
 			}else if(words[1].equals("version")){
 				info.sendMessage("config version="+Config.VERSION);
 			}else if(words.length<3){
-				r.reply("ERR "+ERR_CMD_FORMAT);
+				r.error(ERR_CMD_FORMAT);
 			}else if(words[1].equals("get")&&config.hasAny(words[2])){
 				info.sendMessage("config ret "+words[2]+" "+config.getString(words[2],true));
 			}else if(words.length<4){
-				r.reply("ERR "+ERR_CMD_FORMAT);
+				r.error(ERR_CMD_FORMAT);
 			}else if(words[1].equals("put")||words[1].equals("set")){
 				config.parsePut(words[2], words[3]);
 				r.reply("OK");
@@ -132,7 +157,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	
 	public void doAsteroid(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<3){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			try{
 				double x = Double.parseDouble(words[1]);
@@ -142,14 +167,14 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 				gameState.getUpdater().addEntity(asteroid);
 				r.reply("OK");
 			}catch(NumberFormatException e){
-				r.reply("ERR "+ERR_PARSE_VAL);
+				r.error(ERR_PARSE_VAL);
 			}
 		}
 	}
 	
 	public void doGet(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			switch(words[1]){
 				case "version":
@@ -180,7 +205,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	
 	public void doSet(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<3){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			switch(words[1]){
 				case "name":
@@ -205,7 +230,7 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	
 	public void doMapSet(String msg, String[] words, ClientInfo info, Request r) {
 		if(words.length<4){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			gameState.doMapSet(words[1],words[2],words[3],info,r);	
 		}		
@@ -213,22 +238,26 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	
 	public void doPush(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
-			ClientInfo[] allClients = Main.server.getAllClientInfo();
-			for(ClientInfo client: allClients){
-				if(client.equals(info)){
-					//they don't need their own push message
-				}else{
-					client.sendMessage(msg);
-				}
+			broadcast(info,msg);
+		}
+	}
+	
+	public void broadcast(ClientInfo info, String msg){
+		ClientInfo[] allClients = Main.server.getAllClientInfo();
+		for(ClientInfo client: allClients){
+			if(client.equals(info)){
+				//they don't need their own message
+			}else{
+				client.sendMessage(msg);
 			}
 		}
 	}
 	
 	public void doSubscribe(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			stateUpdateHandler.addSubscriber(words[1], info);
 			r.reply("OK");
@@ -237,12 +266,12 @@ public class SpacegameNetworkProtocol implements ProtocolHandler {
 	
 	public void doUnsubscribe(String msg, String[] words, ClientInfo info, Request r){
 		if(words.length<2){
-			r.reply("ERR "+ERR_CMD_FORMAT);
+			r.error(ERR_CMD_FORMAT);
 		}else{
 			if(stateUpdateHandler.removeSubscriber(words[1],info)){
 				r.reply("OK");
 			}else{
-				r.reply("ERR "+ERR_NOT_SUBSCRIBED);
+				r.error(ERR_NOT_SUBSCRIBED);
 			}
 		}
 	}

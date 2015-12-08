@@ -50,4 +50,8 @@ public class Request {
 	public void reply(String prefix){
 		cInfo.sendMessage(prefix+" "+message);
 	}
+	
+	public void error(int code){
+		reply("ERR "+code);
+	}
 }
