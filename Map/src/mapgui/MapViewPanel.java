@@ -49,7 +49,7 @@ public class MapViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
-		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("gunComponent").getVariable("imagePath"));
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
 		
