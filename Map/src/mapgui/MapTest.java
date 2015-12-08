@@ -16,6 +16,7 @@ public class MapTest {
 		panel = new MapViewPanel(map,"Ship.1");
 		frame.setSize(600,600);
 		frame.add(panel,BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	private static GameMap createTestMap(){
