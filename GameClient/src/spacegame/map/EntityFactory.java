@@ -19,6 +19,9 @@ public class EntityFactory {
 	public static final String HEADING = "Heading";
 	public static final String MARK = "Mark";
 	public static final String GUN = "Gun";
+	public static final String COLLIDER = "Collider";
+	public static final String POLYGON_COLLIDER = "PolygonCollider";
+	public static final String CIRCLE_COLLIDER = "CircleCollider";
 	
 	
 	public static final String REF_HEADER = "Ref"; //for EntityReferenceComponent
