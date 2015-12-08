@@ -35,11 +35,6 @@ public class LineCollider extends Collider {
 		//if end, 
 		//s = getPosition()
 	}
-
-	private Vector2 getPosition(){
-		PositionComponent pos = (PositionComponent)getEntity().getComponent(EntityFactory.POSITION);
-		return pos.getVector();
-	}
 	
 	@Override
 	public String serialize() {

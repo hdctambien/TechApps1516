@@ -23,12 +23,8 @@ public class PolygonCollider extends Collider {
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = new ArrayList<Vector2>();
 	}
-	public PolygonCollider(ArrayList<Vector2> points){
-		absolutePoints = new ArrayList<Vector2>();
-		relativePoints = (ArrayList<Vector2>) points.clone();
-	}
-	public PolygonCollider(ArrayList<Vector2> points,Entity e){
-		super(e);
+	public PolygonCollider(ArrayList<Vector2> points, Vector2 trans){
+		super(trans);
 		absolutePoints = new ArrayList<Vector2>();
 		relativePoints = (ArrayList<Vector2>) points.clone();
 	}
@@ -184,13 +180,4 @@ public class PolygonCollider extends Collider {
 			absolutePoints.set(i, a);
 		}
 	}
-	private Vector2 getPosition(){
-		PositionComponent pos = (PositionComponent)getEntity().getComponent(EntityFactory.POSITION);
-		return pos.getVector();
-	}
-	private double getHeading(){
-		HeadingComponent head = (HeadingComponent)getEntity().getComponent(EntityFactory.HEADING);
-		return head.getHeading();
-	}
-	
 }

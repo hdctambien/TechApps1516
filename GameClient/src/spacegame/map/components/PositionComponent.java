@@ -9,7 +9,8 @@ public class PositionComponent extends Component
 	private double posY;
 	
 	public PositionComponent(){
-		
+		posX = 0;
+		posY = 0;
 	}
 
 	@Override
