@@ -9,9 +9,11 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 import spacegame.map.GameMap;
+import spacegame.map.components.*;
 
 public class InfoPanel extends JPanel
 {
+	private final String SHIP_NAME;
 	private GameMap renderMap;
 	
 	private JPanel dataTable;
@@ -36,8 +38,9 @@ public class InfoPanel extends JPanel
 	private JLabel fuel;
 	private JLabel fuelLabel;
 	
-	public InfoPanel(GameMap m)
+	public InfoPanel(GameMap m, String SHIPNAME)
 	{
+		SHIP_NAME = SHIPNAME;
 		renderMap = m;
 		dataTable = new JPanel(new GridLayout(8,2));
 		throttlePanel = new JPanel(new GridLayout(2,1));
@@ -98,6 +101,22 @@ public class InfoPanel extends JPanel
 	}
 	public void updateInfo()
 	{
+		PhysicsComponent Physics = (PhysicsComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Physics");
+		PositionComponent Position = (PositionComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Position");
+		PowerComponent Power = (PowerComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Power");
+		ShieldComponent Shield = (ShieldComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Shield");
+		HealthComponent Health = (HealthComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Health");
+		FuelComponent Fuel = (FuelComponent) renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel");
 		
+		posX.setText(Position.getVariable("posX"));
+		posY.setText(Position.getVariable("posY"));
+		velocityX.setText(Physics.getVariable("velocityX"));
+		velocityY.setText(Physics.getVariable("velocityY"));
+		maxPower.setText(Power.getVariable("maxPower"));
+		shield.setText(Shield.getVariable("shield"));
+		health.setText(Health.getVariable("health"));
+		fuel.setText(Fuel.getVariable("fuel"));
+		
+		throttle.setValue((int)Double.parseDouble(Fuel.getVariable("throttle")));
 	}
 }

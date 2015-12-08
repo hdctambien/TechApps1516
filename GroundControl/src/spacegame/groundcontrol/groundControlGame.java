@@ -23,10 +23,7 @@ import spacegame.map.GameMap;
  */
 public class GroundControlGame implements Runnable
 {
-	String iaddress = "192.168.1.21";//"10.11.1.110";
-	int port = 8080;
-	String name = "";
-	public final String SHIP_NAME = "Ship.1";
+	public final String SHIP_NAME;
     boolean running = false;
     private GroundControlGraphics guiThread;
 	private boolean isRunning = false;
@@ -40,9 +37,9 @@ public class GroundControlGame implements Runnable
 	
 	public GroundControlGame(String iAddress, int port, String name)
 	{
-		this.name = name;
+		SHIP_NAME = name;
 		try {
-			c = new Client(iaddress,port);
+			c = new Client(iAddress,port);
 			BasicProtocol basic = new BasicProtocol(c);
 			SerialProtocol serial = new SerialProtocol(c);
 			aggregator = new ProtocolAggregator(c);

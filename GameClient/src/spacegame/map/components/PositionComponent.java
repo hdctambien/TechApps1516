@@ -1,6 +1,7 @@
 package spacegame.map.components;
 
 import spacegame.map.Entity;
+import spacegame.map.Vector2;
 
 public class PositionComponent extends Component
 {
@@ -26,6 +27,18 @@ public class PositionComponent extends Component
 		position.posY = posY;
 		position.setEntity(entity);
 		return position;
+	}
+	
+	public double getX(){
+		return posX;
+	}
+	
+	public double getY(){
+		return posY;
+	}
+	
+	public Vector2 getVector(){
+		return Vector2.rect(posX, posY);
 	}
 
 	@Override

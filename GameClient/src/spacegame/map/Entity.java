@@ -8,13 +8,16 @@ import spacegame.map.components.AsteroidUpdateComponent;
 import spacegame.map.components.Component;
 import spacegame.map.components.EntityReferenceComponent;
 import spacegame.map.components.FuelComponent;
+import spacegame.map.components.GunComponent;
 import spacegame.map.components.HeadingComponent;
+import spacegame.map.components.HealthComponent;
 import spacegame.map.components.MultipleReferenceComponent;
 import spacegame.map.components.PhysicsComponent;
 import spacegame.map.components.PositionComponent;
 import spacegame.map.components.PowerComponent;
 import spacegame.map.components.ReferenceComponent;
 import spacegame.map.components.RenderComponent;
+import spacegame.map.components.ShieldComponent;
 import spacegame.map.components.ShipUpdateComponent;
 import spacegame.map.components.UpdateComponent;
 
@@ -179,6 +182,9 @@ public class Entity implements ISerializable {
 					case EntityFactory.POWER: c = new PowerComponent(); break;
 					case EntityFactory.RENDER: c = new RenderComponent(null); break;
 					case EntityFactory.HEADING: c = new HeadingComponent(); break;
+					case EntityFactory.SHIELD: c = new ShieldComponent(); break;
+					case EntityFactory.HEALTH: c = new HealthComponent(); break;
+					case EntityFactory.GUN: c = new GunComponent(); break;
 					case EntityFactory.UPDATE:
 						update = true;
 						switch(data[2]){

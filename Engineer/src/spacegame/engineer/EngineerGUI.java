@@ -7,6 +7,7 @@ import javax.swing.event.ChangeListener;
 
 import mapgui.MapViewPanel;
 import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
@@ -26,10 +27,13 @@ public class EngineerGUI extends Thread
 	private boolean running = false;
 	EngineerGame game;
 	Client client;
+	ClientUpdater cUpdater;
 	GameMap map;
 	JFrame frame;
 	JPanel panel;
 	JPanel t1, t2;
+	
+	private final String SHIP_NAME;
 	
 	ImageLoader imgLoad;
 	
@@ -61,7 +65,7 @@ public class EngineerGUI extends Thread
 	private JLabel rTempLabel;
 	
 	private MapViewPanel mVp;
-	private PowerPanelGUI pGui;
+	public PowerPanelGUI pGui;
 	
 	private JLabel thro;
 		
@@ -73,11 +77,14 @@ public class EngineerGUI extends Thread
 	private int throt = 0;
 	private Dimension size;	
 	
-	public EngineerGUI(EngineerGame g, Client eClient, ProtocolAggregator pa, GameMap m)
+	public EngineerGUI(EngineerGame g, Client eClient, ProtocolAggregator pa, GameMap m, String n, ClientUpdater c)
 	{
 		this.map = m;
 		this.game = g;
 		this.client = eClient;
+		this.cUpdater = c;
+		
+		SHIP_NAME = n;
 		
 		rTempLabel = new JLabel("Temperature = " + this.game.getReacTemp());
 		
@@ -101,17 +108,15 @@ public class EngineerGUI extends Thread
 		panel = new JPanel();
 		powerPanel = new JPanel();
 		
-		pGui = new PowerPanelGUI(this.map);
+		pGui = new PowerPanelGUI(this.map, this.cUpdater, this.client, SHIP_NAME);
 		
 		chatCreate(pa);		
 		powerCreate();
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(panel, BorderLayout.PAGE_END);
+		frame.add(pGui, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(1, 4));
-		frame.add(pGui, BorderLayout.WEST);
-		//panel.add(pGui);
-		//panel.add(powerPanel);
 		panel.add(chat);
 		frame.setBackground(Color.WHITE);
 		
@@ -128,9 +133,7 @@ public class EngineerGUI extends Thread
 			    client.sendMessage("exit");
 			}
 		});
-		
-		//frame.add(rTempLabel, BorderLayout.CENTER);
-		
+			
 		Reactor();
 	}
 	
@@ -285,7 +288,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodO = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -296,7 +299,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTw = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -307,7 +310,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodTh = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});
@@ -318,7 +321,7 @@ public class EngineerGUI extends Thread
 				public void stateChanged(ChangeEvent e)
 				{
 					rodF = ((JSlider) e.getSource()).getValue();
-					game.power((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4));
+					cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)Math.floor(rodO/4) + (int)Math.floor(rodTw/4) + (int)Math.floor(rodTh/4) + (int)Math.floor(rodF/4)), client);
 					reactor.repaint();
 				}					
 			});

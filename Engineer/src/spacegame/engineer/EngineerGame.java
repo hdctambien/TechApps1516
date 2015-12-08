@@ -11,7 +11,7 @@ public class EngineerGame implements Runnable
 	private boolean running = false;
 	Client eClient;
 	EngineerProtocol eProtocol;
-	String iaddress = "10.11.1.110";
+	String iaddress = "10.11.1.92";
 	int port = 8080;
 	private String SHIP_NAME = "Ship.1";
 	
@@ -74,7 +74,7 @@ public class EngineerGame implements Runnable
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gui = new EngineerGUI(this, this.eClient, aggregator, map);
+		gui = new EngineerGUI(this, this.eClient, aggregator, map, SHIP_NAME, cUpdater);
 		gui.start();
 		
 		run();
@@ -102,10 +102,10 @@ public class EngineerGame implements Runnable
 				}
 				pSt = pS;				
 
-				gui.pComms.setValue((int)pCt);
-				gui.pFuel.setValue((int)pFt);
-				gui.pShield.setValue((int)pSt);
-				gui.pGuns.setValue((int)pGt);
+				gui.pGui.com.setValue((int)pCt);
+				gui.pGui.fue.setValue((int)pFt);
+				gui.pGui.shi.setValue((int)pSt);
+				gui.pGui.gun.setValue((int)pGt);
 				
 				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
@@ -124,10 +124,10 @@ public class EngineerGame implements Runnable
 				}				
 				pFt = pF;
 				
-				gui.pComms.setValue((int)pCt);
-				gui.pFuel.setValue((int)pFt);
-				gui.pShield.setValue((int)pSt);
-				gui.pGuns.setValue((int)pGt);
+				gui.pGui.com.setValue((int)pCt);
+				gui.pGui.fue.setValue((int)pFt);
+				gui.pGui.shi.setValue((int)pSt);
+				gui.pGui.gun.setValue((int)pGt);
 				
 				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
@@ -146,10 +146,10 @@ public class EngineerGame implements Runnable
 				}
 				pCt = pC;
 				
-				gui.pComms.setValue((int)pCt);
-				gui.pFuel.setValue((int)pFt);
-				gui.pShield.setValue((int)pSt);
-				gui.pGuns.setValue((int)pGt);
+				gui.pGui.com.setValue((int)pCt);
+				gui.pGui.fue.setValue((int)pFt);
+				gui.pGui.shi.setValue((int)pSt);
+				gui.pGui.gun.setValue((int)pGt);
 				
 				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
@@ -168,10 +168,10 @@ public class EngineerGame implements Runnable
 				}				
 				pGt = pG;
 				
-				gui.pComms.setValue((int)pCt);
-				gui.pFuel.setValue((int)pFt);
-				gui.pShield.setValue((int)pSt);
-				gui.pGuns.setValue((int)pGt);
+				gui.pGui.com.setValue((int)pCt);
+				gui.pGui.fue.setValue((int)pFt);
+				gui.pGui.shi.setValue((int)pSt);
+				gui.pGui.gun.setValue((int)pGt);
 				
 				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
@@ -196,10 +196,10 @@ public class EngineerGame implements Runnable
 									pC -= dif;
 				}				
 				
-				gui.pComms.setValue((int)pC);
-				gui.pFuel.setValue((int)pF);
-				gui.pShield.setValue((int)pS);
-				gui.pGuns.setValue((int)pG);
+				gui.pGui.com.setValue((int)pC);
+				gui.pGui.fue.setValue((int)pF);
+				gui.pGui.shi.setValue((int)pS);
+				gui.pGui.gun.setValue((int)pG);
 				
 				cUpdater.addUserAction(SHIP_NAME, "powerFuel", Integer.toString((int)pFt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
@@ -264,6 +264,7 @@ public class EngineerGame implements Runnable
 					this.gui.frame.setVisible(false);
 				}
 				rTemp += (.0000000001 * pTemp);
+				pTemp = map.getEntityByName(SHIP_NAME).getComponent("Power").getDouble("maxPower");
 			}
 			
 			while(pTemp == 0)
@@ -271,7 +272,8 @@ public class EngineerGame implements Runnable
 				if(rTemp > 0)
 				{
 					rTemp -= rTemp*.00000001;
-				}				
+				}
+				pTemp = map.getEntityByName(SHIP_NAME).getComponent("Power").getDouble("maxPower");
 			}
 		}		
 	}

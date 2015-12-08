@@ -34,7 +34,6 @@ public class Server implements Runnable{
 		forwarders = new ArrayList<RequestForwarder>();
 		infos = new ArrayList<ClientInfo>();
 		loadConfig();
-		
 	}
 	
 	public Config getConfig(){

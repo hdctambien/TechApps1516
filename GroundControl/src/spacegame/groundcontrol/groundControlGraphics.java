@@ -28,6 +28,7 @@ import spacegame.client.Client;
 import spacegame.client.ClientUpdater;
 import spacegame.client.ProtocolAggregator;
 import spacegame.client.chat.ChatPanel;
+import spacegame.engineer.PowerPanelGUI;
 import spacegame.map.GameMap;
 import spacegame.gui.HeadingDial;
 import spacegame.client.chat.*;
@@ -98,9 +99,9 @@ class GroundControlGraphics extends Thread
 		windowPanel = new JPanel(new BorderLayout());
 		windowPanel.setVisible(true);
 		dataPanel = new JPanel(new GridLayout());
-		powerPanel = new JPanel(null);
+		powerPanel = new PowerPanelGUI(renderMap, clientUpdater, c, SHIP_NAME);
 		mapPanel = new mapgui.MapViewPanel(renderMap, SHIP_NAME);
-		infoPanel = new InfoPanel(renderMap);
+		infoPanel = new InfoPanel(renderMap, SHIP_NAME);
 		this.c = c;
 		
 		try
@@ -114,77 +115,6 @@ class GroundControlGraphics extends Thread
 		{
 			e.printStackTrace();
 		}
-		
-		
-		powerBG = new JPanel();
-		powerBG2 = new JPanel();
-		powerBGL = new JPanel();
-		powerBGL2 = new JPanel();
-		powerBG.setBackground(Color.GREEN);
-		powerBG.setVisible(true);
-		powerBG2.setBackground(Color.WHITE);
-		powerBG2.setVisible(true);
-		powerBGL.setBackground(Color.WHITE);
-		powerBGL.setVisible(true);
-		powerBGL2.setBackground(Color.GREEN);
-		powerBGL2.setVisible(true);
-		
-		
-		pFuel = new JSlider(JSlider.VERTICAL,0,100,25);
-		pFuel.setMinorTickSpacing(5);
-		pFuel.setMajorTickSpacing(10);
-		pFuel.setEnabled(false);
-		pComms = new JSlider(JSlider.VERTICAL,0,100,25);
-		pComms.setMinorTickSpacing(5);
-		pComms.setMajorTickSpacing(10);
-		pComms.setEnabled(false);
-		pShield = new JSlider(JSlider.VERTICAL,0,100,25);
-		pShield.setMinorTickSpacing(5);
-		pShield.setMajorTickSpacing(10);
-		pShield.setEnabled(false);
-		pGuns = new JSlider(JSlider.VERTICAL,0,100,25);
-		pGuns.setMinorTickSpacing(5);
-		pGuns.setMajorTickSpacing(10);
-		pGuns.setEnabled(false);
-				
-		fuel   = new JLabel("Fuel");
-		fuel.setBounds(35, 30, 25, 10);
-		comms  = new JLabel("Comms");
-		comms.setBounds(87, 30, 50, 10);
-		shield = new JLabel("Shield");
-		shield.setBounds(150, 30, 50, 10);
-		guns   = new JLabel("Guns");
-		guns.setBounds(213, 30, 30, 10);
-		powerL  = new JLabel("Power");
-		powerL.setBounds(122, 10, 50, 10);
-		
-		pFuel.setOpaque(false);
-		pComms.setOpaque(false);
-		pShield.setOpaque(false);
-		pGuns.setOpaque(false);
-		
-		pFuel.setBounds(25, 40, 60, 150);
-		pComms.setBounds(85, 40, 60, 150);
-		pShield.setBounds(145, 40, 60, 150);
-		pGuns.setBounds(205, 40, 60, 150);
-		powerBG.setBounds(15, 15, 260, 179);
-		powerBG2.setBounds(17, 17, 256, 175);
-		powerBGL.setBounds(120, 8, 42, 15);
-		powerBGL2.setBounds(118, 6, 46, 19);
-		
-		powerPanel.add(pFuel);
-		powerPanel.add(fuel);
-		powerPanel.add(pComms);
-		powerPanel.add(comms);
-		powerPanel.add(pShield);
-		powerPanel.add(shield);
-		powerPanel.add(pGuns);
-		powerPanel.add(guns);
-		powerPanel.add(powerL);
-		powerPanel.add(powerBGL);
-		powerPanel.add(powerBGL2);
-		powerPanel.add(powerBG2);
-		powerPanel.add(powerBG);
 		
 		headingDial.setRadius(100);
 		
@@ -246,6 +176,8 @@ class GroundControlGraphics extends Thread
 		windowFrame.pack();
 		windowFrame.setVisible(true);
 		windowPanel.requestFocus();
+		
+		((PowerPanelGUI) powerPanel).disableEnable(false);
 	}
 	public void run()
 	{
@@ -292,10 +224,6 @@ class GroundControlGraphics extends Thread
 			{
 				clientUpdater.setRenderLock(true); 
 				headingDial.setHeading(heading);
-				pFuel.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel")));
-				pGuns.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns")));
-				pShield.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield")));
-				pComms.setValue(Integer.parseInt(renderMap.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms")));
 				windowPanel.repaint();
 				infoPanel.updateInfo();
 				clientUpdater.setRenderLock(false);

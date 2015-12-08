@@ -3,6 +3,7 @@ package mapgui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -13,6 +14,8 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
 import spacegame.map.GameMap;
@@ -20,7 +23,7 @@ import spacegame.map.components.PhysicsComponent;
 import spacegame.map.components.PositionComponent;
 import spacegame.render.ImageLoader;
 
-public class MapViewPanel extends JPanel
+public class GunnerViewPanel extends JPanel
 {
 	private GameMap map;
 	private BufferedImage shipIMG;
@@ -32,15 +35,20 @@ public class MapViewPanel extends JPanel
 	private Random rand;
 	private Star[] starList;
 	private Star[] backgroundStars;
+	private Point mousePos;
+	private ClientUpdater cU;
+	private Client c;
 	
 	private final boolean DYNAMIC_STARS_ENABLED = false;
 	
-	public MapViewPanel(GameMap m, String shipname)
+	public GunnerViewPanel(String shipname, ClientUpdater clientUpdater, Client client)
 	{
-		starList = new Star[1];
+		cU = clientUpdater;
+		c = client;
+		map = clientUpdater.getRenderMap();
+		starList = new Star[0];
 		backgroundStars = new Star[5000];
 		rand = new Random();
-		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
 		try {
@@ -49,9 +57,11 @@ public class MapViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
-		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("gunComponent").getVariable("imagePath"));
+		System.out.println(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
+		mousePos = new Point(0,0);
 		
 		initStars();
 	}
@@ -130,80 +140,20 @@ public class MapViewPanel extends JPanel
 				}				
 			}
 		}
-
 		g.drawImage(shipIMG, at, null);
-		at2.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
-		at2.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
+		if(this.getMousePosition() != null)
+		{
+			cU.addUserAction(SHIP_NAME, "gunHeading", Double.toString(Math.atan2(this.getMousePosition().y - (this.getHeight()/2), this.getMousePosition().x - (this.getWidth()/2)) + Math.PI/2), c);
+			mousePos = this.getMousePosition();
+		}
+		g.setColor(new Color(255,0,0,100));
+		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
+		at2.translate(getWidth()/2 - gunIMG.getWidth()/2,getHeight()/2 - gunIMG.getHeight()/2);
+		at2.translate(gunIMG.getHeight() / 2-1,gunIMG.getWidth() / 2-1);
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
-        at2.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
+        at2.translate(-gunIMG.getHeight() / 2+1,-gunIMG.getWidth() / 2+1);
         g.drawImage(gunIMG, at2, null);
 	}	
 }
-class Star
-{
-	public BufferedImage image;
-	public double x;
-	public double y;
-	public final int width;
-	public final int height;
-	public final double moveCoef;
-	Color color;
-	Graphics2D g;
-	AffineTransform at;
-	private double lastMillis;
-	private volatile double deltaMillis;
-	
-	private Kernel kernel = new Kernel(3, 3, new float[] { 1 / 9f, 1 / 9f, 1 / 9f,
-	        1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f });
-	private BufferedImageOp op = new ConvolveOp(kernel);
-	
-	public Star(int xPos, int yPos, int w, int h, Color c)
-	{
-		x = xPos;
-		y = yPos;
-		width = w;
-		height = h;
-		moveCoef = 0;
-		color = c;;
-		redrawStar(0,0);
-		lastMillis = System.currentTimeMillis();
-	}
-	public void redrawStar(double xVel, double yVel)
-	{
-		int velocity = (int) Math.round(Math.abs(Math.sqrt(Math.pow(xVel,2)+Math.pow(yVel,2))));
-		image = new BufferedImage((int)(width/50*velocity)+height, height, BufferedImage.TYPE_4BYTE_ABGR_PRE);
-		g = image.createGraphics();
-		g.setColor(color);
-		g.fillPolygon(new int[]{Math.round(height/2),(int) (width/50*velocity)+height,Math.round(height/2),0}, new int[]{0,Math.round(height/2),height,Math.round(height/2)}, 4);
-		Kernel kernel = new Kernel(3, 3, new float[] { 1 / 9f, 1 / 9f, 1 / 9f,
-		        1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f });
-		BufferedImageOp op = new ConvolveOp(kernel);
-		image = op.filter(image, null);
-		rotateStar(xVel,yVel);
-	}
-	public void rotateStar(double xVel, double yVel)
-	{
-		moveStar(xVel,yVel);
-		at.translate(height/2,height/2);
-        at.rotate(Math.atan2(yVel,xVel)-Math.PI);
-        at.translate(-height/2,-height/2);
-	}
-	public void moveStar(double xVel, double yVel)
-	{
-        if(x < -15)
-        	x += 1615;
-        if(x > 1600)
-        	x -= 1600;
-        if(y < -15)
-        	y += 915;
-        if(y > 900)
-        	y -= 900;
-        deltaMillis = (System.currentTimeMillis() - lastMillis)/1000;
-        x-=(xVel*deltaMillis)/height;
-		y-=(yVel*deltaMillis)/height;
-		lastMillis = System.currentTimeMillis();
-        at = new AffineTransform();
-        at.translate(x, y);
-	}
-}
+
 

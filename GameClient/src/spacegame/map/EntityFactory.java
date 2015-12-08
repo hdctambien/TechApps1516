@@ -10,12 +10,15 @@ public class EntityFactory {
 	public static final String PHYSICS = "Physics";
 	public static final String POWER = "Power";
 	public static final String FUEL = "Fuel";
+	public static final String HEALTH = "Health";
+	public static final String SHIELD = "Shield";
 	public static final String UPDATE = "Update";
 	public static final String ASTEROID_UPDATE = "AsteroidUpdate";
 	public static final String SHIP_UPDATE = "ShipUpdate";
 	public static final String RENDER = "Render";
 	public static final String HEADING = "Heading";
 	public static final String MARK = "Mark";
+	public static final String GUN = "Gun";
 	
 	
 	public static final String REF_HEADER = "Ref"; //for EntityReferenceComponent
@@ -36,8 +39,11 @@ public class EntityFactory {
 		ship.addComponent(PHYSICS, new PhysicsComponent());
 		ship.addComponent(POWER, new PowerComponent());
 		ship.addComponent(FUEL, new FuelComponent());
+		ship.addComponent(HEALTH, new HealthComponent());
+		ship.addComponent(SHIELD,new ShieldComponent());
 		ship.addComponent(UPDATE, new ShipUpdateComponent());
 		ship.addComponent(RENDER, new RenderComponent("Ship.png"));
+		ship.addComponent(GUN, new GunComponent());
 		return ship;
 	}
 	
