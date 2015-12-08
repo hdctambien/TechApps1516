@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.JPanel;
@@ -36,7 +37,8 @@ public class MiniMapViewPanel extends JPanel
 	public  MiniMapViewPanel(GameMap m, String shipname)
 	{
 		addMouseListener(mouse);///
-		
+		addMouseMotionListener(mouse);///
+
 		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
@@ -74,6 +76,15 @@ public class MiniMapViewPanel extends JPanel
         	marked=true;
         	System.out.println("click");
     	}
+        public void mouseMoved(MouseEvent e)
+        {
+        	marked=true;
+        	event =e;
+        	mouseX=event.getX();
+        	mouseY=event.getY();
+        	
+        
+        }
         public void mouseReleased(MouseEvent e)
         {
         	marked=false;
@@ -97,9 +108,11 @@ public class MiniMapViewPanel extends JPanel
 		
 		
 		for(int x=0;x<getWidth();x+=20)//gridlines
-			g.drawLine(x, 0, x, getHeight());
+		{	g.drawLine(x, 0, x, getHeight());}
 		for(int y=0;y<getWidth();y+=20)
-			g.drawLine(0, y, getWidth(), y);
+		{	g.drawLine(0, y, getWidth(), y);}
+		
+		
 		
 		//System.out.println("width: "+getWidth());
 		//System.out.println("height: "+getHeight());
@@ -161,7 +174,7 @@ public class MiniMapViewPanel extends JPanel
 					scaled.translate(scaledx, scaledy);
 					
 					g.drawImage(image, scaled, null); 
-				}/////////******~~~~~~~
+				}/////*****~~~~~
 			}
 		}
 		//g.drawImage(image, x, y, null);
@@ -170,7 +183,14 @@ public class MiniMapViewPanel extends JPanel
 		{
 			g.setColor(Color.BLUE);
 			g.fillOval(mouseX-5, mouseY-5, 10, 10);
+			int centerX = getWidth()/2;
+			int centerY = getHeight()/2;
+			g.setColor(new Color(30,138,49,100));//transparency
+		//	g.fillRect(centerX, centerY, mouseX-centerX, mouseY-centerY);
+		//	int radius = (int) Math.sqrt(Math.pow(mouseX-centerX,2)+Math.pow(mouseY-centerY,2)); 
 			
+			//g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);
+			g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);
 			
 		}
 

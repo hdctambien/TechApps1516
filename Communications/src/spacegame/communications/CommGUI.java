@@ -11,6 +11,8 @@ import javax.swing.*;
 import mapgui.MapComponent;
 import mapgui.MiniMapViewPanel;
 import spacegame.client.*;
+import spacegame.client.chat.ChatPanel;
+import spacegame.client.chat.ChatProtocol;
 import spacegame.gui.*;
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
@@ -26,7 +28,8 @@ public class CommGUI extends JPanel implements Runnable {
 	private String name = "Ship.1";//has to be Ship.1
     private static CommGame commGame;
     private static Client client;
-   
+	private ChatPanel chatPanel;
+
     public JFrame windowFrame;
     private HeadingDial headingDial = new HeadingDial();
     public Container contentPane;
@@ -40,13 +43,16 @@ public class CommGUI extends JPanel implements Runnable {
 	private GameMap renderMap;
 	//private MapViewPanel mapPanel;
 	//private MiniMapViewPanel mapPanel;
-	
+	private ChatProtocol chatProtocol;
+	private static ProtocolAggregator aggregator;
+
 	private MiniMapViewPanel miniMap;
+	private CommViewPanel commPanel;
 	ClientUpdater clientUpdater;
 
     
     public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater){
-
+    	
     	
     	this.clientUpdater=clientUpdater;
     	map = clientUpdater.getMap();
@@ -58,15 +64,28 @@ public class CommGUI extends JPanel implements Runnable {
 
 		
     	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
-		
+		commPanel = new CommViewPanel();
 		windowFrame = new JFrame();
 
-		
-		
+		try
+		{
+			this.aggregator = aggregator;
+			chatProtocol = new ChatProtocol(c, chatPanel);
+			chatPanel.addChatListener(chatProtocol);
+			aggregator.addProtocol(chatProtocol);
+		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.X_AXIS));
-    	//chat panel stuff
+		chatPanel = new ChatPanel(300,225);
+		dataPanel.add(chatPanel);
+		
+		//chat panel stuff
        
+		
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
    //     dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
@@ -77,8 +96,9 @@ public class CommGUI extends JPanel implements Runnable {
         
       
         dataPanel.setPreferredSize(new Dimension(1600,250));
-     
+        windowPanel.add(commPanel, BorderLayout.CENTER);
         windowPanel.add(miniMap,BorderLayout.CENTER);
+       
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
         
         
