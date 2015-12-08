@@ -14,6 +14,8 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import spacegame.client.Client;
+import spacegame.client.ClientUpdater;
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
 import spacegame.map.GameMap;
@@ -25,22 +27,28 @@ public class GunnerViewPanel extends JPanel
 {
 	private GameMap map;
 	private BufferedImage shipIMG;
+	private BufferedImage gunIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
+	private AffineTransform at2;
 	private ImageLoader loader;
 	private Random rand;
 	private Star[] starList;
 	private Star[] backgroundStars;
 	private Point mousePos;
+	private ClientUpdater cU;
+	private Client c;
 	
 	private final boolean DYNAMIC_STARS_ENABLED = false;
 	
-	public GunnerViewPanel(GameMap m, String shipname)
+	public GunnerViewPanel(String shipname, ClientUpdater clientUpdater, Client client)
 	{
+		cU = clientUpdater;
+		c = client;
+		map = clientUpdater.getRenderMap();
 		starList = new Star[0];
 		backgroundStars = new Star[5000];
 		rand = new Random();
-		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
 		try {
@@ -49,8 +57,11 @@ public class GunnerViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
+		System.out.println(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
+		mousePos = new Point(0,0);
 		
 		initStars();
 	}
@@ -95,6 +106,7 @@ public class GunnerViewPanel extends JPanel
 		}
 		
 		at = new AffineTransform();
+		at2 = new AffineTransform();
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
 		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
 		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
@@ -128,10 +140,19 @@ public class GunnerViewPanel extends JPanel
 				}				
 			}
 		}
-		mousePos = this.getMousePosition();
-		g.setColor(Color.RED);
-		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
 		g.drawImage(shipIMG, at, null);
+		if(this.getMousePosition() != null)
+		{
+			cU.addUserAction(SHIP_NAME, "gunHeading", Double.toString(Math.atan2(this.getMousePosition().y - (this.getHeight()/2), this.getMousePosition().x - (this.getWidth()/2)) + Math.PI/2), c);
+			mousePos = this.getMousePosition();
+		}
+		g.setColor(new Color(255,0,0,100));
+		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
+		at2.translate(getWidth()/2 - gunIMG.getWidth()/2,getHeight()/2 - gunIMG.getHeight()/2);
+		at2.translate(gunIMG.getHeight() / 2-1,gunIMG.getWidth() / 2-1);
+        at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
+        at2.translate(-gunIMG.getHeight() / 2+1,-gunIMG.getWidth() / 2+1);
+        g.drawImage(gunIMG, at2, null);
 	}	
 }
 

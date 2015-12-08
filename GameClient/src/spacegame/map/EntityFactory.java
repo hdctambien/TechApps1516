@@ -18,6 +18,7 @@ public class EntityFactory {
 	public static final String RENDER = "Render";
 	public static final String HEADING = "Heading";
 	public static final String MARK = "Mark";
+	public static final String GUN = "Gun";
 	
 	
 	public static final String REF_HEADER = "Ref"; //for EntityReferenceComponent
@@ -42,6 +43,7 @@ public class EntityFactory {
 		ship.addComponent(SHIELD,new ShieldComponent());
 		ship.addComponent(UPDATE, new ShipUpdateComponent());
 		ship.addComponent(RENDER, new RenderComponent("Ship.png"));
+		ship.addComponent(GUN, new GunComponent());
 		return ship;
 	}
 	

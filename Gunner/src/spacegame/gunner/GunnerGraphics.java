@@ -106,7 +106,7 @@ public class GunnerGraphics
 		panel = new JPanel();		
 		gunFrame.add(panel, BorderLayout.CENTER);
 		
-		gunnerView = new GunnerViewPanel(map, SHIP_NAME);
+		gunnerView = new GunnerViewPanel(SHIP_NAME, clientUpdater, c);
 		panel.setLayout(new BorderLayout());
 		panel.add(gunnerView, BorderLayout.CENTER);
 		panel.setVisible(true);

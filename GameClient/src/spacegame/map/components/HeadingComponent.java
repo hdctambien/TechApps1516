@@ -7,6 +7,10 @@ public class HeadingComponent extends Component{
 
 	private double heading=3.14;
 
+	public double getHeading(){
+		return heading;
+	}
+	
 	@Override
 	public String serialize() {
 		return "heading:"+heading;

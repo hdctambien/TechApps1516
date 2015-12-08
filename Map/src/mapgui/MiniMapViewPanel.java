@@ -10,14 +10,13 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.swing.JPanel;
-
 import spacegame.map.Entity;
 import spacegame.map.EntityFactory;
 import spacegame.map.GameMap;
 import spacegame.map.components.PositionComponent;
 import spacegame.render.ImageLoader;
+//import spacegame.client.*;//
 
 public class MiniMapViewPanel extends JPanel
 {
@@ -28,13 +27,16 @@ public class MiniMapViewPanel extends JPanel
 	private AffineTransform scaled;
 	private ImageLoader loader;
 	private double scaleFactor = .5;
-
+	private int mouseX;
+	private int mouseY;
 	//int width;
 	//int height;
 	
 	
 	public  MiniMapViewPanel(GameMap m, String shipname)
 	{
+		addMouseListener(mouse);///
+		
 		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
@@ -47,40 +49,41 @@ public class MiniMapViewPanel extends JPanel
 		
 	}
 
-//	private boolean marked=false;
-//	MouseEvent event;
-//	private MouseAdapter mouse = new MouseAdapter()
-//    {
-//        public void mousePressed(MouseEvent e)
-//        {
-//        	event=e;
-//        	/*for(Entity ent: map.getEntities()){
-//        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
-//				int x = (int)Math.round(pos.getDouble("posX"));
-//				int y = (int)Math.round(pos.getDouble("posY"));
-//				if(e.getX()==x&&e.getY()==y)
-//				{
-//					marked=true;
-//				}
-//				
-//        	}		*/
-//        	marked=true;
-//        	System.out.println("click");
-//    	}
-//        public void mouseReleased(MouseEvent e)
-//        {
-//        	//marked=false;
-//        }
-//    };
-    //addMouseListener(mouse);
+	private boolean marked=false;
+	MouseEvent event;
+	private MouseAdapter mouse = new MouseAdapter()
+    {
+        public void mousePressed(MouseEvent e)
+        {
+        	event=e;
+        	mouseX=e.getX();
+        	mouseY=e.getY();
+        	for(Entity ent: map.getEntities()){//highlight something on the map
+        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
+				int x = (int)Math.round(pos.getDouble("posX"));
+				int y = (int)Math.round(pos.getDouble("posY"));
+				System.out.println("x: "+x+" y: "+y);
+				BufferedImage image;
+			//	image = loader.getImage(e.getComponent(EntityFactory.RENDER).getVariable("imagePath"));
+				if(mouseX<=x+50&&mouseX>=x-50&&mouseY<=y+50&&mouseY>=y-50)//width, height
+				{
+					marked=true;
+				}
+				
+        	}		
+        	marked=true;
+        	System.out.println("click");
+    	}
+        public void mouseReleased(MouseEvent e)
+        {
+        	marked=false;
+        }
+    };
+   
 	public void paintComponent(Graphics G) 
 	{
 		Graphics2D g = (Graphics2D) G;
-//		if(marked)
-//		{
-//			g.setColor(Color.BLUE);
-//			g.fillOval(event.getX(), event.getY(), 10, 10);
-//		}
+		
 	
 		at = new AffineTransform();
 		at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
@@ -91,19 +94,16 @@ public class MiniMapViewPanel extends JPanel
 		
 		g.clearRect(0,0, getWidth(), getHeight());
 		g.setColor(new Color(30,138,49));//green 
-	
+		
 		
 		for(int x=0;x<getWidth();x+=20)//gridlines
 			g.drawLine(x, 0, x, getHeight());
 		for(int y=0;y<getWidth();y+=20)
 			g.drawLine(0, y, getWidth(), y);
 		
-	//	System.out.println("width: "+getWidth());
-	//	System.out.println("height: "+getHeight());
-		
-		//g.clearRect(0,0, getWidth(), getHeight());
-		//g.clearRect(0,0, (int)(getWidth()*scaleFactor), (int)(getHeight()*scaleFactor));
-	
+		//System.out.println("width: "+getWidth());
+		//System.out.println("height: "+getHeight());
+			
 
 		//int cx = (int) ((int)(getWidth()/2 - shipIMG.getWidth() / 2)*scaleFactor), cy = (int) ((int) (getHeight()/2 - shipIMG.getHeight() / 2)*scaleFactor);
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
@@ -166,7 +166,14 @@ public class MiniMapViewPanel extends JPanel
 		}
 		//g.drawImage(image, x, y, null);
 		g.drawImage(shipIMG, at, null);
-		
+		if(marked)
+		{
+			g.setColor(Color.BLUE);
+			g.fillOval(mouseX-5, mouseY-5, 10, 10);
+			
+			
+		}
+
 	}
 	
 }

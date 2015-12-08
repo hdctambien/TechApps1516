@@ -113,8 +113,8 @@ public class InfoPanel extends JPanel
 		velocityX.setText(Physics.getVariable("velocityX"));
 		velocityY.setText(Physics.getVariable("velocityY"));
 		maxPower.setText(Power.getVariable("maxPower"));
-	//	shield.setText(Shield.getVariable("shield"));
-	//	health.setText(Health.getVariable("health"));
+		shield.setText(Shield.getVariable("shield"));
+		health.setText(Health.getVariable("health"));
 		fuel.setText(Fuel.getVariable("fuel"));
 		
 		throttle.setValue((int)Double.parseDouble(Fuel.getVariable("throttle")));
