@@ -114,7 +114,7 @@ public class GunnerViewPanel extends JPanel
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
 		at.translate(getWidth()/2 - shipIMG.getWidth() / 2,getHeight()/2 - shipIMG.getHeight() / 2);
 		at.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
-        at.rotate(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
+        at.rotate(Double.parseDouble(map.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))- Math.PI/2);
         at.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
         
         int sx = (int)Math.round(posShip.getDouble("posX")), sy = (int)Math.round(posShip.getDouble("posY"));
