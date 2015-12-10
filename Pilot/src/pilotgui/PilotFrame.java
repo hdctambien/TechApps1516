@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -28,8 +29,6 @@ import spacegame.client.chat.ChatPanel;
 import spacegame.client.chat.ChatProtocol;
 import spacegame.map.Entity;
 import spacegame.map.GameMap;
-import spacegame.server.chat.ChatMessage;
-import spacegame.server.chat.Chats;
 import spacegame.util.gui.HeadingDial;
 
 
@@ -38,19 +37,23 @@ public class PilotFrame{
 	public JPanel buttons;
 	public MapComponent map;
 	public MapViewPanel mapView;
-	public Chats chat;
 	public GameMap game;
 	public ChatPanel chatp;
 	public static final String SHIP_NAME = "Ship.1";
 	public static final String ROTATE_LEFT = "rotate left", ROTATE_RIGHT = "rotate right", THROTTLE_FORWARD = "throttle forward", THROTTLE_BACKWARD = "throttle backward";
+	public static final String RELEASE_UP = "release up";
 	public static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
 	public JLabel obj1;
 	public HeadingDial hd;
 	public InputMap input;
 	public ActionMap action;
 	final PilotGuiClient pilot;
+	public JSlider fuelSlider;
+	public boolean moveRight = false, moveLeft = false, incThrottle = false;
 	public PilotFrame(GameMap g)
 	{
+		
+		
 		pilot = new PilotGuiClient();
 		game = pilot.setup(SHIP_NAME);
 		
@@ -132,6 +135,11 @@ public class PilotFrame{
 		buttons.add(up);
 		buttons.add(down);
 		buttons.add(right);
+		
+		JLabel fuelLabel = new JLabel("Fuel");
+		fuelSlider = new JSlider(0,100,0);
+		fuelSlider.setMajorTickSpacing(10);
+		fuelSlider.setPaintTicks(true);
 	
 		
 		hd = new HeadingDial();
@@ -147,24 +155,45 @@ public class PilotFrame{
 		JPanel utilities = new JPanel();
 		utilities.setLayout(new BoxLayout(utilities, BoxLayout.Y_AXIS));
 		utilities.add(hd);
-	//	utilities.add(chatp);
-		utilities.add(fuel);
+		utilities.add(fuelLabel);
+		utilities.add(fuelSlider);
+		utilities.add(chatp);
+	//	utilities.add(fuel);
 		
 		frame.add(utilities,BorderLayout.EAST);
-		frame.add(chatp,BorderLayout.WEST);
+	//	frame.add(chatp,BorderLayout.WEST);
 	//	frame.add(hd,BorderLayout.EAST);
 		
-		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("LEFT"),ROTATE_LEFT);
+		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false),ROTATE_LEFT);
 		obj1.getActionMap().put(ROTATE_LEFT, new RotateAction("left"));
 		
-		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("RIGHT"),ROTATE_RIGHT);
+	//	obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true),ROTATE_LEFT);
+	//	obj1.getActionMap().put(ROTATE_LEFT, new RotateAction("rLeft"));
+		
+		
+		
+		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false),ROTATE_RIGHT);
 		obj1.getActionMap().put(ROTATE_RIGHT, new RotateAction("right"));
+		
+	//	obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("released RIGHT"),ROTATE_RIGHT);
+	//	obj1.getActionMap().put(ROTATE_RIGHT, new RotateAction("rRight"));
+		
+		
 		
 		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("UP"),THROTTLE_FORWARD);
 		obj1.getActionMap().put(THROTTLE_FORWARD, new ThrottleAction("forward"));
 		
+		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("released UP"), RELEASE_UP);
+		obj1.getActionMap().put(RELEASE_UP, new ThrottleAction("stop"));
+		
+		
+		
 		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke("DOWN"),THROTTLE_BACKWARD);
 		obj1.getActionMap().put(THROTTLE_BACKWARD, new ThrottleAction("backward"));
+		
+		final String LU = "L&U";
+		obj1.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,KeyEvent.CTRL_DOWN_MASK),LU);
+		obj1.getActionMap().put(LU, new CombinedAction("L&U"));
 		
 		frame.add(obj1,BorderLayout.NORTH);
 		mapView.initStars();
@@ -182,7 +211,38 @@ public class PilotFrame{
 			{
 				e.printStackTrace();
 			}*/
-			hd.setHeading(-Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading")));
+		//	System.out.println(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("currentFuel"));
+			if(moveLeft == true)
+			{
+				double h = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
+				h -= Math.PI/36;
+				pilot.getUpdater().addUserAction(SHIP_NAME,"heading",Double.toString(h),pilot.getClient());
+                mapRepaint();
+                System.out.println("rotated left");
+                moveLeft = false;
+			}
+			if(moveRight == true)
+			{
+				double h = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
+				h += Math.PI/36;
+				pilot.getUpdater().addUserAction(SHIP_NAME,"heading",Double.toString(h),pilot.getClient());
+                mapRepaint();
+                moveRight = false;
+			}
+			if(incThrottle == true)
+			{
+				double t = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle"));
+				if(t < 100)
+				{
+					t += 10;
+				}
+				pilot.getUpdater().addUserAction(SHIP_NAME,"throttle",Double.toString(t),pilot.getClient());
+				mapRepaint();
+				incThrottle = false;
+			}
+			int fuel = (int) Math.round(Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("currentFuel"))); 			
+			fuelSlider.setValue(fuel);
+			hd.setHeading((-Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"))));
 			mapRepaint();
 			frame.revalidate();
 		}
@@ -192,11 +252,6 @@ public class PilotFrame{
 	{
 		hd.repaint();
 		mapView.repaint();
-	}
-	public void sendChat(String message)
-	{
-		ChatMessage chatM = new ChatMessage("Drew","Pilot",4,message);
-		chat.addChat(chatM);
 	}
 	public void setX(int x)
 	{
@@ -223,18 +278,22 @@ public class PilotFrame{
 			if(direction.compareTo("left") == 0)
 			{
 				System.out.println("Rotate Left");
-				double h = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
-				h -= Math.PI/12;
-				pilot.getUpdater().addUserAction(SHIP_NAME,"heading",Double.toString(h),pilot.getClient());
-                mapRepaint();
+				moveLeft = true;
 			}
 			if(direction.compareTo("right") == 0)
 			{
 				System.out.println("Rotate Right");
-				double h = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Heading").getVariable("heading"));
-				h += Math.PI/12;
-				pilot.getUpdater().addUserAction(SHIP_NAME,"heading",Double.toString(h),pilot.getClient());
-                mapRepaint();
+				moveRight = true;
+			}
+			if(direction.compareTo("rLeft") == 0)
+			{
+				System.out.println("Ended Left");
+				moveLeft = false;
+			}
+			if(direction.compareTo("rRight") == 0)
+			{
+				System.out.println("Ended Right");
+				moveRight = false;
 			}
 		}
 		
@@ -251,23 +310,39 @@ public class PilotFrame{
 		{
 			if(direction.compareTo("forward") == 0)
 			{
-				pilot.getUpdater().addUserAction(SHIP_NAME,"fuel",game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("maxFuel"),pilot.getClient());
-				double t = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle"));
-				System.out.println("Throttle: "+t);
-				t += 10;
-				pilot.getUpdater().addUserAction(SHIP_NAME,"throttle",Double.toString(t),pilot.getClient());
-                mapRepaint();
+				System.out.println("Throttle: "+Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
+                incThrottle = true;
 			}
 			if(direction.compareTo("backward") == 0)
 			{
 				double t = Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle"));
-				System.out.println("Throttle: "+t);
+			//	System.out.println("Throttle: "+t);
 				t -= 10;
 				pilot.getUpdater().addUserAction(SHIP_NAME,"throttle",Double.toString(t),pilot.getClient());
+				System.out.println("Throttle: "+Double.parseDouble(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")));
                 mapRepaint();
+			}
+			if(direction.compareTo("stop") == 0)
+			{
+				System.out.println("stopping");
+				pilot.getUpdater().addUserAction(SHIP_NAME,"throttle",Double.toString(0),pilot.getClient());
+				System.out.println(game.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle"));
+				mapRepaint();
 			}
 		}
 		
 	}
-
+	public class CombinedAction extends AbstractAction
+	{
+		public String direction;
+		public CombinedAction(String d){
+			direction = d;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			System.out.println("Went L&U");
+		}
+		
+	}
 }
