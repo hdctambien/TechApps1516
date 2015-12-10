@@ -44,6 +44,12 @@ import spacegame.render.ImageLoader;
     	private int mouseY;
     	boolean marked = false;    	
     	private String scan="";
+//    	int[] slope;
+//    	int[] perp;
+//    	int[] point1;
+//    	int[] point2;
+//    	int centerX = getWidth()/2;
+//		int centerY = getHeight()/2;
     	
     	ArrayList<int[]> highlights = new ArrayList<int[]>();
     
@@ -80,16 +86,22 @@ import spacegame.render.ImageLoader;
             {
             	mouseX=e.getX();
             	mouseY=e.getY();
+            	int i=0;
             	for(Entity ent: map.getEntities()){//highlight something on the map
 	        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
 					int x = (int)Math.round(pos.getDouble("posX"));
 					int y = (int)Math.round(pos.getDouble("posY"));
+					//	ent.getVariable("velocity");
 					x+=getWidth()/2;
 					y+=getHeight()/2;
-					highlights.add(new int[]{x,y});
+					if(highlights.size()<map.getEntities().length)
+					{	highlights.add(new int[]{x,y});}
+					else
+					{	highlights.set(i,new int[]{x,y});}
+					
+					
 					System.out.println("x: "+x+" y: "+y);
 					BufferedImage image;
-					//image = loader.getImage(e.getComponent(EntityFactory.RENDER).getVariable("imagePath"));
 					if(mouseX<=x+20&&mouseX>=x-20&&mouseY<=y+20&&mouseY>=y-20)//width, height
 					{
 						marked=true;
@@ -99,8 +111,9 @@ import spacegame.render.ImageLoader;
 					}
 					else
 					{
-						marked=false;
+					//	marked=false;
 					}
+				i++;
 	        	}
             }
          };
@@ -114,6 +127,7 @@ import spacegame.render.ImageLoader;
     		{	g.drawLine(x, 0, x, getHeight());}
     		for(int y=0;y<getWidth();y+=20)
     		{	g.drawLine(0, y, getWidth(), y);}
+    		
     		
 
     		PhysicsComponent physShip = (PhysicsComponent)map.getEntityByName(SHIP_NAME).getComponent("Physics");
@@ -166,12 +180,12 @@ import spacegame.render.ImageLoader;
     		
     		
     		g.fillOval(mouseX-5, mouseY-5, 10, 10);
-			int centerX = getWidth()/2;
-			int centerY = getHeight()/2;
-			//int radiusSlope=(mouseY-centerY)/(mouseX-centerX);
-			//int perpSlope=-1/radiusSlope;
-			//int[] point = {mouseX+(1/perpSlope),mouseY+(perpSlope*radiusSlope)};
-			//int[] point2 = {mouseX-(1/perpSlope),mouseY-(perpSlope*radiusSlope)};
+    		int centerX = getWidth()/2;
+    		int centerY = getHeight()/2;
+			int[] slope ={mouseY-centerY,mouseX-centerX};
+			int[] perp={-slope[1],slope[0]};
+			int[] point1={mouseX-perp[1],mouseY-perp[0]};
+			int[] point2={mouseX+perp[1],mouseY+perp[0]};
 			g.setColor(new Color(30,138,49,100));//transparency
 			
 			//g.fillRect(centerX, centerY, mouseX-centerX, mouseY-centerY);
@@ -179,14 +193,19 @@ import spacegame.render.ImageLoader;
 				
 			//g.fillPolygon(new int[]{centerX,point[0],point2[0]}, new int[]{centerY,point[1],point2[1]},3);
 				
-			g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);//x coordinates, y coordinates, number of coordinate pairs
-    		
+			//g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);//x coordinates, y coordinates, number of coordinate pairs
+			g.fillPolygon(new int[]{centerX,point1[0],point2[0]}, new int[]{centerY,point1[1],point2[1]},3);
 			
-				g.setColor(Color.WHITE);
-				g.drawString(scan, mouseX+20, mouseY+20);
+			g.setColor(Color.WHITE);
+			g.drawString(scan, mouseX+20, mouseY+20);
 			for(int i=0;i<highlights.size();i++)//highlight the entities
 			{
 				g.fillOval(highlights.get(i)[0],highlights.get(i)[1],10,10);
+			}
+			g.setColor(new Color(255,255,255,80));
+			for(int i=0; i<map.getEntities().length;i++)
+			{	
+			g.drawLine(getWidth()/2,getHeight()/2,highlights.get(i)[0],highlights.get(i)[1]);
 			}
 			
     	}	

@@ -90,7 +90,7 @@ public class CommGame implements Runnable
     {
         running=true;
         
-        gui = new CommGUI(this, this.client, clientUpdater);
+        gui = new CommGUI(this, this.client, clientUpdater, aggregator);
         Thread guiThread = new Thread(gui);
         guiThread.start();
         gameLogic();

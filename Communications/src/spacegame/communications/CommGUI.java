@@ -39,12 +39,13 @@ public class CommGUI extends JPanel implements Runnable {
     private JPanel windowPanel = new JPanel(new BorderLayout());
     
     
-    GameMap map = new GameMap();
+    private GameMap map = new GameMap();
 	private GameMap renderMap;
 	//private MapViewPanel mapPanel;
 	//private MiniMapViewPanel mapPanel;
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
+	Entity ship;
 
 	
 	//private MiniMapViewPanel miniMap;
@@ -52,7 +53,8 @@ public class CommGUI extends JPanel implements Runnable {
 	ClientUpdater clientUpdater;
 
     
-    public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater){
+    public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater,ProtocolAggregator aggregator){
+    	ship = map.getEntityByName(name);
     	
 		chatPanel = new ChatPanel(300,225);
 
@@ -107,43 +109,13 @@ public class CommGUI extends JPanel implements Runnable {
         windowFrame.setVisible(true);
 }		
     
-    
-//    private boolean marked=false;
-//	MouseEvent event;
-//	private MouseAdapter mouse = new MouseAdapter()
-//    {
-//        public void mousePressed(MouseEvent e)
-//        {
-//        	event=e;
-//        	/*for(Entity ent: map.getEntities()){
-//        		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
-//				int x = (int)Math.round(pos.getDouble("posX"));
-//				int y = (int)Math.round(pos.getDouble("posY"));
-//				if(e.getX()==x&&e.getY()==y)
-//				{
-//					marked=true;
-//				}
-//				
-//        	}		*/
-//        	marked=true;
-//        	System.out.println("click");
-//    	}
-//        public void mouseReleased(MouseEvent e)
-//        {
-//        	//marked=false;
-//        }
-//    };
-	
-	
-
-    
     public void run()
 	{
 		while(commGame.running)
 		{
 			
-
-
+			heading=map.getEntityByName(name).getComponent("Heading").getDouble("heading");
+			
 			
 			try
 			{

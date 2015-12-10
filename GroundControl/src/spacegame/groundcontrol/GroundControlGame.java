@@ -21,7 +21,7 @@ import spacegame.map.GameMap;
  * 
  * @author Justin Pierre
  */
-public class GroundControlGame implements Runnable
+public class groundControlGame implements Runnable
 {
 	public final String SHIP_NAME;
     boolean running = false;
@@ -35,7 +35,7 @@ public class GroundControlGame implements Runnable
 	private static GameMap map;
 	private static ClientUpdater clientUpdater;
 	
-	public GroundControlGame(String iAddress, int port, String name)
+	public groundControlGame(String iAddress, int port, String name)
 	{
 		SHIP_NAME = name;
 		try {
