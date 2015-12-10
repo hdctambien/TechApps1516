@@ -28,9 +28,11 @@ public class GunnerViewPanel extends JPanel
 	private GameMap map;
 	private BufferedImage shipIMG;
 	private BufferedImage gunIMG;
+	private BufferedImage laserIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
 	private AffineTransform at2;
+	private AffineTransform at3;
 	private ImageLoader loader;
 	private Random rand;
 	private Star[] starList;
@@ -38,6 +40,8 @@ public class GunnerViewPanel extends JPanel
 	private Point mousePos;
 	private ClientUpdater cU;
 	private Client c;
+	private int shootCount = 0;
+	private boolean shoot = true;
 	
 	private final boolean DYNAMIC_STARS_ENABLED = false;
 	
@@ -57,8 +61,8 @@ public class GunnerViewPanel extends JPanel
 			e.printStackTrace();
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
-		System.out.println(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
 		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		laserIMG = loader.getImage("Laser.png");
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
 		mousePos = new Point(0,0);
@@ -148,11 +152,22 @@ public class GunnerViewPanel extends JPanel
 		}
 		g.setColor(new Color(255,0,0,100));
 		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
+		
+		if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("Shoot")) == true)
+		{
+			at3 = new AffineTransform();
+			at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);
+			at3.translate(laserIMG.getWidth() / 2,laserIMG.getHeight() / 2);
+	        at3.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading") + Math.PI);
+	        at3.translate(-laserIMG.getWidth() / 2,-laserIMG.getHeight() / 2);
+	        g.drawImage(laserIMG, at3, null);
+		}
 		at2.translate(getWidth()/2 - gunIMG.getWidth()/ 2,getHeight()/2 - gunIMG.getHeight() / 2);
 		at2.translate(gunIMG.getHeight() / 2,gunIMG.getWidth() / 2);
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
         at2.translate(-gunIMG.getHeight() / 2,-gunIMG.getWidth() / 2);
         g.drawImage(gunIMG, at2, null);
+        
 	}	
 }
 

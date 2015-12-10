@@ -19,7 +19,7 @@ public class CommGame implements Runnable
     Client client;
     //String iaddress = "10.11.1.61";
     String iaddress = "10.11.1.92";
-    // String iaddress = "192.168.1.89";
+    //String iaddress = "10.103.85.117";
     int port = 8080;
 
     private Thread protocolThread;

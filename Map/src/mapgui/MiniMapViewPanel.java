@@ -38,7 +38,6 @@ public class MiniMapViewPanel extends JPanel
 	{
 		addMouseListener(mouse);///
 		addMouseMotionListener(mouse);///
-
 		map = m;
 		SHIP_NAME = shipname;
 		loader = new ImageLoader();
@@ -60,7 +59,7 @@ public class MiniMapViewPanel extends JPanel
         	event=e;
         	mouseX=e.getX();
         	mouseY=e.getY();
-        	for(Entity ent: map.getEntities()){//highlight something on the map
+        	/*for(Entity ent: map.getEntities()){//highlight something on the map
         		PositionComponent pos = (PositionComponent)ent.getComponent(EntityFactory.POSITION);
 				int x = (int)Math.round(pos.getDouble("posX"));
 				int y = (int)Math.round(pos.getDouble("posY"));
@@ -70,14 +69,14 @@ public class MiniMapViewPanel extends JPanel
 				if(mouseX<=x+50&&mouseX>=x-50&&mouseY<=y+50&&mouseY>=y-50)//width, height
 				{
 					marked=true;
-				}
-				
-        	}		
+				}}*/
         	marked=true;
         	System.out.println("click");
-    	}
+        }		
+        	
         public void mouseMoved(MouseEvent e)
         {
+        	System.out.println("move");
         	marked=true;
         	event =e;
         	mouseX=event.getX();
@@ -94,29 +93,20 @@ public class MiniMapViewPanel extends JPanel
 	public void paintComponent(Graphics G) 
 	{
 		Graphics2D g = (Graphics2D) G;
-		
-	
 		at = new AffineTransform();
-		at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
-		scaled = new AffineTransform();
-		scaled = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
+		//at = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
+		//scaled = new AffineTransform();
+		//scaled = AffineTransform.getScaleInstance(scaleFactor,scaleFactor);
 	
 		g.setBackground(Color.BLACK);
 		
 		g.clearRect(0,0, getWidth(), getHeight());
 		g.setColor(new Color(30,138,49));//green 
-		
-		
+	
 		for(int x=0;x<getWidth();x+=20)//gridlines
 		{	g.drawLine(x, 0, x, getHeight());}
 		for(int y=0;y<getWidth();y+=20)
 		{	g.drawLine(0, y, getWidth(), y);}
-		
-		
-		
-		//System.out.println("width: "+getWidth());
-		//System.out.println("height: "+getHeight());
-			
 
 		//int cx = (int) ((int)(getWidth()/2 - shipIMG.getWidth() / 2)*scaleFactor), cy = (int) ((int) (getHeight()/2 - shipIMG.getHeight() / 2)*scaleFactor);
 		int cx = getWidth()/2 - shipIMG.getWidth() / 2, cy = getHeight()/2 - shipIMG.getHeight() / 2;
@@ -181,16 +171,23 @@ public class MiniMapViewPanel extends JPanel
 		g.drawImage(shipIMG, at, null);
 		if(marked)
 		{
-			g.setColor(Color.BLUE);
+		//	g.setColor(Color.BLUE);
 			g.fillOval(mouseX-5, mouseY-5, 10, 10);
 			int centerX = getWidth()/2;
 			int centerY = getHeight()/2;
+			int radiusSlope=(mouseY-centerY)/(mouseX-centerX);
+			int perpSlope=-1/radiusSlope;
+			int[] point = {mouseX+(1/perpSlope),mouseY+(perpSlope*radiusSlope)};
+			int[] point2 = {mouseX-(1/perpSlope),mouseY-(perpSlope*radiusSlope)};
 			g.setColor(new Color(30,138,49,100));//transparency
-		//	g.fillRect(centerX, centerY, mouseX-centerX, mouseY-centerY);
+		
+			//g.fillRect(centerX, centerY, mouseX-centerX, mouseY-centerY);
 		//	int radius = (int) Math.sqrt(Math.pow(mouseX-centerX,2)+Math.pow(mouseY-centerY,2)); 
 			
-			//g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);
-			g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);
+			g.fillPolygon(new int[]{centerX,point[0],point2[0]}, new int[]{centerY,point[1],point2[1]},3);
+			
+			//g.fillPolygon(new int[]{centerX,(int)(mouseX-Math.tan(45)*mouseY),(int) (mouseX+Math.tan(45)*mouseY)}, new int[]{centerY,mouseY,mouseY},3);//x coordinates, y coordinates, number of coordinate pairs
+			
 			
 		}
 

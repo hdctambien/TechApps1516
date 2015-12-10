@@ -46,14 +46,16 @@ public class CommGUI extends JPanel implements Runnable {
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
 
-	private MiniMapViewPanel miniMap;
+	
+	//private MiniMapViewPanel miniMap;
 	private CommViewPanel commPanel;
 	ClientUpdater clientUpdater;
 
     
     public CommGUI(CommGame game, Client c, ClientUpdater clientUpdater){
     	
-    	
+		chatPanel = new ChatPanel(300,225);
+
     	this.clientUpdater=clientUpdater;
     	map = clientUpdater.getMap();
     	renderMap = clientUpdater.getRenderMap();
@@ -63,8 +65,8 @@ public class CommGUI extends JPanel implements Runnable {
     //	mapPanel = new mapgui.MapViewPanel(renderMap, name);
 
 		
-    	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
-		commPanel = new CommViewPanel();
+    //	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
+		commPanel = new CommViewPanel(map, name);
 		windowFrame = new JFrame();
 
 		try
@@ -80,7 +82,6 @@ public class CommGUI extends JPanel implements Runnable {
 		}
 		
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.X_AXIS));
-		chatPanel = new ChatPanel(300,225);
 		dataPanel.add(chatPanel);
 		
 		//chat panel stuff
@@ -88,19 +89,14 @@ public class CommGUI extends JPanel implements Runnable {
 		
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
-   //     dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
+   //   dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
         dataPanel.add(Box.createRigidArea(new Dimension(36,0)));
-        
-    
-		
-        
-      
+
         dataPanel.setPreferredSize(new Dimension(1600,250));
         windowPanel.add(commPanel, BorderLayout.CENTER);
-        windowPanel.add(miniMap,BorderLayout.CENTER);
+     //   windowPanel.add(miniMap,BorderLayout.CENTER);
        
         windowPanel.add(dataPanel, BorderLayout.SOUTH);
-        
         
         windowFrame.add(windowPanel);
         windowFrame.setPreferredSize(new Dimension(1600,900));
@@ -146,40 +142,17 @@ public class CommGUI extends JPanel implements Runnable {
 		while(commGame.running)
 		{
 			
-//			if(right)
-//			{
-//				heading -= -0.05;
-//			}
-//			if(left)
-//			{
-//				heading += 0.05;
-//			}
-//			
-//			if(right || left)
-//			{
-//				System.out.println(heading);
-	//			clientUpdater.addUserAction(name, "heading", Double.toString(heading), client);
-//			}
-//			
-//			if(move)
-//			{
-//				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) < 0.1)
-//					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(100), c);
-//			}
-//			else
-//			{
-//				if(Double.parseDouble(renderMap.getEntityByName(SHIP_NAME).getComponent("Fuel").getVariable("throttle")) > 99.9)
-//					clientUpdater.addUserAction(SHIP_NAME, "throttle", Double.toString(0), c);
-//			}
-//				
-//			try
-//			{
-//				Thread.sleep(25);
-//			}
-//			catch(InterruptedException e)
-//			{
-//				e.printStackTrace();
-//			}
+
+
+			
+			try
+			{
+				Thread.sleep(25);
+			}
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 			if(!(clientUpdater.isDirty() || clientUpdater.isRenderLocked()) && clientUpdater.isDrawDirty())
 			{
 				continue;

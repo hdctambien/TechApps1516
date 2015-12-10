@@ -25,9 +25,11 @@ public class MapViewPanel extends JPanel
 	private GameMap map;
 	private BufferedImage shipIMG;
 	private BufferedImage gunIMG;
+	private BufferedImage laserIMG;
 	private final String SHIP_NAME;
 	private AffineTransform at;
 	private AffineTransform at2;
+	private AffineTransform at3;
 	private ImageLoader loader;
 	private Random rand;
 	private Star[] starList;
@@ -50,6 +52,7 @@ public class MapViewPanel extends JPanel
 		}
 		shipIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Render").getVariable("imagePath"));
 		gunIMG = loader.getImage(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("imagePath"));
+		laserIMG = loader.getImage("Laser.png");
 		if(DYNAMIC_STARS_ENABLED)
 			starList = new Star[250];
 		
@@ -136,6 +139,17 @@ public class MapViewPanel extends JPanel
 		at2.translate(shipIMG.getHeight() / 2,shipIMG.getWidth() / 2);
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
         at2.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
+        
+        if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("Shoot")) == true)
+		{
+			at3 = new AffineTransform();
+			at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);
+			at3.translate(laserIMG.getWidth() / 2,laserIMG.getHeight() / 2);
+	        at3.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading") + Math.PI);
+	        at3.translate(-laserIMG.getWidth() / 2,-laserIMG.getHeight() / 2);
+	        g.drawImage(laserIMG, at3, null);
+		}
+        
         g.drawImage(gunIMG, at2, null);
 	}	
 }
