@@ -11,7 +11,7 @@ public class GunComponent extends Component{
 
 	@Override
 	public String serialize() {
-		return "gunHeading:"+gunHeading+" imagePath:"+imagePath+" shoot:"+shoot.toString();
+		return "gunHeading:"+gunHeading+" imagePath:"+imagePath+" shoot:"+Boolean.toString(shoot);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class GunComponent extends Component{
 		}
 		else if(varname.equals("shoot"))
 		{
-			return shoot.toString();
+			return Boolean.toString(shoot);
 		}
 		else
 		{

@@ -3,6 +3,8 @@ package spacegame.gunner;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -40,6 +42,8 @@ public class GunnerGraphics
 	private GunnerViewPanel gunnerView;
 	private JSlider gunPow;
 	private Border border;
+	
+	boolean shoot = false;
 
 	public GunnerGraphics(String iAddress, int port, String name)
 	{
@@ -120,10 +124,46 @@ public class GunnerGraphics
 		gunPanel.add(gunPow);
 		gunPanel.setBorder(border);	
 		
+		gunFrame.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) 
+			{
+	//			clientUpdater.addUserAction(SHIP_NAME, "shoot", "true", c);
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				clientUpdater.addUserAction(SHIP_NAME, "shoot", "true", c);
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				clientUpdater.addUserAction(SHIP_NAME, "shoot", "false", c);
+			}
+			
+		});
+		
 		gunFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		gunFrame.setUndecorated(true);
 		gunFrame.pack();
 		gunFrame.setVisible(true);
+		gunFrame.requestFocus();
+		
 	}
 	
 	private void run()

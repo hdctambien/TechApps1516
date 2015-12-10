@@ -140,7 +140,7 @@ public class MapViewPanel extends JPanel
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
         at2.translate(-shipIMG.getHeight() / 2,-shipIMG.getWidth() / 2);
         
-        if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("Shoot")) == true)
+        if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("shoot")) == true)
 		{
 			at3 = new AffineTransform();
 			at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);

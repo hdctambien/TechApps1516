@@ -153,7 +153,7 @@ public class GunnerViewPanel extends JPanel
 		g.setColor(new Color(255,0,0,100));
 		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
 		
-		if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("Shoot")) == true)
+		if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("shoot")) == true)
 		{
 			at3 = new AffineTransform();
 			at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);
