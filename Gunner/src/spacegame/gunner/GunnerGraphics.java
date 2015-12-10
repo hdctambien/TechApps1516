@@ -93,7 +93,6 @@ public class GunnerGraphics
 		run();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void GunnerWindow()
 	{
 		border = BorderFactory.createEmptyBorder(10, 10, 0, 10);
@@ -106,7 +105,6 @@ public class GunnerGraphics
 			    c.sendMessage("exit");
 			}
 		});				
-		gunFrame.setCursor(Cursor.CROSSHAIR_CURSOR);
 		panel = new JPanel();		
 		gunFrame.add(panel, BorderLayout.CENTER);
 		
@@ -120,6 +118,7 @@ public class GunnerGraphics
 		gunPanel.setLayout(new GridLayout(2, 2));
 		
 		gunPow = new JSlider();
+		gunPow.setEnabled(false);
 		gunPow.setVisible(true);
 		gunPanel.add(gunPow);
 		gunPanel.setBorder(border);	

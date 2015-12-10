@@ -29,10 +29,10 @@ public class PowerPanelGUI extends JPanel
 	int height, width, labelW;
 	
 	private double maxPower;
-	private double pSt = 25;
-	private double pGt = 25;
-	private double pFt = 25;
-	private double pCt = 25;
+	private double pSt = 0;
+	private double pGt = 0;
+	private double pFt = 0;
+	private double pCt = 0;
 	
 	ClientUpdater cUpdater;
 	
@@ -87,7 +87,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pC = ((JSlider) e.getSource()).getValue();
-					powerComms(pC);
+					powerDist(pSt, pFt, pC, pGt, "pC", maxPower);
 				}					
 			});
 		
@@ -106,7 +106,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pS = ((JSlider) e.getSource()).getValue();
-					powerShield(pS);
+					powerDist(pS, pFt, pCt, pGt, "pS", maxPower);
 				}					
 			});
 		
@@ -125,7 +125,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pF = ((JSlider) e.getSource()).getValue();
-					powerFuel(pF);
+					powerDist(pSt, pF, pCt, pGt, "pF", maxPower);
 				}					
 			});
 		
@@ -144,7 +144,7 @@ public class PowerPanelGUI extends JPanel
 				public void stateChanged(ChangeEvent e)
 				{
 					pG = ((JSlider) e.getSource()).getValue();
-					powerGuns(pG);
+					powerDist(pSt, pFt, pCt, pG, "pG", maxPower);
 				}					
 			});
 		
@@ -181,10 +181,24 @@ public class PowerPanelGUI extends JPanel
 	public void powerDist(double pS, double pF, double pC, double pG, String change, double mP)
 	{
 		maxPower = mP;
+		pSt = pS;
+		pCt = pC;
+		pGt = pG;
+		pFt = pF;
+
+		System.out.println("p " + map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("power"));
+		
+	//	System.out.println("S  C  G  F");
+	//	System.out.println(pSt + " " + pCt + " " + pGt + " " + pFt);
+		System.out.println("s " + map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerShield"));
+		System.out.println("g " + map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerGuns"));
+		System.out.println("f " + map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerFuel"));
+		System.out.println("c " + map.getEntityByName(SHIP_NAME).getComponent("Power").getVariable("powerComms"));
+		
 		switch(change)
 		{
 			case "pS":
-				if(pS + pG + pF + pC > maxPower)
+				if(pSt + pGt + pFt + pCt > maxPower)
 				{
 					if(pFt > 0)
 						pFt--;
@@ -193,7 +207,7 @@ public class PowerPanelGUI extends JPanel
 					if(pGt > 0)
 						pGt--;
 				}
-				pSt = pS;				
+				//pSt = pS;				
 
 				com.setValue((int)pCt);
 				fue.setValue((int)pFt);
@@ -206,7 +220,7 @@ public class PowerPanelGUI extends JPanel
 				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pF": 
-				if(pS + pG + pF + pC > maxPower)
+				if(pSt + pGt + pF + pCt > maxPower)
 				{					
 					if(pCt > 0)
 						pCt--;
@@ -215,7 +229,7 @@ public class PowerPanelGUI extends JPanel
 					if(pSt > 0)
 						pSt--;
 				}				
-				pFt = pF;
+				//pFt = pF;
 				
 				com.setValue((int)pCt);
 				fue.setValue((int)pFt);
@@ -228,7 +242,7 @@ public class PowerPanelGUI extends JPanel
 				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pC": 
-				if(pS + pG + pF + pC > maxPower)
+				if(pSt + pGt + pFt + pC > maxPower)
 				{
 					if(pFt > 0)
 						pFt--;
@@ -237,7 +251,7 @@ public class PowerPanelGUI extends JPanel
 					if(pSt > 0)
 						pSt--;
 				}
-				pCt = pC;
+				//pCt = pC;
 				
 				com.setValue((int)pCt);
 				fue.setValue((int)pFt);
@@ -250,7 +264,7 @@ public class PowerPanelGUI extends JPanel
 				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
 				
 			case "pG": 
-				if(pS + pG + pF + pC > maxPower)
+				if(pSt + pG + pFt + pCt > maxPower)
 				{					
 					if(pFt > 0)
 						pFt--;
@@ -259,7 +273,7 @@ public class PowerPanelGUI extends JPanel
 					if(pSt > 0)
 						pSt--;
 				}				
-				pGt = pG;
+				//pGt = pG;
 				
 				com.setValue((int)pCt);
 				fue.setValue((int)pFt);
@@ -298,40 +312,14 @@ public class PowerPanelGUI extends JPanel
 				cUpdater.addUserAction(SHIP_NAME, "powerComms", Integer.toString((int)pCt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerShield", Integer.toString((int)pSt), eClient);
 				cUpdater.addUserAction(SHIP_NAME, "powerGuns", Integer.toString((int)pGt), eClient);break;
-				
-			default:
-				pCt = 25;
-				pSt = 25;
-				pFt = 25;
-				pGt = 25;break;
 		}
 	}
 	
 	public void power(int mP)
 	{
-		maxPower = 100 + mP;
+		maxPower = 200 + mP;
 		powerDist(pSt, pFt, pCt, pGt, "mP", maxPower);
 		cUpdater.addUserAction(SHIP_NAME, "power", Integer.toString((int)maxPower), eClient);
-	}
-	
-	public void powerShield(int pShield)
-	{
-		powerDist(pShield, pFt, pCt, pGt, "pS", maxPower);
-	}
-	
-	public void powerFuel(int pFuel)
-	{
-		powerDist(pSt, pFuel, pCt, pGt, "pF", maxPower);
-	}
-	
-	public void powerComms(int pComms)
-	{
-		powerDist(pSt, pFt, pComms, pGt, "pC", maxPower);
-	}
-	
-	public void powerGuns(int pGuns)
-	{
-		powerDist(pSt, pFt, pCt, pGuns, "pG", maxPower);
 	}
 	
 	public void paintComponent(Graphics g)

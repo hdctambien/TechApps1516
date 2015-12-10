@@ -85,7 +85,7 @@ public class EngineerGame implements Runnable
 		eClient.sendMessage("set throttle " + Integer.toString(throt));
 	}
 	
-	public void powerDist(double pS, double pF, double pC, double pG, String change, double mP)
+	/*public void powerDist(double pS, double pF, double pC, double pG, String change, double mP)
 	{
 		maxPower = mP;
 		switch(change)
@@ -214,7 +214,7 @@ public class EngineerGame implements Runnable
 		}
 	}
 	
-	public void power(int mP)
+	/*public void power(int mP)
 	{
 		maxPower = 100 + mP;
 		reacTemp(mP);
@@ -240,7 +240,7 @@ public class EngineerGame implements Runnable
 	public void powerGuns(int pGuns)
 	{
 		powerDist(pSt, pFt, pCt, pGuns, "pG", maxPower);
-	}
+	}*/
 	
 	public void reacTemp(int mP)
 	{
