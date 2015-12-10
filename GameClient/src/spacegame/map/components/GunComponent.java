@@ -11,12 +11,13 @@ public class GunComponent extends Component{
 
 	@Override
 	public String serialize() {
-		return "gunHeading:"+gunHeading+" imagePath:"+imagePath;
+		return "gunHeading:"+gunHeading+" imagePath:"+imagePath+" shoot:"+shoot.toString();
 	}
 
 	@Override
 	public void sync(Component c) {
 		c.setVariable("gunHeading", Double.toString(gunHeading));		
+		c.setVariable("shoot", Boolean.toString(shoot));
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class GunComponent extends Component{
 	@Override
 	public boolean hasVariable(String varname) 
 	{
-		return varname.equals("gunHeading") || varname.equals("imagePath");
+		return varname.equals("gunHeading") || varname.equals("imagePath") || varname.equals("shoot");
 	}
 
 	@Override
@@ -43,6 +44,10 @@ public class GunComponent extends Component{
 		else if(varname.equals("imagePath"))
 		{
 			return imagePath;
+		}
+		else if(varname.equals("shoot"))
+		{
+			return shoot.toString();
 		}
 		else
 		{
@@ -60,6 +65,11 @@ public class GunComponent extends Component{
 		else if(varname.equals("imagePath"))
 		{
 			imagePath = value;
+			return true;
+		}
+		else if(varname.equals("shoot"))
+		{
+			shoot = Boolean.parseBoolean(value);
 			return true;
 		}
 		else{
