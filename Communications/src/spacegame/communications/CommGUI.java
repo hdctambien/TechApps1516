@@ -41,7 +41,7 @@ public class CommGUI extends JPanel implements Runnable {
     
     private GameMap map = new GameMap();
 	private GameMap renderMap;
-	//private MapViewPanel mapPanel;
+	private MapViewPanel mapPanel;
 	//private MiniMapViewPanel mapPanel;
 	private ChatProtocol chatProtocol;
 	private static ProtocolAggregator aggregator;
@@ -64,7 +64,7 @@ public class CommGUI extends JPanel implements Runnable {
     	this.commGame=game;
     	this.client=c;
     	
-    //	mapPanel = new mapgui.MapViewPanel(renderMap, name);
+    	mapPanel = new mapgui.MapViewPanel(renderMap, name);
 
 		
     //	miniMap = new mapgui.MiniMapViewPanel(renderMap, name);
@@ -91,7 +91,7 @@ public class CommGUI extends JPanel implements Runnable {
 		
         headingDial.setRadius(100);
         dataPanel.add(headingDial, BorderLayout.CENTER);        
-   //   dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
+        dataPanel.add(mapPanel, BorderLayout.EAST);//, BorderLayout.EAST);
         dataPanel.add(Box.createRigidArea(new Dimension(36,0)));
 
         dataPanel.setPreferredSize(new Dimension(1600,250));

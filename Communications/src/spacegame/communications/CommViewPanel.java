@@ -94,19 +94,22 @@ import spacegame.render.ImageLoader;
 					//	ent.getVariable("velocity");
 					x+=getWidth()/2;
 					y+=getHeight()/2;
+					BufferedImage image = loader.getImage(map.getEntityByName(ent.getName()).getComponent("Render").getVariable("imagePath"));
+					x+=image.getWidth()/5;
+					y+=image.getHeight()/5;
 					if(highlights.size()<map.getEntities().length)
 					{	highlights.add(new int[]{x,y});}
 					else
 					{	highlights.set(i,new int[]{x,y});}
 					
 					
-					System.out.println("x: "+x+" y: "+y);
-					BufferedImage image;
+					//System.out.println("x: "+x+" y: "+y);
+				//	BufferedImage image;
 					if(mouseX<=x+20&&mouseX>=x-20&&mouseY<=y+20&&mouseY>=y-20)//width, height
 					{
 						marked=true;
-						System.out.println("marked");
-						System.out.println(ent.getName());
+						//System.out.println("marked");
+						//System.out.println(ent.getName());
 						scan=ent.getName();
 					}
 					else
@@ -198,11 +201,12 @@ import spacegame.render.ImageLoader;
 			
 			g.setColor(Color.WHITE);
 			g.drawString(scan, mouseX+20, mouseY+20);
+			g.setColor(new Color(255,255,255,80));
 			for(int i=0;i<highlights.size();i++)//highlight the entities
 			{
 				g.fillOval(highlights.get(i)[0],highlights.get(i)[1],10,10);
 			}
-			g.setColor(new Color(255,255,255,80));
+			//g.setColor(new Color(255,255,255,80));
 			for(int i=0; i<map.getEntities().length;i++)
 			{	
 			g.drawLine(getWidth()/2,getHeight()/2,highlights.get(i)[0],highlights.get(i)[1]);
