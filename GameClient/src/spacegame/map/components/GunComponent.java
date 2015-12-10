@@ -7,6 +7,7 @@ public class GunComponent extends Component{
 
 	private double gunHeading=3.14;
 	private String imagePath = "gun.png";
+	private Boolean shoot = false;
 
 	@Override
 	public String serialize() {

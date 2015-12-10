@@ -153,28 +153,15 @@ public class GunnerViewPanel extends JPanel
 		g.setColor(new Color(255,0,0,100));
 		g.drawLine(getWidth()/2, getHeight()/2, (int) mousePos.getX(), (int) mousePos.getY());
 		
-		if(shoot == true)
+		if(Boolean.parseBoolean(map.getEntityByName(SHIP_NAME).getComponent("Gun").getVariable("Shoot")) == true)
 		{
-			if(shootCount < 5)
-			{
-				at3 = new AffineTransform();
-				at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);
-				at3.translate(laserIMG.getWidth() / 2,laserIMG.getHeight() / 2);
-		        at3.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading") + Math.PI);
-		        at3.translate(-laserIMG.getWidth() / 2,-laserIMG.getHeight() / 2);
-		        g.drawImage(laserIMG, at3, null);
-			}
-			else
-			{
-				shootCount = 0;
-				shoot = false;
-			}
+			at3 = new AffineTransform();
+			at3.translate(getWidth()/2 - laserIMG.getWidth()/ 2,getHeight()/2 - laserIMG.getHeight() / 2);
+			at3.translate(laserIMG.getWidth() / 2,laserIMG.getHeight() / 2);
+	        at3.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading") + Math.PI);
+	        at3.translate(-laserIMG.getWidth() / 2,-laserIMG.getHeight() / 2);
+	        g.drawImage(laserIMG, at3, null);
 		}
-		else
-			if(shootCount > -5)
-				shootCount--;
-			else
-				shoot = true;
 		at2.translate(getWidth()/2 - gunIMG.getWidth()/ 2,getHeight()/2 - gunIMG.getHeight() / 2);
 		at2.translate(gunIMG.getHeight() / 2,gunIMG.getWidth() / 2);
         at2.rotate(map.getEntityByName(SHIP_NAME).getComponent("Gun").getDouble("gunHeading"));
